@@ -6,15 +6,17 @@ pros::Controller master(CONTROLLER_MASTER);
 
 //Intakes
 pros::Motor leftIntake(12, MOTOR_GEARSET_18, 0, MOTOR_ENCODER_ROTATIONS);
+pros::Motor middleIntake(1, MOTOR_GEARSET_18, 1, MOTOR_ENCODER_ROTATIONS);
 pros::Motor rightIntake(11, MOTOR_GEARSET_18, 1, MOTOR_ENCODER_ROTATIONS);
+
+//Indexer Motors
+pros::Motor indexer(1, MOTOR_GEARSET_18, 0, MOTOR_ENCODER_ROTATIONS);
+
 //Drive Base
 pros::Motor LF(19, MOTOR_GEARSET_18, 0, MOTOR_ENCODER_COUNTS), //19,9,13,
             LB(10, MOTOR_GEARSET_18, 0, MOTOR_ENCODER_COUNTS),
             RF(17, MOTOR_GEARSET_18, 0, MOTOR_ENCODER_COUNTS),
             RB(2, MOTOR_GEARSET_18, 0, MOTOR_ENCODER_COUNTS);
-//Arm Motors
-pros::Motor leftArm(1, MOTOR_GEARSET_18, 0, MOTOR_ENCODER_ROTATIONS);
-pros::Motor rightArm(1, MOTOR_GEARSET_18, 1, MOTOR_ENCODER_ROTATIONS);
 
 //Sensor Definitions
 

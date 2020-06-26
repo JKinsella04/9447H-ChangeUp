@@ -3,10 +3,11 @@
 extern pros::Controller master;
 //Motor Declarations
 extern pros::Motor leftIntake;
+extern pros::Motor middleIntake;
 extern pros::Motor rightIntake;
 extern pros::Motor LF, LB, RF, RB;
-extern pros::Motor leftArm;
-extern pros::Motor rightArm;
+extern pros::Motor indexer;
+
 
 //Sensor Declarations
 

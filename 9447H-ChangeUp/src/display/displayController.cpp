@@ -145,6 +145,97 @@ return *this;
 return *this;
   }
 
+ std::vector<int> Display::loadAuton(){
+   int press = lv_btnm_get_pressed(btnm);
+   switch(press){
+     case 0: { buttonVec.push_back(6);  }
+     case 2: { buttonVec.push_back(5);  }
+     case 4: { buttonVec.push_back(4);  }
+     case 5: { buttonVec.push_back(1);  }
+     case 7: { buttonVec.push_back(2);  }
+     case 9: { buttonVec.push_back(3);  }
+   }
+   return buttonVec;
+ }
+
+ std::vector<int> Display::getAuton(){
+   return buttonVec;
+ }
+
+ Display& Display::runAuton(){
+   /* int first = buttonVec.at(1);
+    switch (first){
+      case 6: { LF.move(100); break;}
+      case 5: { RF.move(100); break;}
+      // default: { LF.move(100); break;}
+    }
+    */
+  while(true){
+   switch (currentPos) { //Where am I?
+     case 0: {
+       switch (firstPos) {
+         case 1: {currentPos = 1;}//robot's mvmt from 0 to 1
+         case 2: {currentPos = 2;}//robot's mvmt from 0 to 2
+         case 3: {currentPos = 3;}//robot's mvmt from 0 to 3
+         case 4: {currentPos = 4;}//robot's mvmt from 0 to 4
+         case 5: {currentPos = 5;}//robot's mvmt from 0 to 5
+         case 6: {currentPos = 6;}//robot's mvmt from 0 to 6
+       }}
+   } //switch
+   switch (currentPos){
+     case 1: {
+       switch (secondPos) {
+         case 2: {currentPos = 2;}//robot's mvmt from 1 to 2
+         case 3: {currentPos = 3;}//robot's mvmt from 1 to 3
+         case 4: {currentPos = 4;}//robot's mvmt from 1 to 4
+         case 5: {currentPos = 5;}//robot's mvmt from 1 to 5
+         case 6: {currentPos = 6;}//robot's mvmt from 1 to 6
+       }}
+     case 2: {
+       switch (secondPos) {
+         case 1: {currentPos = 1;}//robot's mvmt from 2 to 1
+         case 3: {currentPos = 3;}//robot's mvmt from 2 to 3
+         case 4: {currentPos = 4;}//robot's mvmt from 2 to 4
+         case 5: {currentPos = 5;}//robot's mvmt from 2 to 5
+         case 6: {currentPos = 6;}//robot's mvmt from 2 to 6
+       }}
+     case 3: {
+       switch (secondPos) {
+         case 1: {currentPos = 1;}//robot's mvmt from 3 to 1
+         case 2: {currentPos = 2;}//robot's mvmt from 3 to 2
+         case 4: {currentPos = 4;}//robot's mvmt from 3 to 4
+         case 5: {currentPos = 5;}//robot's mvmt from 3 to 5
+         case 6: {currentPos = 6;}//robot's mvmt from 3 to 6
+       }}
+     case 4: {
+       switch (secondPos) {
+         case 1: {currentPos = 1;}//robot's mvmt from 4 to 1
+         case 2: {currentPos = 2;}//robot's mvmt from 4 to 2
+         case 3: {currentPos = 3;}//robot's mvmt from 4 to 3
+         case 5: {currentPos = 5;}//robot's mvmt from 4 to 5
+         case 6: {currentPos = 6;}//robot's mvmt from 4 to 6
+       }}
+     case 5: {
+       switch (secondPos) {
+         case 1: {currentPos = 1;}//robot's mvmt from 5 to 1
+         case 2: {currentPos = 2;}//robot's mvmt from 5 to 2
+         case 3: {currentPos = 3;}//robot's mvmt from 5 to 3
+         case 4: {currentPos = 4;}//robot's mvmt from 5 to 4
+         case 6: {currentPos = 6;}//robot's mvmt from 5 to 6
+       }}
+     case 6: {
+       switch (secondPos) {
+         case 1: {currentPos = 1;}//robot's mvmt from 6 to 1
+         case 2: {currentPos = 2;}//robot's mvmt from 6 to 2
+         case 3: {currentPos = 3;}//robot's mvmt from 6 to 3
+         case 4: {currentPos = 4;}//robot's mvmt from 6 to 4
+         case 5: {currentPos = 5;}//robot's mvmt from 6 to 5
+       }} //case 6
+   }
+ pros::delay(20);} //while
+   return *this;
+ } //function
+
  void Display::create_tab1(lv_obj_t * parent){
   static lv_style_t style_btn_rel;                        /*A variable to store the released style*/
   lv_style_copy(&style_btn_rel, &lv_style_plain);         /*Initialize from a built-in style*/

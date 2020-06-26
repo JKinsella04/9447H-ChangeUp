@@ -1,6 +1,9 @@
 #include "main.h"
 #include "globals.h"
 
+#include <bits/stdc++.h>
+#include <vector>
+
 LV_IMG_DECLARE(BlueSide);
 LV_IMG_DECLARE(RedSide);
 LV_IMG_DECLARE(Reset);
@@ -22,6 +25,22 @@ public:
   Creates circles around selected goals.
   */
   Display& arcchecker();
+
+  /*
+  Takes the input from the GUI and creates the Auton routine.
+  */
+  std::vector<int> loadAuton();
+
+  /*
+  Gets Auton Vector variable.
+  */
+  std::vector<int> getAuton();
+
+  /*
+  Takes Auton Vector and runs the auton.
+  */
+  Display& runAuton();
+
 
 private:
   /*
@@ -67,4 +86,10 @@ private:
   lv_obj_t * robot = lv_btn_create(tab2, NULL);
   lv_obj_t * facing = lv_label_create(robot, NULL);
   lv_obj_t * label= lv_label_create(tab2,NULL);
+
+  std::vector<int> buttonVec = {};
+
+  int currentPos; //Still need to fix the getting wanted positions.
+  int firstPos;
+  int secondPos;
 };

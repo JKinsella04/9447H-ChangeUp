@@ -3,17 +3,21 @@
 #include "class/displayController.h"
 
 void initialize() {
+
+  // pros::delay(20);
 }
 
 
 void competition_initialize() {
-    Chassis chassis;
-    Display display;
+  Chassis chassis;
+  Display display;
 
-    chassis.reset();
-    display.display();
-    while(1){
-    display.backgroundcheck().arcchecker();
-    pros::delay(20);
-  }
+  chassis.reset();
+  display.display();
+  while(1){
+  display.backgroundcheck();
+  // display.arcchecker();
+  display.loadAuton();
+  pros::delay(20);
+}
 }
