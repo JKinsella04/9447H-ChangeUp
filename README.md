@@ -1,6 +1,7 @@
 # 9447H Change Up
 
-This is the offical code for 9447H. This code is for the VRC 2020-2021 Change Up season. 
+This is the offical code for 9447H. This code is for the VRC 2020-2021 Change Up season. To learn about the code look at our <br />
+[Wiki](https://github.com/PSASchool/9447H-ChangeUp/wiki#9447h-vex-vrc-2020-2021-change-up-robotics-code)
 
 ## Getting Started
 
