@@ -2,22 +2,18 @@
 #include "class/control/chassis.h"
 #include "class/displayController.h"
 
-void initialize() {
+Display display;
 
-  // pros::delay(20);
-}
-
+void initialize() {}
 
 void competition_initialize() {
-  Chassis chassis;
-  Display display;
-
-  chassis.reset();
+  display.sensorReset();
   display.display();
   while(1){
   display.backgroundcheck();
-  // display.arcchecker();
-  display.loadAuton();
-  pros::delay(20);
-}
+  display.arcchecker();
+  while(firstPos == 0){ display.setFirst(); pros::delay(20);}
+  pros::delay(250);
+  while(secondPos == 0 && firstPos != 0){ display.setSecond(); pros::delay(20);}
+  pros::delay(20);}
 }

@@ -34,6 +34,17 @@ class Intake{
     void indexerSpin(int ecount, int speed);
 
     /*
+    Initializes both the intakes and the indexers.
+    Default moode is coast. To make them hold use iiLock.
+    */
+    void iiInit();
+
+    /*
+    Sets both intakes and indexers to Hold
+    */
+    void iiLock();
+
+    /*
     Sorts out the enemy ball based on color.
     The opposing color is determined during the auton selection before a match.
     */

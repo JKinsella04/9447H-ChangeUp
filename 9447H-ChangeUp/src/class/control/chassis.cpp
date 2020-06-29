@@ -35,6 +35,7 @@ void Chassis::reset() {
       LEncoder.reset();
       MEncoder.reset();
       REncoder.reset();
+      pros::delay(3000);
 }
 
 void Chassis::SensorReset() {

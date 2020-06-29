@@ -5,7 +5,10 @@
 
 class Auton {
   public:
-
+    /*
+    Uses variables set from Display::loadAuton to build and run the Auton
+    */
+    Auton& run();
 
   private:
 

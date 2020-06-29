@@ -7,12 +7,15 @@
 #include "class/control/slew.h"
 
 // Class Initialization
- Chassis chassis;
- Slew slew;
+// Chassis chassis;
+Slew slew;
+Intake intake;
+
 
 void opcontrol() {
   while (true) {
+    intake.iiInit();
     slew.driveSlew(10); //7.5
-    
-  } //while
+    slew.intakeSlew(10);
+  pros::delay(20);} //while
 }

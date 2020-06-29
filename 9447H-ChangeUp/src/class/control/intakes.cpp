@@ -31,7 +31,19 @@ void Intake::indexerSpin(int ecount, int speed){
   indexer.move_relative(ecount, speed);
 }
 
-Intake& Intake::autoSort(){
+void Intake::iiInit(){
+  leftIntake.set_brake_mode(MOTOR_BRAKE_COAST);
+  middleIntake.set_brake_mode(MOTOR_BRAKE_COAST);
+  rightIntake.set_brake_mode(MOTOR_BRAKE_COAST);
+}
 
+void Intake::iiLock(){
+  leftIntake.set_brake_mode(MOTOR_BRAKE_HOLD);
+  middleIntake.set_brake_mode(MOTOR_BRAKE_HOLD);
+  rightIntake.set_brake_mode(MOTOR_BRAKE_HOLD);
+}
+
+Intake& Intake::autoSort(){
+  
   return *this;
 }

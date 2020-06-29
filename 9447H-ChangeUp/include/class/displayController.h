@@ -27,21 +27,29 @@ public:
   Display& arcchecker();
 
   /*
-  Takes the input from the GUI and creates the Auton routine.
+  Stores first wanted position for auton.
   */
-  std::vector<int> loadAuton();
+  Display& setFirst();
 
   /*
-  Gets Auton Vector variable.
+  Stores second wanted position for auton.
   */
-  std::vector<int> getAuton();
+  Display& setSecond();
 
   /*
-  Takes Auton Vector and runs the auton.
+  Gets first stored position for auton.
   */
-  Display& runAuton();
+  int getFirst();
 
+  /*
+  Gets Current position for auton.
+  */
+  int getCurrent();
 
+  /*
+  Reset Sensors.
+  */
+  Display& sensorReset();
 private:
   /*
   Creates all of tab1's objects.
@@ -88,8 +96,4 @@ private:
   lv_obj_t * label= lv_label_create(tab2,NULL);
 
   std::vector<int> buttonVec = {};
-
-  int currentPos; //Still need to fix the getting wanted positions.
-  int firstPos;
-  int secondPos;
 };

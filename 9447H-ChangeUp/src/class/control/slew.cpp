@@ -2,13 +2,8 @@
 
 #include "class/control/slew.h"
 
-double LslewOutput = 0, RslewOutput = 0;
-double LslewError, RslewError;
-
-
 
 int Slew::driveSlew(double accel){
-while (1){
   if(master.get_analog(ANALOG_LEFT_Y)*1.58 > LslewOutput + accel ) LslewOutput += accel;
   if(master.get_analog(ANALOG_LEFT_Y)*1.58 < LslewOutput + accel ) LslewOutput -= accel;
   if(master.get_analog(ANALOG_RIGHT_Y)*1.58 > RslewOutput + accel ) RslewOutput += accel;
@@ -21,7 +16,31 @@ while (1){
   RF.move_velocity(-RslewOutput);
   RB.move_velocity(-RslewOutput);
 
-  pros::delay(25);
-} //while
+  return 0;
+}
+
+int Slew::intakeSlew(double accel){
+  if(master.get_digital(DIGITAL_L1) == 1){
+    if(IntakeOutput < IslewMax + accel) IntakeOutput += accel;}
+  else if(master.get_digital(DIGITAL_L2) == 1){
+    if(IntakeOutput > IslewMin - accel) IntakeOutput -= accel;}
+  else{IntakeOutput =0;}
+
+  leftIntake.move_velocity(IntakeOutput);
+  middleIntake.move_velocity(IntakeOutput);
+  rightIntake.move_velocity(IntakeOutput);
+
+  return 0;
+}
+
+int Slew::indexerSlew(double accel){
+  if(master.get_digital(DIGITAL_R1) == 1){
+    if(IndexerOutput < IslewMax + accel) IndexerOutput += accel;}
+  else if(master.get_digital(DIGITAL_R2) == 1){
+    if(IndexerOutput > IslewMin - accel) IndexerOutput -= accel;}
+  else{IndexerOutput =0;}
+
+  indexer.move_velocity(IndexerOutput);
+
   return 0;
 }
