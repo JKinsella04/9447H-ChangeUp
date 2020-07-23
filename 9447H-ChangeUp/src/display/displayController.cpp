@@ -4,12 +4,51 @@
                     "\n", "\n",
                     "1", " ", "2", " ", "3", "" };
 
+ Display& Display::setup(){
+   static lv_style_t bar_style;
+   lv_style_copy(&bar_style, &lv_style_plain);
+   bar_style.body.border.color = LV_COLOR_BLACK;
+   bar_style.body.border.opa = 1;
+   bar_style.body.main_color = LV_COLOR_BLACK;
+   bar_style.body.grad_color = LV_COLOR_BLACK;
+   bar_style.body.radius =  LV_RADIUS_CIRCLE;
+   lv_theme_set_current(th);
+   lv_vdb_t * vdb = lv_vdb_get();
+   memset(vdb->buf, 0x00, sizeof(lv_color_t) * LV_VDB_SIZE);
+   lv_obj_set_style(lv_scr_act(), &lv_style_transp);
+   lv_img_set_src(letternumberImg, &teamnumber);
+   lv_obj_align(letternumberImg, NULL,LV_ALIGN_CENTER,0,0);
+
+
+   hide();
+   // intro();
+   lv_obj_set_size(progressbar, 400, 20);
+   lv_obj_align(progressbar, NULL, LV_ALIGN_IN_BOTTOM_MID, 0, -10);
+   lv_obj_set_style(progressbar, &bar_style);
+   L_IMU.reset();
+   M_IMU.reset();
+   R_IMU.reset();
+   // pros::delay(2000);
+   REncoder.reset();
+   LEncoder.reset();
+   MEncoder.reset();
+    // pros::delay(1000);
+   while(prog < 100){
+    prog ++;
+    lv_bar_set_value(progressbar, prog);
+    if(prog == 100){*isSetup = true; break;}
+    pros::delay(50);
+   }
+
+   return *this;
+ }
+
  Display& Display::display(){
    lv_scr_load(scr);
    lv_tabview_set_btns_pos(tabview,LV_TABVIEW_BTNS_POS_BOTTOM);
    lv_obj_set_size(tabview, 480, 250);
    lv_tabview_set_sliding(tabview, false);
-   lv_theme_set_current(th);
+
 
    lv_img_set_src(background, &BlueSide);
    lv_obj_set_pos(background, 0,0);
@@ -20,7 +59,7 @@
 
   static lv_style_t style_tab;
   lv_style_copy(&style_tab, lv_tabview_get_style(tabview, LV_TABVIEW_STYLE_BTN_REL));
-  // style_tab.text.font = &lv_font_dejavu_10;
+  // style_tab.text.font = &asman;
   style_tab.body.padding.ver = 10;
 
   static lv_style_t style_arc_rel;
@@ -38,13 +77,26 @@
  }
 
  Display& Display::backgroundcheck(){
-  if (lv_ddlist_get_selected(Preset) == 1) {
-    lv_img_set_src(background, &RedSide);
+  if(lv_tabview_get_tab_act(tabview) == 0){
+    if(lv_ddlist_get_selected(Preset) == 0){
+      lv_img_set_src(background, &RedSide);
+      lv_obj_set_pos(background, 0,0);
+    }else if(lv_ddlist_get_selected(Preset) == 1){
+      lv_img_set_src(background, &BlueSide);
+      lv_obj_set_pos(background, 0,0);
+    }
+  }
+  // if (lv_ddlist_get_selected(Preset) == 1 && lv_tabview_get_tab_act(tabview) == 1) {
+  //   lv_img_set_src(background, &RedSide);
+  //   lv_obj_set_pos(background, 0,0);
+  // }else if(lv_ddlist_get_selected(Preset) == 2  && lv_tabview_get_tab_act(tabview) == 1){
+  //   lv_img_set_src(background, &BlueSide);
+  //   lv_obj_set_pos(background, 0,0);
+  //}
+  if(lv_tabview_get_tab_act(tabview) == 2){
+    lv_img_set_src(background, &Reset);
     lv_obj_set_pos(background, 0,0);
-  }else{
-    lv_img_set_src(background, &BlueSide);
-    lv_obj_set_pos(background, 0,0);
-  }if(lv_tabview_get_tab_act(tabview) == 2){
+  }if(lv_tabview_get_tab_act(tabview) == 3){
     lv_img_set_src(background, &Reset);
     lv_obj_set_pos(background, 0,0);
   }if(lv_tabview_get_tab_act(tabview) != 0){
@@ -171,15 +223,74 @@ return *this;
    return *this;
  }
 
- Display& Display::sensorReset() {
-   L_IMU.reset();
-   M_IMU.reset();
-   R_IMU.reset();
-   REncoder.reset();
-   LEncoder.reset();
-   MEncoder.reset();
+ Display& Display::setThird(){
+   int press = lv_btnm_get_pressed(btnm);
+   switch(press) {
+     case 0: { thirdPos = 6;  break;}
+     case 2: { thirdPos = 5;  break;}
+     case 4: { thirdPos = 4;  break;}
+     case 5: { thirdPos = 1;  break;}
+     case 7: { thirdPos = 2;  break;}
+     case 9: { thirdPos = 3;  break;}
+   }
+   return *this;
+ }
+
+ Display& Display::hide(){
+   lv_obj_set_hidden(arc1, true);
+   lv_obj_set_hidden(arc2, true);
+   lv_obj_set_hidden(arc3, true);
+   lv_obj_set_hidden(arc4, true);
+   lv_obj_set_hidden(arc5, true);
+   lv_obj_set_hidden(arc6, true);
+   lv_obj_set_hidden(tabview, true);
+   lv_obj_set_hidden(btnm, true);
+   lv_obj_set_hidden(Preset, true);
+   lv_obj_set_hidden(btn1, true);
+   lv_obj_set_hidden(btn2, true);
+   return *this;
+ }
+
+ Display& Display::destroy(){
+   lv_obj_set_hidden(arc1, false);
+   lv_obj_set_hidden(arc2, false);
+   lv_obj_set_hidden(arc3, false);
+   lv_obj_set_hidden(arc4, false);
+   lv_obj_set_hidden(arc5, false);
+   lv_obj_set_hidden(arc6, false);
+   lv_obj_set_hidden(tabview, false);
+   lv_obj_set_hidden(btnm, false);
+   lv_obj_set_hidden(Preset, false);
+   lv_obj_set_hidden(btn1, false);
+   lv_obj_set_hidden(btn2, false);
+   lv_obj_del(progressbar);
+   lv_obj_del(nine);
+   lv_obj_del(letternumberImg);
+   delete isSetup;
+   return *this;
+ }
+
+ Display& Display::intro(){
+   static lv_style_t label_style;
+    label_style.text.font = &rage;
+
+   lv_label_set_text(nine, "4");
+   lv_obj_align(nine, NULL,LV_ALIGN_CENTER, 0,0);
+   lv_obj_set_size(nine, 100,100);
+   lv_label_set_style(nine, &label_style);
 
    return *this;
+ }
+
+ Display& Display::setVars(){
+   if(lv_tabview_get_tab_act(tabview) == 1){
+   while(firstPos == 0){ setFirst(); pros::delay(20);}
+   pros::delay(500);
+   while(secondPos == 0 && firstPos != 0){ setSecond(); pros::delay(20);}
+   pros::delay(500);
+   while(thirdPos == 0 && secondPos != 0 && firstPos != 0){ setThird(); pros::delay(20);}
+ }
+ return *this;
  }
 
  int Display::getFirst(){
@@ -207,7 +318,7 @@ return *this;
   style_btn_pr.body.grad_color = lv_color_hex3(0x000000);
   style_btn_pr.body.shadow.width = 2;
   style_btn_pr.text.color = lv_color_hex3(0xBCD);
-  style_btn_rel.body.radius = LV_RADIUS_CIRCLE;
+  style_btn_pr.body.radius = LV_RADIUS_CIRCLE;
 
   static lv_style_t style_goal_rel;
   lv_style_copy(&style_goal_rel, &lv_style_transp);
@@ -287,4 +398,79 @@ return *this;
   lv_page_set_scrl_fit(tab2, false, false);
 }
 
- void Display::create_tab3(lv_obj_t * parent){}
+ void Display::create_tab3(lv_obj_t * parent){
+     lv_obj_t * btnImu = lv_btn_create(tab3, NULL);
+     lv_obj_t * btnVis = lv_btn_create(tab3, NULL);
+     lv_obj_t * btnOdom = lv_btn_create(tab3, NULL);
+     lv_obj_t * btnChassis = lv_btn_create(tab3, NULL);
+     lv_obj_t * lblImu = lv_label_create(btnImu, NULL);
+     lv_obj_t * lblOdom = lv_label_create(btnOdom, NULL);
+     lv_obj_t * lblVis = lv_label_create(btnVis, NULL);
+     lv_obj_t * lblChassis = lv_label_create(btnChassis, NULL);
+
+     static lv_style_t style_btn_rel;                        /*A variable to store the released style*/
+     lv_style_copy(&style_btn_rel, &lv_style_plain);         /*Initialize from a built-in style*/
+     style_btn_rel.body.border.color = lv_color_hex3(0x333333);
+     style_btn_rel.body.border.width = 1;
+     style_btn_rel.body.main_color = lv_color_hex3(0x333333);
+     style_btn_rel.body.grad_color = lv_color_hex3(0x333333);
+     style_btn_rel.text.color = lv_color_hex3(0xDEF);
+     style_btn_rel.body.radius = LV_RADIUS_CIRCLE;
+
+     static lv_style_t style_btn_pr;                         /*A variable to store the pressed style*/
+     lv_style_copy(&style_btn_pr, &style_btn_rel);           /*Initialize from the released style*/
+     style_btn_pr.body.border.color = lv_color_hex3(0x585858);
+     style_btn_pr.body.main_color = lv_color_hex3(0xC24365);
+     style_btn_pr.body.grad_color = lv_color_hex3(0x000000);
+     style_btn_pr.body.shadow.width = 2;
+     style_btn_pr.text.color = lv_color_hex3(0xBCD);
+     style_btn_rel.body.radius = LV_RADIUS_CIRCLE;
+
+     lv_btn_set_style(btnImu, LV_BTN_STYLE_REL, &style_btn_rel);
+     lv_btn_set_style(btnImu, LV_BTN_STYLE_PR, &style_btn_pr);
+     lv_btn_set_style(btnVis, LV_BTN_STYLE_REL, &style_btn_rel);
+     lv_btn_set_style(btnVis, LV_BTN_STYLE_PR, &style_btn_pr);
+     lv_btn_set_style(btnOdom, LV_BTN_STYLE_REL, &style_btn_rel);
+     lv_btn_set_style(btnOdom, LV_BTN_STYLE_PR, &style_btn_pr);
+     lv_btn_set_style(btnChassis, LV_BTN_STYLE_REL, &style_btn_rel);
+     lv_btn_set_style(btnChassis, LV_BTN_STYLE_PR, &style_btn_pr);
+
+     lv_obj_set_pos(btnImu, 10,10);  //Not actual positions
+     lv_obj_set_size(btnImu, 150, 30);
+     lv_obj_set_pos(btnOdom, 10,50);
+     lv_obj_set_size(btnOdom,150, 30);
+     lv_obj_set_pos(btnVis, 10,90);
+     lv_obj_set_size(btnVis, 150, 30);
+     lv_obj_set_pos(btnChassis, 10,130);
+     lv_obj_set_size(btnChassis, 150, 30);
+     lv_label_set_text(lblImu, "Reset Inertial");
+     lv_label_set_text(lblOdom, "Reset Odom");
+     lv_label_set_text(lblVis, "Reset Vision");
+     lv_label_set_text(lblChassis, "Reset Chassis");
+
+     if(lv_btn_get_state(btnImu)== LV_BTN_STATE_PR){
+       L_IMU.reset();
+       M_IMU.reset();
+       R_IMU.reset();
+     }
+     if(lv_btn_get_state(btnVis)== LV_BTN_STATE_PR) {
+       //Reset Vision Sensor
+     }
+     if(lv_btn_get_state(btnOdom)== LV_BTN_STATE_PR) {
+       REncoder.reset();
+       LEncoder.reset();
+       MEncoder.reset();
+     }
+     if(lv_btn_get_state(btnChassis)== LV_BTN_STATE_PR) {
+       LF.tare_position();
+       LB.tare_position();
+       RF.tare_position();
+       RB.tare_position();
+     }
+     // if(lv_tabview_get_tab_act(tabview) != 3){
+     //   lv_obj_del(btnImu);
+     //   lv_obj_del(btnVis);
+     //   lv_obj_del(btnOdom);
+     //   lv_obj_del(btnChassis);
+     // }
+  }

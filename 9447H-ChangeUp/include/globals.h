@@ -20,3 +20,4 @@ extern pros::ADIEncoder LEncoder, REncoder, MEncoder;
 
 //Global Variables
 extern int currentPos, firstPos, secondPos, thirdPos;
+extern bool *isSetup;

@@ -33,3 +33,5 @@ int currentPos = 0,
     firstPos = 0,
     secondPos = 0,
     thirdPos = 0;
+
+bool *isSetup = new bool[false];

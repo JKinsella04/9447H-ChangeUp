@@ -106,6 +106,10 @@ Chassis& Chassis::turn(double theta_){
           printf("L_IMU, M_IMU, R_IMU,Average, TPower, RPower %f %f %f %f %f %f \n", leftheading, middleheading, rightheading, averageheading, tpower, rpower);
           if(averageheading >= theta-1 && averageheading <= theta+1){ //If it gets really close to the wanted angle it breaks the loop
             isSettled = true;
+            LF.move(0);
+            LB.move(0);
+            RF.move(0);
+            RB.move(0);
             break;
           }
         pros::delay(20);
@@ -120,7 +124,7 @@ Chassis& Chassis::drive(double target){
       double averagePos = REncoder.get_value() + LEncoder.get_value()/2;
       double error = target - averagePos;
       double prevError = error;
-      double derivative = error = prevError;
+      double derivative = error - prevError;
       double power = error*kP_drive + derivative*kD_drive;
       if (output <= power + rate_drive) {
         output += rate_drive;
@@ -134,6 +138,10 @@ Chassis& Chassis::drive(double target){
       pros::delay(20);
       if(averagePos < target+10 && averagePos > target-10) {
         isSettled = true;
+        LF.move(0);
+        LB.move(0);
+        RF.move(0);
+        RB.move(0);
         break;
       }
     }

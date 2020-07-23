@@ -4,16 +4,16 @@
 
 Display display;
 
-void initialize() {}
+void initialize() {
+  display.setup();
+if(isSetup){display.destroy();}
+}
 
 void competition_initialize() {
-  display.sensorReset();
-  display.display();
+    display.display();
   while(1){
   display.backgroundcheck();
   display.arcchecker();
-  while(firstPos == 0){ display.setFirst(); pros::delay(20);}
-  pros::delay(250);
-  while(secondPos == 0 && firstPos != 0){ display.setSecond(); pros::delay(20);}
+  // display.setVars();
   pros::delay(20);}
 }

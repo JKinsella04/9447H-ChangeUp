@@ -8,9 +8,20 @@ LV_IMG_DECLARE(BlueSide);
 LV_IMG_DECLARE(RedSide);
 LV_IMG_DECLARE(Reset);
 LV_IMG_DECLARE(test);
+LV_IMG_DECLARE(Apex);
+LV_IMG_DECLARE(teamnumber);
+
+LV_FONT_DECLARE(rage);
+
 
 class Display{
 public:
+  /*
+  Does all the needed motor and sensor setup.
+  Run this before anything else.
+  */
+  Display& setup();
+
   /*
   Initializes the GUI and sets up Screen and Tabs.
   */
@@ -37,6 +48,11 @@ public:
   Display& setSecond();
 
   /*
+  Stores third wanted position for auton.
+  */
+  Display& setThird();
+
+  /*
   Gets first stored position for auton.
   */
   int getFirst();
@@ -47,9 +63,24 @@ public:
   int getCurrent();
 
   /*
-  Reset Sensors.
+  Hides all object except the objects used in the setup function.
   */
-  Display& sensorReset();
+  Display& hide();
+
+  /*
+  Destroys the objects used in the setup function.
+  */
+  Display& destroy();
+
+  /*
+  Displays fading 9447H.
+  */
+  Display& intro();
+
+  /*
+  Runs the functions to set variables for autonomous.
+  */
+  Display& setVars();
 private:
   /*
   Creates all of tab1's objects.
@@ -94,6 +125,14 @@ private:
   lv_obj_t * robot = lv_btn_create(tab2, NULL);
   lv_obj_t * facing = lv_label_create(robot, NULL);
   lv_obj_t * label= lv_label_create(tab2,NULL);
+
+  lv_obj_t * progressbar = lv_bar_create(lv_layer_top(), NULL);
+  lv_obj_t * nine = lv_label_create(lv_layer_top(), NULL);
+  int prog = 0;
+
+
+  lv_obj_t * letternumberImg = lv_img_create(lv_layer_top(), NULL);
+
 
   std::vector<int> buttonVec = {};
 };
