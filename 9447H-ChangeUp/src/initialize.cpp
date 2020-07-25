@@ -14,6 +14,6 @@ void competition_initialize() {
   while(1){
   display.backgroundcheck();
   display.arcchecker();
-  // display.setVars();
+  display.setVars();
   pros::delay(20);}
 }

@@ -7,11 +7,7 @@
 LV_IMG_DECLARE(BlueSide);
 LV_IMG_DECLARE(RedSide);
 LV_IMG_DECLARE(Reset);
-LV_IMG_DECLARE(test);
-LV_IMG_DECLARE(Apex);
-LV_IMG_DECLARE(teamnumber);
-
-LV_FONT_DECLARE(rage);
+LV_IMG_DECLARE(imgstart);
 
 
 class Display{
@@ -38,6 +34,11 @@ public:
   Display& arcchecker();
 
   /*
+  Stores wanted starting position.
+  */
+  Display& setStart();
+
+  /*
   Stores first wanted position for auton.
   */
   Display& setFirst();
@@ -53,16 +54,6 @@ public:
   Display& setThird();
 
   /*
-  Gets first stored position for auton.
-  */
-  int getFirst();
-
-  /*
-  Gets Current position for auton.
-  */
-  int getCurrent();
-
-  /*
   Hides all object except the objects used in the setup function.
   */
   Display& hide();
@@ -73,14 +64,19 @@ public:
   Display& destroy();
 
   /*
-  Displays fading 9447H.
-  */
-  Display& intro();
-
-  /*
   Runs the functions to set variables for autonomous.
   */
   Display& setVars();
+
+  /*
+  Gets first stored position for auton.
+  */
+  int getFirst();
+
+  /*
+  Gets Current position for auton.
+  */
+  int getCurrent();
 private:
   /*
   Creates all of tab1's objects.
@@ -131,7 +127,7 @@ private:
   int prog = 0;
 
 
-  lv_obj_t * letternumberImg = lv_img_create(lv_layer_top(), NULL);
+  lv_obj_t * letternumberImg = lv_img_create(lv_scr_act(), NULL);
 
 
   std::vector<int> buttonVec = {};

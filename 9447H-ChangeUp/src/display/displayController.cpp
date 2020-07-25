@@ -5,6 +5,7 @@
                     "1", " ", "2", " ", "3", "" };
 
  Display& Display::setup(){
+   lv_obj_set_hidden(nine, true);
    static lv_style_t bar_style;
    lv_style_copy(&bar_style, &lv_style_plain);
    bar_style.body.border.color = LV_COLOR_BLACK;
@@ -16,12 +17,10 @@
    lv_vdb_t * vdb = lv_vdb_get();
    memset(vdb->buf, 0x00, sizeof(lv_color_t) * LV_VDB_SIZE);
    lv_obj_set_style(lv_scr_act(), &lv_style_transp);
-   lv_img_set_src(letternumberImg, &teamnumber);
+   lv_img_set_src(letternumberImg, &imgstart);
    lv_obj_align(letternumberImg, NULL,LV_ALIGN_CENTER,0,0);
 
-
    hide();
-   // intro();
    lv_obj_set_size(progressbar, 400, 20);
    lv_obj_align(progressbar, NULL, LV_ALIGN_IN_BOTTOM_MID, 0, -10);
    lv_obj_set_style(progressbar, &bar_style);
@@ -85,15 +84,7 @@
       lv_img_set_src(background, &BlueSide);
       lv_obj_set_pos(background, 0,0);
     }
-  }
-  // if (lv_ddlist_get_selected(Preset) == 1 && lv_tabview_get_tab_act(tabview) == 1) {
-  //   lv_img_set_src(background, &RedSide);
-  //   lv_obj_set_pos(background, 0,0);
-  // }else if(lv_ddlist_get_selected(Preset) == 2  && lv_tabview_get_tab_act(tabview) == 1){
-  //   lv_img_set_src(background, &BlueSide);
-  //   lv_obj_set_pos(background, 0,0);
-  //}
-  if(lv_tabview_get_tab_act(tabview) == 2){
+  }if(lv_tabview_get_tab_act(tabview) == 2){
     lv_img_set_src(background, &Reset);
     lv_obj_set_pos(background, 0,0);
   }if(lv_tabview_get_tab_act(tabview) == 3){
@@ -197,6 +188,12 @@ return *this;
 return *this;
   }
 
+ Display& Display::setStart(){
+   if(lv_btn_get_state(btn1) ==1) {currentPos = 0;}
+   if(lv_btn_get_state(btn2) ==1) {currentPos = -1;}
+   return *this;
+ }
+
  Display& Display::setFirst(){
     int press = lv_btnm_get_pressed(btnm);
     switch(press) {
@@ -270,20 +267,9 @@ return *this;
    return *this;
  }
 
- Display& Display::intro(){
-   static lv_style_t label_style;
-    label_style.text.font = &rage;
-
-   lv_label_set_text(nine, "4");
-   lv_obj_align(nine, NULL,LV_ALIGN_CENTER, 0,0);
-   lv_obj_set_size(nine, 100,100);
-   lv_label_set_style(nine, &label_style);
-
-   return *this;
- }
-
  Display& Display::setVars(){
    if(lv_tabview_get_tab_act(tabview) == 1){
+   while(currentPos == 0){ setStart(); pros::delay(20);}
    while(firstPos == 0){ setFirst(); pros::delay(20);}
    pros::delay(500);
    while(secondPos == 0 && firstPos != 0){ setSecond(); pros::delay(20);}
