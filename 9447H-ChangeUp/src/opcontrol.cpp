@@ -16,6 +16,8 @@ void opcontrol() {
   while (true) {
     intake.iiInit();
     slew.driveSlew(10); //7.5
-    slew.intakeSlew(10);
+    // slew.intakeSlew(100);
+    // slew.indexerSlew(100);
+    slew.allSlew();
   pros::delay(20);} //while
 }

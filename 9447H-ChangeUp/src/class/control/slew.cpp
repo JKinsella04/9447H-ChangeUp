@@ -44,3 +44,21 @@ int Slew::indexerSlew(double accel){
 
   return 0;
 }
+
+void Slew::allSlew(double intakeAccel, double indexerAccel){
+  if(master.get_digital(DIGITAL_R1) ==1){
+    if(IntakeOutput < IslewMax + intakeAccel) IntakeOutput += intakeAccel;
+    if(IndexerOutput < IslewMax + indexerAccel) IndexerOutput += indexerAccel;}
+  else if(master.get_digital(DIGITAL_L1) ==1){
+    if(IntakeOutput > IslewMin - intakeAccel) IntakeOutput -= intakeAccel;
+    if(IndexerOutput > IslewMin - indexerAccel) IndexerOutput -= indexerAccel;}
+  else if(master.get_digital(DIGITAL_R2) ==1){
+    if(IntakeOutput < IslewMax + intakeAccel) IntakeOutput += intakeAccel;
+    if(IndexerOutput > IslewMin - indexerAccel) IndexerOutput -= indexerAccel;}
+  else{IndexerOutput =0, IntakeOutput =0;}
+
+  leftIntake.move_velocity(IntakeOutput);
+  middleIntake.move_velocity(IntakeOutput);
+  rightIntake.move_velocity(IntakeOutput);
+  indexer.move_velocity(IndexerOutput);
+}

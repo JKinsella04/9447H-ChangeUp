@@ -24,8 +24,16 @@ class Slew {
     */
     int indexerSlew(double accel);
 
+    /*
+    Spins both indexer and intakes with given acceleration for both.
+
+    @param intakeAccel Default 100
+    @param indexerAccel Default 100
+    */
+    void allSlew(double intakeAccel = 100, double indexerAccel = 100);
+
   private:
     double LslewOutput = 0, RslewOutput = 0, IntakeOutput =0, IndexerOutput =0;
     double LslewError, RslewError;
-    double IslewMax = 200, IslewMin = -200; //Real Robot 600 RPM
+    double IslewMax = 600, IslewMin = -600; //Real Robot 600 RPM
 };
