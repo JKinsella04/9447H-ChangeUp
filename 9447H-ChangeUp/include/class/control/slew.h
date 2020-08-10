@@ -33,7 +33,7 @@ class Slew {
     void allSlew(double intakeAccel = 100, double indexerAccel = 100);
 
   private:
-    double LslewOutput = 0, RslewOutput = 0, IntakeOutput =0, IndexerOutput =0;
-    double LslewError, RslewError;
-    double IslewMax = 600, IslewMin = -600; //Real Robot 600 RPM
+    double LslewOutput = 0, RslewOutput = 0, IntakeOutput =0, IndexerOutput =0, middleIntakeOutput =0;
+    double IslewMax = 600, IslewMin = -600, middleIntakeMax = 400, middleIntakeMin  = -600; //Real Robot 600 RPM
+    double leftJoystick, rightJoystick, leftError, rightError;
 };

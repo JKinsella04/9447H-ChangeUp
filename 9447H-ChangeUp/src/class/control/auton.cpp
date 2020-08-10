@@ -3,15 +3,15 @@
 #include "class/control/auton.h"
 #include "class/control/chassis.h"
 
-Chassis chassis;
+static Chassis chassis;
 
 Auton& Auton::run(){
  while(true){
-  switch (currentPos) { //Where am I? Starting Position
-    case -1: {
+  switch (startPos) { //Where am I? Starting Position
+    case 1: {
       switch (firstPos) {
         case 1: {
-          chassis.withPD(0.075,0.001).withSlew(2).drive(3500);
+          chassis.withTurnPD(2,.1).withTurnSlew(2).turn(90).waitUntilSettled();
           currentPos = 1; break;}//robot's mvmt from 0 to 1 //
         case 2: {currentPos = 2; }//robot's mvmt from 0 to 2
         case 3: {currentPos = 3; }//robot's mvmt from 0 to 3
@@ -19,18 +19,17 @@ Auton& Auton::run(){
         case 5: {currentPos = 5; }//robot's mvmt from 0 to 5
         case 6: {currentPos = 6; }//robot's mvmt from 0 to 6
       }}
-    case 0: {
+    case 2: {
       switch (firstPos) {
         case 1: {
-          chassis.withPD(0.075,0.001).withSlew(2).drive(3500);
+          chassis.withPD(0.075,0.001).withSlew(2).withHeading(0).drive(5000);
           currentPos = 1; break;}//robot's mvmt from -1 to 1 //
         case 2: {currentPos = 2; }//robot's mvmt from -1 to 2
         case 3: {currentPos = 3; }//robot's mvmt from -1 to 3
         case 4: {currentPos = 4; }//robot's mvmt from -1 to 4
         case 5: {currentPos = 5; }//robot's mvmt from -1 to 5
         case 6: {currentPos = 6; }//robot's mvmt from -1 to 6
-      }
-      }
+      }}
   } //switch
   switch (currentPos){ //Where am I? First Position
     case 1: {
@@ -39,7 +38,7 @@ Auton& Auton::run(){
         case 3: {currentPos = 3;}//robot's mvmt from 1 to 3
         case 4: {currentPos = 4;}//robot's mvmt from 1 to 4
         case 5: {
-            chassis.withTurnPD(2,.1).withTurnSlew(2).turn(90).waitUntilSettled();
+            // chassis.withTurnPD(2,.1).withTurnSlew(2).turn(90).waitUntilSettled();
             currentPos = 5;}//robot's mvmt from 1 to 5
         case 6: {currentPos = 6;}//robot's mvmt from 1 to 6
       }}

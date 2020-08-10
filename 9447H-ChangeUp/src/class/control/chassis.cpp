@@ -6,7 +6,7 @@ bool Chassis::isSettled = true;
 double Chassis::leftheading = L_IMU.get_heading(), Chassis::middleheading = M_IMU.get_heading(), Chassis::rightheading = R_IMU.get_heading(),
  Chassis::averageheading = (leftheading + middleheading + rightheading)/3;
 
- double Chassis::power;
+ double Chassis::power, Chassis::drive_theta;
 
  double Chassis::kP_drive, Chassis::kD_drive, Chassis::kP_turn, Chassis::kD_turn;
 
@@ -74,6 +74,11 @@ Chassis& Chassis::withPD(double kP_, double kD_){
   return *this;
 }
 
+Chassis& Chassis::withHeading(double drive_theta_){
+  drive_theta = drive_theta_;
+  return *this;
+}
+
 Chassis& Chassis::turn(double theta_){
       isSettled = false;
       while(averageheading != theta_){
@@ -126,16 +131,33 @@ Chassis& Chassis::drive(double target){
       double prevError = error;
       double derivative = error - prevError;
       double power = error*kP_drive + derivative*kD_drive;
-      if (output <= power + rate_drive) {
+      if(output <= power + rate_drive) {
         output += rate_drive;
       }else if(output >= power){
         output -= rate_drive;
       }
-      RF.move(-output);
-      RB.move(-output);
-      LF.move(output);
-      LB.move(output);
-      pros::delay(20);
+      double LOutput = output;
+      double ROutput = output;
+      leftheading = L_IMU.get_heading();
+      middleheading = M_IMU.get_heading();
+      rightheading = R_IMU.get_heading();
+      averageheading = (leftheading + middleheading + rightheading)/3;
+      if( averageheading != drive_theta){
+        double headDifference = drive_theta - averageheading;
+        if(abs(headDifference) < 180){
+          LOutput = LOutput -5;
+          ROutput = ROutput +5;
+        }else{
+          ROutput = ROutput -5;
+          LOutput = LOutput -5;
+        }
+      }
+      RF.move(-ROutput);
+      RB.move(-ROutput);
+      LF.move(LOutput);
+      LB.move(LOutput);
+
+      pros::delay(10);
       if(averagePos < target+10 && averagePos > target-10) {
         isSettled = true;
         LF.move(0);

@@ -19,5 +19,5 @@ extern pros::Imu M_IMU, L_IMU, R_IMU;
 extern pros::ADIEncoder LEncoder, REncoder, MEncoder;
 
 //Global Variables
-extern int currentPos, firstPos, secondPos, thirdPos;
+extern int currentPos, startPos, firstPos, secondPos, thirdPos;
 extern bool *isSetup;

@@ -50,6 +50,13 @@ class Chassis {
     @param kD_ The kD variable.
     */
     Chassis& withPD(double kP_, double kD_);
+
+    /*
+    Sets the wanted angle for the robot to stick to while driving.
+
+    @param theta_ The wanted angle.
+    */
+    Chassis& withHeading(double drive_theta_);
     /*
     Turns the robot to a set angle.
 
@@ -73,7 +80,7 @@ class Chassis {
 
     static double leftheading, middleheading, rightheading, averageheading;
 
-    static double power,rate_drive, rate_turn;
+    static double power,rate_drive, rate_turn, drive_theta;
     static double kP_drive, kD_drive, kP_turn, kD_turn;
     static int output;
 };

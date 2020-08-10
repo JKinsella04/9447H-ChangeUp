@@ -4,10 +4,11 @@
 #include <bits/stdc++.h>
 #include <vector>
 
-LV_IMG_DECLARE(BlueSide);
-LV_IMG_DECLARE(RedSide);
-LV_IMG_DECLARE(Reset);
-LV_IMG_DECLARE(imgstart);
+LV_IMG_DECLARE(RedSide)
+LV_IMG_DECLARE(Reset)
+LV_IMG_DECLARE(imgstart)
+LV_IMG_DECLARE(sensorpage)
+LV_FONT_DECLARE(xirod);
 
 
 class Display{
@@ -31,7 +32,7 @@ public:
   /*
   Creates circles around selected goals.
   */
-  Display& arcchecker();
+  Display& arcChecker();
 
   /*
   Stores wanted starting position.
@@ -77,7 +78,17 @@ public:
   Gets Current position for auton.
   */
   int getCurrent();
-private:
+
+  /*
+  Updates the variables for the sensors on the Second Tab.
+  */
+  void updateSensors();
+
+  /*
+  Creates objects needed for selected tab and deletes other tabs objects.
+  */
+  void tabSelecter();
+
   /*
   Creates all of tab1's objects.
   */
@@ -93,12 +104,20 @@ private:
   */
   void create_tab3(lv_obj_t * parent);
 
+  /*
+  Creates all of tab4's objects
+  */
+  void create_tab4(lv_obj_t * parent);
+
+private:
+
   lv_obj_t * scr = lv_cont_create(NULL, NULL);
 
   lv_obj_t * tabview = lv_tabview_create(lv_layer_top(), NULL);
-  lv_obj_t * tab1 = lv_tabview_add_tab(tabview, "Autons");
+  lv_obj_t * tab1 = lv_tabview_add_tab(tabview, "Auton");
   lv_obj_t * tab2 = lv_tabview_add_tab(tabview, "Sensors");
-  lv_obj_t * tab3 = lv_tabview_add_tab(tabview, "Reset");
+  // lv_obj_t * tab3 = lv_tabview_add_tab(tabview, "PID");
+  lv_obj_t * tab4 = lv_tabview_add_tab(tabview, "Reset");
 
   lv_theme_t * th = lv_theme_night_init(20, NULL);
 
@@ -112,15 +131,16 @@ private:
   lv_obj_t * btn2 = lv_btn_create(tab1, NULL);
   lv_obj_t * label1 = lv_label_create(btn1, NULL);
   lv_obj_t * label2 = lv_label_create(btn2, NULL);
-  lv_obj_t * Preset = lv_ddlist_create(tab1, NULL);
 
   lv_obj_t * btnm = lv_btnm_create(tab1, NULL);
 
   lv_obj_t * background = lv_img_create(scr, NULL);
 
-  lv_obj_t * robot = lv_btn_create(tab2, NULL);
-  lv_obj_t * facing = lv_label_create(robot, NULL);
-  lv_obj_t * label= lv_label_create(tab2,NULL);
+  lv_obj_t * lIMU= lv_label_create(tab2,NULL);
+  lv_obj_t * mIMU= lv_label_create(tab2,NULL);
+  lv_obj_t * rIMU= lv_label_create(tab2,NULL);
+  lv_obj_t * lEncoder= lv_label_create(tab2,NULL);
+  lv_obj_t * rEncoder= lv_label_create(tab2,NULL);
 
   lv_obj_t * progressbar = lv_bar_create(lv_layer_top(), NULL);
   lv_obj_t * nine = lv_label_create(lv_layer_top(), NULL);
@@ -128,7 +148,6 @@ private:
 
 
   lv_obj_t * letternumberImg = lv_img_create(lv_scr_act(), NULL);
-
 
   std::vector<int> buttonVec = {};
 };

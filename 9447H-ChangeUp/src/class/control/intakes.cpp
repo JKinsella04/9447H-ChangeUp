@@ -35,15 +35,17 @@ void Intake::iiInit(){
   leftIntake.set_brake_mode(MOTOR_BRAKE_COAST);
   middleIntake.set_brake_mode(MOTOR_BRAKE_COAST);
   rightIntake.set_brake_mode(MOTOR_BRAKE_COAST);
+  indexer.set_brake_mode(MOTOR_BRAKE_COAST);
 }
 
 void Intake::iiLock(){
   leftIntake.set_brake_mode(MOTOR_BRAKE_HOLD);
   middleIntake.set_brake_mode(MOTOR_BRAKE_HOLD);
   rightIntake.set_brake_mode(MOTOR_BRAKE_HOLD);
+  indexer.set_brake_mode(MOTOR_BRAKE_HOLD);
 }
 
 Intake& Intake::autoSort(){
-  
+
   return *this;
 }

@@ -6,6 +6,6 @@
 Auton auton;
 
 void autonomous() {
-  printf("firstPos, secondPos, thirdPos %d %d %d \n", firstPos, secondPos, thirdPos);
+  printf("startPos, firstPos, secondPos, thirdPos %d %d %d %d \n", startPos, firstPos, secondPos, thirdPos);
   auton.run();
   }

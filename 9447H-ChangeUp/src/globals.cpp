@@ -7,14 +7,14 @@ pros::Controller master(CONTROLLER_MASTER);
 //Intakes
 pros::Motor leftIntake(1, MOTOR_GEARSET_18, 0, MOTOR_ENCODER_ROTATIONS); //12
 pros::Motor middleIntake(1, MOTOR_GEARSET_18, 1, MOTOR_ENCODER_ROTATIONS);
-pros::Motor rightIntake(10, MOTOR_GEARSET_18, 1, MOTOR_ENCODER_ROTATIONS); //16
+pros::Motor rightIntake(16, MOTOR_GEARSET_18, 1, MOTOR_ENCODER_ROTATIONS); //16
 
 //Indexer Motors
-pros::Motor indexer(19, MOTOR_GEARSET_18, 0, MOTOR_ENCODER_ROTATIONS);
+pros::Motor indexer(1, MOTOR_GEARSET_18, 0, MOTOR_ENCODER_ROTATIONS);
 
 //Drive Base
-pros::Motor LF(12, MOTOR_GEARSET_18, 0, MOTOR_ENCODER_COUNTS), //19,9,13,
-            LB(16, MOTOR_GEARSET_18, 0, MOTOR_ENCODER_COUNTS),
+pros::Motor LF(19, MOTOR_GEARSET_18, 0, MOTOR_ENCODER_COUNTS), //19,9,13,
+            LB(10, MOTOR_GEARSET_18, 0, MOTOR_ENCODER_COUNTS),
             RF(17, MOTOR_GEARSET_18, 0, MOTOR_ENCODER_COUNTS),
             RB(2, MOTOR_GEARSET_18, 0, MOTOR_ENCODER_COUNTS);
 
@@ -30,6 +30,7 @@ pros::ADIEncoder LEncoder(7, 8),
 
 //Global Variables
 int currentPos = 0,
+    startPos = 0,
     firstPos = 0,
     secondPos = 0,
     thirdPos = 0;
