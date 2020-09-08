@@ -156,7 +156,7 @@ Chassis& Chassis::drive(double target){
       RB.move(-ROutput);
       LF.move(LOutput);
       LB.move(LOutput);
-
+        printf("Error, AveragePos %f %f \n", error, averagePos);
       pros::delay(10);
       if(averagePos < target+10 && averagePos > target-10) {
         isSettled = true;

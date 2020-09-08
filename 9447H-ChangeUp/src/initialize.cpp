@@ -13,6 +13,7 @@ void competition_initialize() {
     display.display();
   while(1){
   display.backgroundcheck();
+  display.setAlliance();
   display.arcChecker();
   display.setVars();
   display.updateSensors();

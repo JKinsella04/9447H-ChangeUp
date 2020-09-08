@@ -8,7 +8,7 @@ class Slew {
 
     @param accel Acceleration
     */
-    int driveSlew(double accel);
+    int driveSlew(double fwdAccel, double deccel, double revAccel);
 
     /*
     Starts Intake Slew code with the given accerleration.
@@ -33,7 +33,7 @@ class Slew {
     void allSlew(double intakeAccel = 100, double indexerAccel = 100);
 
   private:
-    double LslewOutput = 0, RslewOutput = 0, IntakeOutput =0, IndexerOutput =0, middleIntakeOutput =0;
+    double LslewOutput = 0, RslewOutput = 0, IntakeOutput =0, IndexerOutput =0, middleIntakeOutput =0, driveMax = 12000;
     double IslewMax = 600, IslewMin = -600, middleIntakeMax = 400, middleIntakeMin  = -600; //Real Robot 600 RPM
-    double leftJoystick, rightJoystick, leftError, rightError;
+    double leftJoystick, rightJoystick, leftError, rightError, leftOvershoot, rightOvershoot;
 };

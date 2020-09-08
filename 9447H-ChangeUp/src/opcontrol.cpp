@@ -14,15 +14,20 @@ Intake intake;
 
 void opcontrol() {
   while (true) {
+    LF.set_brake_mode(MOTOR_BRAKE_HOLD);
+    LB.set_brake_mode(MOTOR_BRAKE_HOLD);
+    RF.set_brake_mode(MOTOR_BRAKE_HOLD);
+    RB.set_brake_mode(MOTOR_BRAKE_HOLD);
     intake.iiInit();
-    // double leftJoystick = master.get_analog(ANALOG_LEFT_Y);
-    // double rightJoystick = master.get_analog(ANALOG_RIGHT_Y);
-    // double bothJoystick = leftJoystick/rightJoystick;
-    // double leftError = leftJoystick*1.58 - 0;
-    // printf("left, right, both, leftError  %F %F %F %F \n", leftJoystick, rightJoystick, bothJoystick, leftError);
-    slew.driveSlew(5); //7.5
-    // slew.intakeSlew(100);
-    // slew.indexerSlew(100);
-    slew.allSlew();
-  pros::delay(20);} //while
+    // intake.autoSort();
+    slew.driveSlew(1000, 200, 800); //7.5
+    // intake.runIntakes();
+    // slew.allSlew(1, 50);
+    // pros::ADIAnalogIn sensor('C');
+    double sensorvalue = sensor.get_value();
+    if(sensor.get_value() <= 2200)intake.middleStop();
+  pros::delay(20);
+} //while
+
+
 }

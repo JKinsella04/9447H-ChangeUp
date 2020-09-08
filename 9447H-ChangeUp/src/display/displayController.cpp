@@ -315,6 +315,14 @@ return *this;
    lv_obj_set_pos(lEncoder, 80, 115);
  }
 
+ void Display::setAlliance(){
+   int currentAlliance = lv_ddlist_get_selected(Alliance);
+   switch (currentAlliance){
+     case 1:{ alliance = REDALLIANCE; std::cout << "Red" << std::endl; break;}
+     case 2:{ alliance = BLUEALLIANCE; std::cout << "Blue" << std::endl; break;}
+   }
+ }
+
  void Display::create_tab1(lv_obj_t * parent){
   static lv_style_t style_btn_rel;                        /*A variable to store the released style*/
   lv_style_copy(&style_btn_rel, &lv_style_plain);         /*Initialize from a built-in style*/
@@ -357,9 +365,9 @@ return *this;
   lv_label_set_text(label1, "1");
 	lv_label_set_text(label2, "2");
 
-	// lv_ddlist_set_options(Preset,"Blue\nRed");
-	// lv_obj_set_x(Preset, 10);
-	// lv_ddlist_set_fix_height(Preset, 80);
+	lv_ddlist_set_options(Alliance,"None\nRed\nBlue");
+	lv_obj_set_x(Alliance, 10);
+	lv_ddlist_set_fix_height(Alliance, 110);
 
 	lv_btnm_set_map(btnm, map);
 	lv_btnm_set_toggle(btnm, false,0);

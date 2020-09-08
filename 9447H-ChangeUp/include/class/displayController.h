@@ -10,6 +10,8 @@ LV_IMG_DECLARE(imgstart)
 LV_IMG_DECLARE(sensorpage)
 LV_FONT_DECLARE(xirod);
 
+#define REDALLIANCE 1
+#define BLUEALLIANCE 2
 
 class Display{
 public:
@@ -85,6 +87,12 @@ public:
   void updateSensors();
 
   /*
+  Sets team to either RED or BLUE
+  Run this before any other setter member functions during the intialize phase.
+  */
+  void setAlliance();
+
+  /*
   Creates objects needed for selected tab and deletes other tabs objects.
   */
   void tabSelecter();
@@ -131,7 +139,7 @@ private:
   lv_obj_t * btn2 = lv_btn_create(tab1, NULL);
   lv_obj_t * label1 = lv_label_create(btn1, NULL);
   lv_obj_t * label2 = lv_label_create(btn2, NULL);
-
+  lv_obj_t * Alliance = lv_ddlist_create(tab1, NULL);
   lv_obj_t * btnm = lv_btnm_create(tab1, NULL);
 
   lv_obj_t * background = lv_img_create(scr, NULL);

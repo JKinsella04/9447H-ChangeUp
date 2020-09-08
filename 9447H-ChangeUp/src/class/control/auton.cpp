@@ -22,7 +22,7 @@ Auton& Auton::run(){
     case 2: {
       switch (firstPos) {
         case 1: {
-          chassis.withPD(0.075,0.001).withSlew(2).withHeading(0).drive(5000);
+          chassis.withPD(0.075,0.001).withSlew(2).withHeading(0).drive(-5000);
           currentPos = 1; break;}//robot's mvmt from -1 to 1 //
         case 2: {currentPos = 2; }//robot's mvmt from -1 to 2
         case 3: {currentPos = 3; }//robot's mvmt from -1 to 3
