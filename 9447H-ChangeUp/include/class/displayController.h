@@ -12,6 +12,7 @@ LV_FONT_DECLARE(xirod);
 
 #define REDALLIANCE 1
 #define BLUEALLIANCE 2
+#define SKILLS 3
 
 class Display{
 public:
@@ -70,6 +71,11 @@ public:
   Runs the functions to set variables for autonomous.
   */
   Display& setVars();
+
+  /*
+  Gets start position for auton.
+  */
+  int getStart();
 
   /*
   Gets first stored position for auton.

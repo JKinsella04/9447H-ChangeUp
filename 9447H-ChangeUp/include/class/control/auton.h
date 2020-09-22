@@ -10,6 +10,11 @@ class Auton {
     */
     Auton& run();
 
+    /*
+    Runs the Skills autonomous.
+    */
+    Auton& runSkills();
+
   private:
 
 };

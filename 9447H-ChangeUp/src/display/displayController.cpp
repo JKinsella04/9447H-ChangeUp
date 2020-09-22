@@ -269,6 +269,10 @@ return *this;
  return *this;
  }
 
+ int Display::getStart(){
+   return startPos;
+ }
+
  int Display::getFirst(){
    return firstPos;
  }
@@ -320,6 +324,7 @@ return *this;
    switch (currentAlliance){
      case 1:{ alliance = REDALLIANCE; std::cout << "Red" << std::endl; break;}
      case 2:{ alliance = BLUEALLIANCE; std::cout << "Blue" << std::endl; break;}
+     case 3:{ alliance = SKILLS; std::cout << "Skills" << std::endl; break;}
    }
  }
 
@@ -365,9 +370,9 @@ return *this;
   lv_label_set_text(label1, "1");
 	lv_label_set_text(label2, "2");
 
-	lv_ddlist_set_options(Alliance,"None\nRed\nBlue");
+	lv_ddlist_set_options(Alliance,"None\nRed\nBlue\nSkills");
 	lv_obj_set_x(Alliance, 10);
-	lv_ddlist_set_fix_height(Alliance, 110);
+	lv_ddlist_set_fix_height(Alliance, 150);
 
 	lv_btnm_set_map(btnm, map);
 	lv_btnm_set_toggle(btnm, false,0);

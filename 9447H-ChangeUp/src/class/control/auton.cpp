@@ -2,8 +2,10 @@
 
 #include "class/control/auton.h"
 #include "class/control/chassis.h"
+#include "class/control/intakes.h"
 
 static Chassis chassis;
+static Intake intake;
 
 Auton& Auton::run(){
  while(true){
@@ -136,6 +138,12 @@ Auton& Auton::run(){
 
   }
 pros::delay(20);} //while
-
   return *this;
-} //function
+}
+
+Auton& Auton::runSkills(){
+  chassis.withPD(0.075,0.001).withSlew(2).withHeading(0).drive(3500);
+  chassis.withTurnPD(2,.1).withTurnSlew(2).turn(90).waitUntilSettled();
+  chassis.withPD(0.075,0.001).withSlew(2).withHeading(0).drive(1000);
+  return *this;
+}

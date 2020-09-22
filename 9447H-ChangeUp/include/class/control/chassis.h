@@ -13,9 +13,9 @@ class Chassis {
     void reset();
 
     /*
-    Resets Odom, IMUs, and Wheel Encoders.
+    Resets Odom sensors.
     */
-    void SensorReset();
+    void odomReset();
 
     /*
     Delays the calling thread until the robot completes its action.
@@ -53,7 +53,7 @@ class Chassis {
 
     /*
     Sets the wanted angle for the robot to stick to while driving.
-
+    
     @param theta_ The wanted angle.
     */
     Chassis& withHeading(double drive_theta_);

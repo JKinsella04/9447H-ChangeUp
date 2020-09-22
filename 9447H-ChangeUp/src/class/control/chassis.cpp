@@ -1,19 +1,17 @@
 #include "main.h"
 #include "chassis.h"
 
-
 bool Chassis::isSettled = true;
 double Chassis::leftheading = L_IMU.get_heading(), Chassis::middleheading = M_IMU.get_heading(), Chassis::rightheading = R_IMU.get_heading(),
  Chassis::averageheading = (leftheading + middleheading + rightheading)/3;
 
- double Chassis::power, Chassis::drive_theta;
+double Chassis::power, Chassis::drive_theta=0;
 
- double Chassis::kP_drive, Chassis::kD_drive, Chassis::kP_turn, Chassis::kD_turn;
+double Chassis::kP_drive, Chassis::kD_drive, Chassis::kP_turn, Chassis::kD_turn;
 
- double Chassis::rate_drive, Chassis::rate_turn;
+double Chassis::rate_drive, Chassis::rate_turn;
 
 int Chassis::output = 0;
-
 
 Chassis::Chassis() { }
 Chassis::~Chassis() {
@@ -38,10 +36,7 @@ void Chassis::reset() {
       pros::delay(3000);
 }
 
-void Chassis::SensorReset() {
-  L_IMU.reset();
-  M_IMU.reset();
-  R_IMU.reset();
+void Chassis::odomReset() {
   REncoder.reset();
   LEncoder.reset();
   MEncoder.reset();
@@ -123,6 +118,7 @@ Chassis& Chassis::turn(double theta_){
     }
 
 Chassis& Chassis::drive(double target){
+    odomReset();
     isSettled = false;
     double averagePos = REncoder.get_value() + LEncoder.get_value()/2;
     while(target != averagePos) {
