@@ -1,6 +1,8 @@
 #include "main.h"
 #include "globals.h"
 
+#define RIGHT 1
+#define LEFT 2
 
 class Chassis {
   public:
@@ -38,6 +40,13 @@ class Chassis {
     Chassis& withTurnPD(double kP_, double kD_);
 
     /*
+    Sets the direction you want to turn
+
+    @param direction_turn_ Either RIGHT or LEFT.
+    */
+    Chassis& withTurnDirection(double direction_turn_);
+
+    /*
     Sets Drive rate for the slew acceleration.
 
     @param rate_ Default rate = 5
@@ -53,7 +62,7 @@ class Chassis {
 
     /*
     Sets the wanted angle for the robot to stick to while driving.
-    
+
     @param theta_ The wanted angle.
     */
     Chassis& withHeading(double drive_theta_);
@@ -81,6 +90,6 @@ class Chassis {
     static double leftheading, middleheading, rightheading, averageheading;
 
     static double power,rate_drive, rate_turn, drive_theta;
-    static double kP_drive, kD_drive, kP_turn, kD_turn;
+    static double kP_drive, kD_drive, kP_turn, kD_turn, direction_turn;
     static int output;
 };

@@ -63,7 +63,7 @@ class Intake{
     void middleSpin(int ecount, int speed);
 
     /*
-    Sets middleIntake to 0 RPM. 
+    Sets middleIntake to 0 RPM.
     */
     void middleStop();
 
@@ -71,6 +71,11 @@ class Intake{
     Runs the intakes for driver control.
     */
     void runIntakes();
+
+    /*
+    Automatically stops certain intakes based off light sensor values.
+    */
+    void runAutoIndexer();
 
     /*
     Initializes both the intakes and the indexers.
@@ -82,6 +87,11 @@ class Intake{
     Sets both intakes and indexers to Hold
     */
     void iiLock();
+
+    /*
+    Deploys the hood and intakes. Run at the beginning of driver control and pre-auton
+    */
+    void deploy();
 
     /*
     Automatically sorts the balls. The Auton builder inputs opposingColor based on ddlist(Alliance)
@@ -102,4 +112,5 @@ class Intake{
     void waitUntilSettled();
 
   private:
+    bool topFull, middleFull;
 };

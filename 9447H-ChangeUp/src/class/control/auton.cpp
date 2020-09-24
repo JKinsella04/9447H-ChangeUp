@@ -142,8 +142,9 @@ pros::delay(20);} //while
 }
 
 Auton& Auton::runSkills(){
-  chassis.withPD(0.075,0.001).withSlew(2).withHeading(0).drive(3500);
-  chassis.withTurnPD(2,.1).withTurnSlew(2).turn(90).waitUntilSettled();
-  chassis.withPD(0.075,0.001).withSlew(2).withHeading(0).drive(1000);
+  intake.deploy();
+  // chassis.withPD(0.075,0.001).withSlew(2).withHeading(0).drive(1000);
+  // chassis.withTurnPD(1,.1).withTurnSlew(2).withTurnDirection(LEFT).turn(270).waitUntilSettled();
+  // chassis.withPD(0.075,0.001).withSlew(2).withHeading(0).drive(1000);
   return *this;
 }

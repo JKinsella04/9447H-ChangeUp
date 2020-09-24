@@ -7,7 +7,7 @@ double Chassis::leftheading = L_IMU.get_heading(), Chassis::middleheading = M_IM
 
 double Chassis::power, Chassis::drive_theta=0;
 
-double Chassis::kP_drive, Chassis::kD_drive, Chassis::kP_turn, Chassis::kD_turn;
+double Chassis::kP_drive, Chassis::kD_drive, Chassis::kP_turn, Chassis::kD_turn, Chassis::direction_turn;
 
 double Chassis::rate_drive, Chassis::rate_turn;
 
@@ -31,7 +31,6 @@ void Chassis::reset() {
       M_IMU.reset();
       R_IMU.reset();
       LEncoder.reset();
-      MEncoder.reset();
       REncoder.reset();
       pros::delay(3000);
 }
@@ -39,8 +38,7 @@ void Chassis::reset() {
 void Chassis::odomReset() {
   REncoder.reset();
   LEncoder.reset();
-  MEncoder.reset();
-  pros::delay(1000);
+  pros::delay(50);
 }
 
 void Chassis::waitUntilSettled() {
@@ -55,6 +53,11 @@ Chassis& Chassis::withTurnSlew(double rate_){
 Chassis& Chassis::withTurnPD(double kP_, double kD_){
   kP_turn = kP_;
   kD_turn = kD_;
+  return *this;
+}
+
+Chassis& Chassis::withTurnDirection(double direction_turn_){
+  direction_turn = direction_turn_;
   return *this;
 }
 
@@ -94,10 +97,21 @@ Chassis& Chassis::turn(double theta_){
           }else if(output >= power){
             output -= rate_turn;
           }
-          LF.move(output);
-          LB.move(output);
-          RF.move(output);
-          RB.move(output);
+            if(direction_turn == LEFT){
+              LF.move(-output);
+              LB.move(-output);
+              RF.move(-output);
+              RB.move(-output);
+            }else if(direction_turn == RIGHT){
+              LF.move(output);
+              LB.move(output);
+              RF.move(output);
+              RB.move(output);
+            }
+          // LF.move(-output);
+          // LB.move(-output);
+          // RF.move(-output);
+          // RB.move(-output);
           double tpower = LF.get_target_velocity(); //Speed sent to motors
           double rpower = LF.get_actual_velocity(); //Actual speed of the motors
           if(leftheading > 355|| rightheading > 355 || middleheading > 355){
@@ -119,6 +133,10 @@ Chassis& Chassis::turn(double theta_){
 
 Chassis& Chassis::drive(double target){
     odomReset();
+    double leftvalue =LEncoder.get_value();
+    double rightvalue =REncoder.get_value();
+    printf("Left, Right %f %f  \n", leftvalue, rightvalue);
+    pros::delay(1000);
     isSettled = false;
     double averagePos = REncoder.get_value() + LEncoder.get_value()/2;
     while(target != averagePos) {
@@ -148,11 +166,13 @@ Chassis& Chassis::drive(double target){
           LOutput = LOutput -5;
         }
       }
-      RF.move(-ROutput);
-      RB.move(-ROutput);
-      LF.move(LOutput);
-      LB.move(LOutput);
-        printf("Error, AveragePos %f %f \n", error, averagePos);
+      RF.move(ROutput);
+      RB.move(ROutput);
+      LF.move(-LOutput);
+      LB.move(-LOutput);
+      double leftvalue =LEncoder.get_value();
+      double rightvalue =REncoder.get_value();
+      printf("Error, AveragePos, Left, Right %f %f %f %f \n", error, averagePos, leftvalue, rightvalue);
       pros::delay(10);
       if(averagePos < target+10 && averagePos > target-10) {
         isSettled = true;

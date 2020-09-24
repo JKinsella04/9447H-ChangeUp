@@ -20,12 +20,11 @@ void opcontrol() {
     RB.set_brake_mode(MOTOR_BRAKE_HOLD);
     intake.iiInit();
     // intake.autoSort();
-    slew.driveSlew(1000, 200, 800); //7.5
-    // intake.runIntakes();
+    slew.driveSlew(900, 720, 720); //7.5
+    intake.runIntakes();
+    intake.runAutoIndexer();
     // slew.allSlew(1, 50);
     // pros::ADIAnalogIn sensor('C');
-    double sensorvalue = sensor.get_value();
-    if(sensor.get_value() <= 2200)intake.middleStop();
   pros::delay(20);
 } //while
 

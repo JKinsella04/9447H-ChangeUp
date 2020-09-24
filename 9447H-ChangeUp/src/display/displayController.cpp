@@ -30,7 +30,6 @@
    // pros::delay(2000);
    REncoder.reset();
    LEncoder.reset();
-   MEncoder.reset();
     // pros::delay(1000);
    while(prog < 100){
     prog ++;
@@ -492,7 +491,6 @@ return *this;
     if(lv_btn_get_state(btnOdom)== LV_BTN_STATE_PR) {
       REncoder.reset();
       LEncoder.reset();
-      MEncoder.reset();
     }
     if(lv_btn_get_state(btnChassis)== LV_BTN_STATE_PR) {
       LF.tare_position();
