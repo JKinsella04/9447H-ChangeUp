@@ -98,15 +98,15 @@ Chassis& Chassis::turn(double theta_){
             output -= rate_turn;
           }
             if(direction_turn == LEFT){
-              LF.move(-output);
-              LB.move(-output);
-              RF.move(-output);
-              RB.move(-output);
-            }else if(direction_turn == RIGHT){
               LF.move(output);
               LB.move(output);
               RF.move(output);
               RB.move(output);
+            }else if(direction_turn == RIGHT){
+              LF.move(-output);
+              LB.move(-output);
+              RF.move(-output);
+              RB.move(-output);
             }
           // LF.move(-output);
           // LB.move(-output);
@@ -174,7 +174,7 @@ Chassis& Chassis::drive(double target){
       double rightvalue =REncoder.get_value();
       printf("Error, AveragePos, Left, Right %f %f %f %f \n", error, averagePos, leftvalue, rightvalue);
       pros::delay(10);
-      if(averagePos < target+10 && averagePos > target-10) {
+      if(averagePos < target+50 && averagePos > target-50) {
         isSettled = true;
         LF.move(0);
         LB.move(0);

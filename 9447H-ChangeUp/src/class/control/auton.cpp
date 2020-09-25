@@ -143,8 +143,36 @@ pros::delay(20);} //while
 
 Auton& Auton::runSkills(){
   intake.deploy();
-  // chassis.withPD(0.075,0.001).withSlew(2).withHeading(0).drive(1000);
-  // chassis.withTurnPD(1,.1).withTurnSlew(2).withTurnDirection(LEFT).turn(270).waitUntilSettled();
-  // chassis.withPD(0.075,0.001).withSlew(2).withHeading(0).drive(1000);
+  LF.move_relative(1, 200);
+  LB.move_relative(1, 200);
+  RF.move_relative(1, 200);
+  RB.move_relative(1, 200);
+  chassis.withTurnPD(2,.15).withTurnSlew(2).withTurnDirection(RIGHT).turn(50).waitUntilSettled();
+  intake.intakeSpin(600);
+  chassis.withPD(0.15,1).withSlew(2).withHeading(0).drive(1050);
+  chassis.withTurnPD(1.2,.11).withTurnSlew(2).withTurnDirection(RIGHT).turn(135).waitUntilSettled();
+  chassis.withPD(0.15,1).withSlew(2).withHeading(0).drive(700);
+  intake.middleSpin(600);
+  intake.indexerSpin(600);
+  pros::delay(50);
+  intake.indexerSpin(-600);
+  pros::delay(10);
+  intake.indexerSpin(600);
+  intake.intakeSpin(600);
+  pros::delay(500);
+  intake.intakeStop(); intake.middleStop(); intake.indexerStop();
+  chassis.withPD(0.15,1).withSlew(2).withHeading(0).drive(-1000); //back up
+  chassis.withTurnPD(2,.1).withTurnSlew(2).withTurnDirection(RIGHT).turn(90).waitUntilSettled();//turn left
+  intake.intakeSpin(600);
+  chassis.withPD(0.15,1).withSlew(2).withHeading(0).drive(750);
+  intake.indexerSpin(600);  
+  chassis.withTurnPD(.9,.1).withTurnSlew(2).withTurnDirection(RIGHT).turn(225).waitUntilSettled();
+  //turn right to goal
+  //go forward
+  //deposit
+  //back up
+  //turn right to 270
+  //go forward and pick up ball
+  //turn left
   return *this;
 }

@@ -19,7 +19,7 @@ class Intake{
     @param ecount encounder counts
     @param speed RPM
     */
-    void intakeSpin(int ecount, int speed);
+    void intakeSpin(double ecount, int speed);
 
     /*
     Sets intakes to 0 RPM.

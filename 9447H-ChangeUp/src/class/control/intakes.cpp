@@ -9,12 +9,9 @@ pros::vision_signature_s_t BLUEBALL_SIG = pros::Vision::signature_from_utility(B
 void Intake::intakeSpin(int speed){
   leftIntake.move(speed);
   rightIntake.move(speed);
-  pros::delay(10);
-  leftIntake.move(speed);
-  rightIntake.move(speed);
 }
 
-void Intake::intakeSpin(int ecount, int speed){
+void Intake::intakeSpin(double ecount, int speed){
   leftIntake.move_relative(ecount, speed);
   pros::delay(50);
   rightIntake.move_relative(ecount, speed);
@@ -27,12 +24,12 @@ void Intake::intakeStop(){
 
 void Intake::indexerSpin(int speed){
   indexer.move(speed);
-  pros::delay(10);
-  indexer.move(speed);
 }
 
 void Intake::indexerSpin(int ecount, int speed){
-  indexer.move_relative(ecount, speed);
+  indexer.move(speed);
+  pros::delay(ecount);
+  indexerStop();
 }
 
 void Intake::indexerStop(){
@@ -40,8 +37,6 @@ void Intake::indexerStop(){
 }
 
 void Intake::middleSpin(int speed){
-  middleIntake.move(speed);
-  pros::delay(10);
   middleIntake.move(speed);
 }
 
@@ -108,8 +103,9 @@ void Intake::iiLock(){
 
 void Intake::deploy(){
   iiInit();
-  indexerSpin(-3,-600);
+  indexerSpin(50,-600);
   intakeSpin(-3,-600);
+  pros::delay(500);
 }
 void Intake::calculateSort(int opposingColor){
   while (true) {
