@@ -49,25 +49,25 @@ void Intake::middleStop(){
 }
 
 void Intake::runIntakes(){
-  if(master.get_digital(DIGITAL_L1) ==1)intakeSpin(600);
+  if(master.get_digital(DIGITAL_L1) ==1)runAutoIndexer();
   else if(master.get_digital(DIGITAL_L2) ==1)intakeSpin(-600);
-  else if(master.get_digital(DIGITAL_L1) !=1 && master.get_digital(DIGITAL_L2) !=1 && master.get_digital(DIGITAL_A) !=1 && master.get_digital(DIGITAL_Y) !=1){ intakeStop();}
-  if(master.get_digital(DIGITAL_R2) ==1){indexerSpin(-400); middleSpin(400);}
-  else if(master.get_digital(DIGITAL_R1) ==1){indexerSpin(600); middleSpin(600);}
+  else if(master.get_digital(DIGITAL_L1) !=1 && master.get_digital(DIGITAL_L2) !=1 && master.get_digital(DIGITAL_Y) !=1){ intakeStop();}
+  if(master.get_digital(DIGITAL_R2) ==1){indexerSpin(-400); middleSpin(400);if(master.get_digital(DIGITAL_L2) ==1){intakeSpin(600);}}
+  else if(master.get_digital(DIGITAL_R1) ==1){indexerSpin(600); middleSpin(600);if(master.get_digital(DIGITAL_L2) ==1){intakeSpin(600);}}
   else if(master.get_digital(DIGITAL_Y) ==1){intakeSpin(-600); middleSpin(-600); indexerSpin(-600);}
-  else if(master.get_digital(DIGITAL_R1) !=1 && master.get_digital(DIGITAL_R2) !=1 && master.get_digital(DIGITAL_Y) !=1 && master.get_digital(DIGITAL_A) !=1){indexerStop(); middleStop();}
-  if(master.get_digital(DIGITAL_L1) !=1 && master.get_digital(DIGITAL_L2) !=1 && master.get_digital(DIGITAL_R1) !=1 && master.get_digital(DIGITAL_R2) !=1 && master.get_digital(DIGITAL_A) !=1 && master.get_digital(DIGITAL_Y) !=1){intakeStop(); indexerStop(); middleStop();}
+  else if(master.get_digital(DIGITAL_R1) !=1 && master.get_digital(DIGITAL_R2) !=1 && master.get_digital(DIGITAL_Y) !=1 && master.get_digital(DIGITAL_L1) !=1){indexerStop(); middleStop();}
+  if(master.get_digital(DIGITAL_L1) !=1 && master.get_digital(DIGITAL_L2) !=1 && master.get_digital(DIGITAL_R1) !=1 && master.get_digital(DIGITAL_R2) !=1 && master.get_digital(DIGITAL_Y) !=1){intakeStop(); indexerStop(); middleStop();}
 }
 
 void Intake::runAutoIndexer(){
-  if(master.get_digital(DIGITAL_A) == 1){
+  // if(master.get_digital(DIGITAL_L1) == 1){
     double midLightAverage = botLight.get_value(); //+ topLight.get_value())/2;
     double topLightAverage = topLight.get_value();
-    if(topLightAverage <=2200){
+    if(topLightAverage <=2800){
       indexerStop();
       topFull=1;
-      if(midLightAverage >= 2200){
-        middleSpin(600);}
+      if(midLightAverage >= 2500){
+        middleSpin(50);}
       else{
         middleStop();
         middleFull=1;
@@ -75,12 +75,12 @@ void Intake::runAutoIndexer(){
      }
     else{
     intakeSpin(600);
-    middleSpin(600);
-    indexerSpin(600);
+    middleSpin(50);
+    indexerSpin(50);
     topFull=0;
   }
   printf("lightAverage  %F \n",midLightAverage);
-}// else if(master.get_digital(DIGITAL_R1) !=1 && master.get_digital(DIGITAL_R2) !=1 && master.get_digital(DIGITAL_Y) !=1 && master.get_digital(DIGITAL_A)){indexerStop(); middleStop();}
+// }// else if(master.get_digital(DIGITAL_R1) !=1 && master.get_digital(DIGITAL_R2) !=1 && master.get_digital(DIGITAL_Y) !=1 && master.get_digital(DIGITAL_A)){indexerStop(); middleStop();}
 }
 
 void Intake::iiInit(){
@@ -107,6 +107,7 @@ void Intake::deploy(){
   intakeSpin(-3,-600);
   pros::delay(500);
 }
+
 void Intake::calculateSort(int opposingColor){
   while (true) {
     pros::vision_object_s_t latestsnapshot = vis.get_by_sig(0, opposingColor);

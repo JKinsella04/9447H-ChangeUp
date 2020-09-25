@@ -22,7 +22,7 @@ void opcontrol() {
     // intake.autoSort();
     slew.driveSlew(900, 720, 720); //7.5
     intake.runIntakes();
-    intake.runAutoIndexer();
+    // intake.runAutoIndexer();
     // slew.allSlew(1, 50);
     // pros::ADIAnalogIn sensor('C');
   pros::delay(20);

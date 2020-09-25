@@ -30,7 +30,7 @@ pros::ADIEncoder LEncoder('H', 'G'),
                  // MEncoder(4, 5); //3,4
 
 pros::ADIAnalogIn botLight('C');
-pros::ADIAnalogIn topLight('E');
+pros::ADIAnalogIn topLight('F');
 
 //Global Variables
 int currentPos = 0,
