@@ -2,9 +2,7 @@
 
 #include "class/control/intakes.h"
 
-pros::vision_signature_s_t REDBALL_SIG = pros::Vision::signature_from_utility(REDBALL, 8497, 10143, 9320, -319, 1185, 434, 3.000, 0);
-pros::vision_signature_s_t BLUEBALL_SIG = pros::Vision::signature_from_utility(BLUEBALL, -4111, -3209, -3660, -2213, -1065, -1640, 3.000, 0);
-
+int Intake::ledLevel = 75;
 
 void Intake::intakeSpin(int speed){
   leftIntake.move(speed);
@@ -15,6 +13,11 @@ void Intake::intakeSpin(double ecount, int speed){
   leftIntake.move_relative(ecount, speed);
   pros::delay(50);
   rightIntake.move_relative(ecount, speed);
+}
+
+void Intake::intakeSpinVelocity(int velocity){
+  leftIntake.move_velocity(velocity);
+  rightIntake.move_velocity(velocity);
 }
 
 void Intake::intakeStop(){
@@ -32,6 +35,10 @@ void Intake::indexerSpin(int ecount, int speed){
   indexerStop();
 }
 
+void Intake::indexerSpinVelocity(int velocity){
+  indexer.move_velocity(velocity);
+}
+
 void Intake::indexerStop(){
   indexer.move(0);
 }
@@ -44,16 +51,21 @@ void Intake::middleSpin(int ecount, int speed){
   middleIntake.move_relative(ecount, speed);
 }
 
+void Intake::middleSpinVelocity(int velocity){
+  middleIntake.move_velocity(velocity);
+}
+
 void Intake::middleStop(){
   middleIntake.move(0);
 }
 
-void Intake::runIntakes(){
-  if(master.get_digital(DIGITAL_L1) ==1)runAutoIndexer();
+void Intake::runIntakes(){ // Runs the intakes based on L1,L2,R1,R2 and, Y and if they are pressed.
+  if(master.get_digital(DIGITAL_L1) ==1 && master.get_digital(DIGITAL_R1)!=1)autoSort(alliance);//runAutoIndexer();
+  else if(master.get_digital(DIGITAL_L1) ==1 && master.get_digital(DIGITAL_R1)==1)goalSort(alliance);
   else if(master.get_digital(DIGITAL_L2) ==1)intakeSpin(-600);
   else if(master.get_digital(DIGITAL_L1) !=1 && master.get_digital(DIGITAL_L2) !=1 && master.get_digital(DIGITAL_Y) !=1){ intakeStop();}
   if(master.get_digital(DIGITAL_R2) ==1){indexerSpin(-400); middleSpin(400);if(master.get_digital(DIGITAL_L2) ==1){intakeSpin(600);}}
-  else if(master.get_digital(DIGITAL_R1) ==1){indexerSpin(600); middleSpin(600);if(master.get_digital(DIGITAL_L2) ==1){intakeSpin(600);}}
+  else if(master.get_digital(DIGITAL_R1) ==1 && master.get_digital(DIGITAL_L1) !=1){indexerSpin(600); middleSpin(600);if(master.get_digital(DIGITAL_L2) ==1){intakeSpin(600);}}
   else if(master.get_digital(DIGITAL_Y) ==1){intakeSpin(-600); middleSpin(-600); indexerSpin(-600);}
   else if(master.get_digital(DIGITAL_R1) !=1 && master.get_digital(DIGITAL_R2) !=1 && master.get_digital(DIGITAL_Y) !=1 && master.get_digital(DIGITAL_L1) !=1){indexerStop(); middleStop();}
   if(master.get_digital(DIGITAL_L1) !=1 && master.get_digital(DIGITAL_L2) !=1 && master.get_digital(DIGITAL_R1) !=1 && master.get_digital(DIGITAL_R2) !=1 && master.get_digital(DIGITAL_Y) !=1){intakeStop(); indexerStop(); middleStop();}
@@ -65,19 +77,16 @@ void Intake::runAutoIndexer(){
     double topLightAverage = topLight.get_value();
     if(topLightAverage <=2800){
       indexerStop();
-      topFull=1;
       if(midLightAverage >= 2500){
         middleSpin(50);}
       else{
         middleStop();
-        middleFull=1;
        }
      }
     else{
     intakeSpin(600);
     middleSpin(50);
     indexerSpin(50);
-    topFull=0;
   }
   printf("lightAverage  %F \n",midLightAverage);
 // }// else if(master.get_digital(DIGITAL_R1) !=1 && master.get_digital(DIGITAL_R2) !=1 && master.get_digital(DIGITAL_Y) !=1 && master.get_digital(DIGITAL_A)){indexerStop(); middleStop();}
@@ -108,19 +117,68 @@ void Intake::deploy(){
   pros::delay(500);
 }
 
-void Intake::calculateSort(int opposingColor){
-  while (true) {
-    pros::vision_object_s_t latestsnapshot = vis.get_by_sig(0, opposingColor);
-    std::cout << "sig:" << latestsnapshot.signature << std::endl; //debug
-    if(latestsnapshot.signature != 0){/*do mvmt to send out back*/}
-    pros::delay(2);
+void Intake::autoSort(int allianceColor){
+  switch (allianceColor){
+    case REDBALL:{
+      optical.set_led_pwm(ledLevel);
+      intakeSpinVelocity(600);
+      middleSpinVelocity(600);
+      indexerSpinVelocity(280);
+      double currentHue = optical.get_hue();
+      printf("currentHue %F\n", currentHue); //debug code
+      if(optical.get_hue() <= 10){ //Sees RED Ball //If there is a ball at the top already it will stop this ball at the Optical Sensor
+        middleSpinVelocity(600);
+        indexerSpinVelocity(280);
+        if(topLight.get_value()<=2800)middleStop();
+      }
+      if(optical.get_hue() >= 220){middleSpinVelocity(600); if(topLight.get_value() >=2800){indexerSpinVelocity(-600);}} //If there is a blue ball it will send it out back.
+      if(topLight.get_value() <=2800){
+        indexerStop();
+      }
+      break;
+    }
+    case BLUEBALL:{
+      optical.set_led_pwm(ledLevel);
+      intakeSpinVelocity(600);
+      middleSpinVelocity(600);
+      indexerSpinVelocity(280);
+      double currentHue = optical.get_hue();
+      printf("currentHue %F\n", currentHue); //debug code
+      if(optical.get_hue() >=220){ //Sees BLUE Ball //If there is a ball at the top already it will stop this ball at the Optical Sensor
+        middleSpinVelocity(600);
+        indexerSpinVelocity(280);
+        if(topLight.get_value()<=2800)middleStop();
+      }
+      if(optical.get_hue() <=10){middleSpin(600); if(topLight.get_value() >=2800){indexerSpin(-600);}} //If there is a RED ball it will send it out back.
+      if(topLight.get_value() <=2800){
+        indexerStop();
+      }
+      break;
+    }
   }
 }
 
-Intake& Intake::autoSort(){
-  switch (alliance){
-    case 1:{ calculateSort(REDBALL); break;/*Red Alliance*/}
-    case 2:{ calculateSort(BLUEBALL); break;/*Blue Alliance*/}
+void Intake::goalSort(int allianceColor){
+  switch (allianceColor){
+    case REDBALL:{
+      optical.set_led_pwm(ledLevel);
+      intakeSpin(200);
+      middleSpin(600);
+      indexerSpin(600);
+      double currentHue = optical.get_hue();
+      printf("currentHue %F\n", currentHue); //debug code
+      if(optical.get_hue() >= 220){indexerSpin(-600);} //If there is a blue ball it will send it out back.
+      break;
+    }
+    case BLUEBALL:{
+      optical.set_led_pwm(ledLevel);
+      intakeSpin(200);
+      middleSpin(600);
+      indexerSpin(600);
+      double currentHue = optical.get_hue();
+      printf("currentHue %F\n", currentHue); //debug code
+      if(optical.get_hue() <= 10){indexerSpin(-600);} //If there is a red ball it will send it out back.
+      break;
+    }
   }
-  return *this;
 }

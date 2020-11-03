@@ -7,7 +7,7 @@
 class Intake{
   public:
     /*
-    Spins intakes at given RPM
+    Spins intakes at given RPM with the range of -127,127.
 
     @param speed RPM
     */
@@ -22,12 +22,19 @@ class Intake{
     void intakeSpin(double ecount, int speed);
 
     /*
+    Spins intakes at given RPM to the max of the gearset of the motor
+
+    @param velocity RPM
+    */
+    void intakeSpinVelocity(int velocity);
+
+    /*
     Sets intakes to 0 RPM.
     */
     void intakeStop();
 
     /*
-    Spins indexer at given RPM
+    Spins indexer at given RPM with the range of -127,127.
 
     @param speed RPM
     */
@@ -42,17 +49,23 @@ class Intake{
     void indexerSpin(int ecount, int speed);
 
     /*
+    Spins the indexer at given RPM to the max of the gearset of the motor
+
+    @param velocity RPM
+    */
+    void indexerSpinVelocity(int velocity);
+
+    /*
     Sets indexer to 0 RPM.
     */
     void indexerStop();
 
     /*
-    Spins middle intake at given RPM.
+    Spins middle intake at given RPM with the range of -127,127.
 
     @param speed RPM
     */
     void middleSpin(int speed);
-
 
     /*
     Spins middleIntake for the vien amount of encoder counts in RPM.
@@ -61,6 +74,13 @@ class Intake{
     @param speed rpm
     */
     void middleSpin(int ecount, int speed);
+
+    /*
+    Spins the middle intake at given RPM to the max of the gearset of the motor
+
+    @param velocity RPM
+    */
+    void middleSpinVelocity(int velocity);
 
     /*
     Sets middleIntake to 0 RPM.
@@ -94,17 +114,16 @@ class Intake{
     void deploy();
 
     /*
-    Automatically sorts the balls. The Auton builder inputs opposingColor based on ddlist(Alliance)
-
-    @param opposingColor The color of the opposing alliance.
-    */
-    void calculateSort(int opposingColor);
-
-    /*
     Sorts out the enemy ball based on color.
     The opposing color is determined during the auton selection before a match.
     */
-    Intake& autoSort();
+    void autoSort(int allianceColor);
+
+    /*
+    Sorts out the enemy ball based on color.
+    This is used to auto sort while interacting with the gaols.
+    */
+    void goalSort(int allianceColor);
 
     /*
     Delays the calling thread until the robot completes its action.
@@ -112,5 +131,5 @@ class Intake{
     void waitUntilSettled();
 
   private:
-    bool topFull, middleFull;
+    static int ledLevel;
 };

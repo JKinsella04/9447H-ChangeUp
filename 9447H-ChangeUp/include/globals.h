@@ -11,7 +11,7 @@ extern pros::Motor indexer;
 
 
 //Sensor Declarations
-extern pros::Vision vis;
+extern pros::Optical optical;
 
 extern pros::Imu M_IMU, L_IMU, R_IMU;
 
