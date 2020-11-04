@@ -6,8 +6,10 @@
 int Slew::driveSlew(double fwdAccel, double deccel, double revAccel){
   leftJoystick = master.get_analog(ANALOG_LEFT_Y);
   rightJoystick = master.get_analog(ANALOG_RIGHT_Y);
-  if(leftJoystick/rightJoystick < 0 || leftJoystick/rightJoystick >=2)driveMax =6000;
-  if(rightJoystick/leftJoystick < 0 || rightJoystick/leftJoystick >=2)driveMax =6000;
+  double averageJoystick = leftJoystick/rightJoystick;
+  printf("joyaverage %f\n", averageJoystick);
+  if(leftJoystick/rightJoystick < 0 || leftJoystick/rightJoystick >=2){driveMax =9000;}else{driveMax=12000;}
+  if(rightJoystick/leftJoystick < 0 || rightJoystick/leftJoystick >=2){driveMax =9000;}else{driveMax=12000;}
 
   if(master.get_analog(ANALOG_LEFT_Y) < 5 && master.get_analog(ANALOG_LEFT_Y) > -5 ) leftJoystick = 0;
   if(master.get_analog(ANALOG_RIGHT_Y) < 5 && master.get_analog(ANALOG_RIGHT_Y) > -5 ) rightJoystick = 0;

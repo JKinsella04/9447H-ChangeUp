@@ -20,7 +20,7 @@ void opcontrol() {
     RB.set_brake_mode(MOTOR_BRAKE_HOLD);
     intake.iiInit();
     // intake.autoSort();
-    slew.driveSlew(900, 720, 720); //7.5
+    slew.driveSlew(1000, 720, 900); //7.5
     intake.runIntakes();
     // intake.runAutoIndexer();
     // slew.allSlew(1, 50);
