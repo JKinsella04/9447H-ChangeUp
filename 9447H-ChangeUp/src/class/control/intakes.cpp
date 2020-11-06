@@ -122,37 +122,33 @@ void Intake::autoSort(int allianceColor){
     case REDBALL:{
       optical.set_led_pwm(ledLevel);
       intakeSpinVelocity(600);
-      middleSpinVelocity(600);
-      indexerSpinVelocity(280);
-      double currentHue = optical.get_hue();
-      printf("currentHue %F\n", currentHue); //debug code
-      if(optical.get_hue() <= 10){ //Sees RED Ball //If there is a ball at the top already it will stop this ball at the Optical Sensor
-        middleSpinVelocity(600);
-        indexerSpinVelocity(280);
-        if(topLight.get_value()<=2800)middleStop();
-      }
-      if(optical.get_hue() >= 220){middleSpinVelocity(600); if(topLight.get_value() >=2800){indexerSpinVelocity(-600);}} //If there is a blue ball it will send it out back.
+      middleSpinVelocity(300);
+      indexerSpinVelocity(300);
       if(topLight.get_value() <=2800){
         indexerStop();
       }
+      double currentHue = optical.get_hue();
+      printf("currentHue %F\n", currentHue); //debug code
+      if(optical.get_hue() <= 10){ //Sees RED Ball //If there is a ball at the top already it will stop this ball at the Optical Sensor
+        if(topLight.get_value()<=2800)middleStop();
+      }
+      if(optical.get_hue() >= 220){middleSpinVelocity(600); if(topLight.get_value() >=2800){indexerSpinVelocity(-600);}} //If there is a blue ball it will send it out back.
       break;
     }
     case BLUEBALL:{
       optical.set_led_pwm(ledLevel);
       intakeSpinVelocity(600);
-      middleSpinVelocity(600);
-      indexerSpinVelocity(280);
-      double currentHue = optical.get_hue();
-      printf("currentHue %F\n", currentHue); //debug code
-      if(optical.get_hue() >=220){ //Sees BLUE Ball //If there is a ball at the top already it will stop this ball at the Optical Sensor
-        middleSpinVelocity(600);
-        indexerSpinVelocity(280);
-        if(topLight.get_value()<=2800)middleStop();
-      }
-      if(optical.get_hue() <=10){middleSpin(600); if(topLight.get_value() >=2800){indexerSpin(-600);}} //If there is a RED ball it will send it out back.
+      middleSpinVelocity(300);
+      indexerSpinVelocity(300);
       if(topLight.get_value() <=2800){
         indexerStop();
       }
+      double currentHue = optical.get_hue();
+      printf("currentHue %F\n", currentHue); //debug code
+      if(optical.get_hue() >=220){ //Sees BLUE Ball //If there is a ball at the top already it will stop this ball at the Optical Sensor
+        if(topLight.get_value()<=2800)middleStop();
+      }
+      if(optical.get_hue() <=10){middleSpinVelocity(600); if(topLight.get_value() >=2800){indexerSpinVelocity(-600);}} //If there is a RED ball it will send it out back.
       break;
     }
   }
