@@ -366,8 +366,8 @@ return *this;
   lv_obj_set_y(btn2, 130);
   lv_obj_set_size(btn2, 75, 40);
 
-  lv_label_set_text(label1, "1");
-	lv_label_set_text(label2, "2");
+  lv_label_set_text(label1, "Right");
+	lv_label_set_text(label2, "Left");
 
 	lv_ddlist_set_options(Alliance,"None\nRed\nBlue\nSkills");
 	lv_obj_set_x(Alliance, 10);

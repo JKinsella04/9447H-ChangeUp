@@ -132,4 +132,5 @@ class Intake{
 
   private:
     static int ledLevel;
+     int doubleShotDelay;
 };

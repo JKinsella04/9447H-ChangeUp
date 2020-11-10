@@ -2,7 +2,7 @@
 
 #include "class/control/intakes.h"
 
-int Intake::ledLevel = 75;
+int Intake::ledLevel = 75, doubleShotDelay = 100;
 
 void Intake::intakeSpin(int speed){
   leftIntake.move(speed);
@@ -65,7 +65,7 @@ void Intake::runIntakes(){ // Runs the intakes based on L1,L2,R1,R2 and, Y and i
   else if(master.get_digital(DIGITAL_L2) ==1)intakeSpin(-600);
   else if(master.get_digital(DIGITAL_L1) !=1 && master.get_digital(DIGITAL_L2) !=1 && master.get_digital(DIGITAL_Y) !=1){ intakeStop();}
   if(master.get_digital(DIGITAL_R2) ==1){indexerSpin(-400); middleSpin(400);if(master.get_digital(DIGITAL_L2) ==1){intakeSpin(600);}}
-  else if(master.get_digital(DIGITAL_R1) ==1 && master.get_digital(DIGITAL_L1) !=1){indexerSpin(600); middleSpin(600);if(master.get_digital(DIGITAL_L2) ==1){intakeSpin(600);}}
+  else if(master.get_digital(DIGITAL_R1) ==1 && master.get_digital(DIGITAL_L1) !=1){indexerSpin(600); if(master.get_digital(DIGITAL_L2) ==1){intakeSpin(600);} pros::delay(doubleShotDelay); middleSpin(600);}
   else if(master.get_digital(DIGITAL_Y) ==1){intakeSpin(-600); middleSpin(-600); indexerSpin(-600);}
   else if(master.get_digital(DIGITAL_R1) !=1 && master.get_digital(DIGITAL_R2) !=1 && master.get_digital(DIGITAL_Y) !=1 && master.get_digital(DIGITAL_L1) !=1){indexerStop(); middleStop();}
   if(master.get_digital(DIGITAL_L1) !=1 && master.get_digital(DIGITAL_L2) !=1 && master.get_digital(DIGITAL_R1) !=1 && master.get_digital(DIGITAL_R2) !=1 && master.get_digital(DIGITAL_Y) !=1){intakeStop(); indexerStop(); middleStop();}
@@ -129,7 +129,7 @@ void Intake::autoSort(int allianceColor){
       }
       double currentHue = optical.get_hue();
       printf("currentHue %F\n", currentHue); //debug code
-      if(optical.get_hue() <= 10){ //Sees RED Ball //If there is a ball at the top already it will stop this ball at the Optical Sensor
+      if(optical.get_hue() <= 5){ //Sees RED Ball //If there is a ball at the top already it will stop this ball at the Optical Sensor
         if(topLight.get_value()<=2800)middleStop();
       }
       if(optical.get_hue() >= 220){middleSpinVelocity(600); if(topLight.get_value() >=2800){indexerSpinVelocity(-600);}} //If there is a blue ball it will send it out back.
@@ -148,7 +148,7 @@ void Intake::autoSort(int allianceColor){
       if(optical.get_hue() >=220){ //Sees BLUE Ball //If there is a ball at the top already it will stop this ball at the Optical Sensor
         if(topLight.get_value()<=2800)middleStop();
       }
-      if(optical.get_hue() <=10){middleSpinVelocity(600); if(topLight.get_value() >=2800){indexerSpinVelocity(-600);}} //If there is a RED ball it will send it out back.
+      if(optical.get_hue() <=5){middleSpinVelocity(600); if(topLight.get_value() >=2800){indexerSpinVelocity(-600);}} //If there is a RED ball it will send it out back.
       break;
     }
   }
@@ -159,8 +159,9 @@ void Intake::goalSort(int allianceColor){
     case REDBALL:{
       optical.set_led_pwm(ledLevel);
       intakeSpin(200);
-      middleSpin(600);
       indexerSpin(600);
+      pros::delay(doubleShotDelay);
+      middleSpin(600);
       double currentHue = optical.get_hue();
       printf("currentHue %F\n", currentHue); //debug code
       if(optical.get_hue() >= 220){indexerSpin(-600);} //If there is a blue ball it will send it out back.
@@ -169,8 +170,9 @@ void Intake::goalSort(int allianceColor){
     case BLUEBALL:{
       optical.set_led_pwm(ledLevel);
       intakeSpin(200);
-      middleSpin(600);
       indexerSpin(600);
+      pros::delay(doubleShotDelay);
+      middleSpin(600);
       double currentHue = optical.get_hue();
       printf("currentHue %F\n", currentHue); //debug code
       if(optical.get_hue() <= 10){indexerSpin(-600);} //If there is a red ball it will send it out back.

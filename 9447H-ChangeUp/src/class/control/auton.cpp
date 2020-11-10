@@ -12,15 +12,20 @@ Auton& Auton::run(){
   switch (startPos) { //Where am I? Starting Position
     case 1: {
       switch (firstPos) {
-        case 1: {
+        case 1: { //robot's mvmt from 1 to 1 //
           chassis.withTurnPD(2,.1).withTurnSlew(2).turn(90).waitUntilSettled();
-          currentPos = 1; break;}//robot's mvmt from 0 to 1 //
-        case 2: {currentPos = 2; }//robot's mvmt from 0 to 2
-        case 3: {currentPos = 3; }//robot's mvmt from 0 to 3
-        case 4: {currentPos = 4; }//robot's mvmt from 0 to 4
-        case 5: {currentPos = 5; }//robot's mvmt from 0 to 5
-        case 6: {currentPos = 6; }//robot's mvmt from 0 to 6
-      }}
+          currentPos = 1; break;}
+        case 2: { //robot's mvmt from 1 to 2
+          intake.indexerSpinVelocity(600);
+          pros::delay(1000);
+          intake.indexerStop();
+          currentPos = 2; firstPos=0; break;}
+        case 3: {currentPos = 3; }//robot's mvmt from 1 to 3
+        case 4: {currentPos = 4; }//robot's mvmt from 1 to 4
+        case 5: {currentPos = 5; }//robot's mvmt from 1 to 5
+        case 6: {currentPos = 6; }//robot's mvmt from 1 to 6
+        default: { startPos=0;break;}
+      } }
     case 2: {
       switch (firstPos) {
         case 1: {
@@ -31,7 +36,8 @@ Auton& Auton::run(){
         case 4: {currentPos = 4; }//robot's mvmt from -1 to 4
         case 5: {currentPos = 5; }//robot's mvmt from -1 to 5
         case 6: {currentPos = 6; }//robot's mvmt from -1 to 6
-      }}
+      }startPos=0;}
+    default:{break;}
   } //switch
   switch (currentPos){ //Where am I? First Position
     case 1: {
@@ -43,15 +49,18 @@ Auton& Auton::run(){
             // chassis.withTurnPD(2,.1).withTurnSlew(2).turn(90).waitUntilSettled();
             currentPos = 5;}//robot's mvmt from 1 to 5
         case 6: {currentPos = 6;}//robot's mvmt from 1 to 6
-      }}
+      }break;}
     case 2: {
       switch (secondPos) {
         case 1: {currentPos = 1;}//robot's mvmt from 2 to 1
-        case 3: {currentPos = 3;}//robot's mvmt from 2 to 3
+        case 3: {//robot's mvmt from 2 to 3
+          chassis.withPD(0.075,0.001).withSlew(100).withHeading(0).drive(1000);
+          chassis.withTurnPD(2,.1).withTurnSlew(2).withTurnDirection(RIGHT).turn(135).waitUntilSettled();
+          currentPos = 3; break;}
         case 4: {currentPos = 4;}//robot's mvmt from 2 to 4
         case 5: {currentPos = 5;}//robot's mvmt from 2 to 5
         case 6: {currentPos = 6;}//robot's mvmt from 2 to 6
-      }}
+      }break;}
     case 3: {
       switch (secondPos) {
         case 1: {currentPos = 1;}//robot's mvmt from 3 to 1
@@ -59,7 +68,7 @@ Auton& Auton::run(){
         case 4: {currentPos = 4;}//robot's mvmt from 3 to 4
         case 5: {currentPos = 5;}//robot's mvmt from 3 to 5
         case 6: {currentPos = 6;}//robot's mvmt from 3 to 6
-      }}
+      }break;}
     case 4: {
       switch (secondPos) {
         case 1: {currentPos = 1;}//robot's mvmt from 4 to 1
@@ -67,7 +76,7 @@ Auton& Auton::run(){
         case 3: {currentPos = 3;}//robot's mvmt from 4 to 3
         case 5: {currentPos = 5;}//robot's mvmt from 4 to 5
         case 6: {currentPos = 6;}//robot's mvmt from 4 to 6
-      }}
+      }break;}
     case 5: {
       switch (secondPos) {
         case 1: {currentPos = 1;}//robot's mvmt from 5 to 1
@@ -75,7 +84,7 @@ Auton& Auton::run(){
         case 3: {currentPos = 3;}//robot's mvmt from 5 to 3
         case 4: {currentPos = 4;}//robot's mvmt from 5 to 4
         case 6: {currentPos = 6;}//robot's mvmt from 5 to 6
-      }}
+      }break;}
     case 6: {
       switch (secondPos) {
         case 1: {currentPos = 1;}//robot's mvmt from 6 to 1
@@ -83,7 +92,7 @@ Auton& Auton::run(){
         case 3: {currentPos = 3;}//robot's mvmt from 6 to 3
         case 4: {currentPos = 4;}//robot's mvmt from 6 to 4
         case 5: {currentPos = 5;}//robot's mvmt from 6 to 5
-      }} //case 6
+      }break;} //case 6
 
   } //switch
   switch (currentPos){ //Where am I? Second Position
@@ -105,7 +114,10 @@ Auton& Auton::run(){
       }}
     case 3: {
       switch (thirdPos) {
-        case 1: {currentPos = 1;}//robot's mvmt from 3 to 1
+        case 1: {
+          chassis.withPD(0.075,0.001).withSlew(100).withHeading(0).drive(-1000);
+          chassis.withTurnPD(2,.1).withTurnSlew(2).turn(270).waitUntilSettled();
+          currentPos = 1;}//robot's mvmt from 3 to 1
         case 2: {currentPos = 2;}//robot's mvmt from 3 to 2
         case 4: {currentPos = 4;}//robot's mvmt from 3 to 4
         case 5: {currentPos = 5;}//robot's mvmt from 3 to 5
@@ -165,7 +177,7 @@ Auton& Auton::runSkills(){
   chassis.withTurnPD(2,.1).withTurnSlew(2).withTurnDirection(RIGHT).turn(90).waitUntilSettled();//turn left
   intake.intakeSpin(600);
   chassis.withPD(0.15,1).withSlew(2).withHeading(0).drive(750);
-  intake.indexerSpin(600);  
+  intake.indexerSpin(600);
   chassis.withTurnPD(.9,.1).withTurnSlew(2).withTurnDirection(RIGHT).turn(225).waitUntilSettled();
   //turn right to goal
   //go forward
