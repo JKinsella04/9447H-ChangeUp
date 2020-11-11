@@ -120,35 +120,38 @@ void Intake::deploy(){
 void Intake::autoSort(int allianceColor){
   switch (allianceColor){
     case REDBALL:{
-      optical.set_led_pwm(ledLevel);
+      bool full =0;
+      LOptical.set_led_pwm(ledLevel);
+      ROptical.set_led_pwm(ledLevel);
       intakeSpinVelocity(600);
-      middleSpinVelocity(300);
       indexerSpinVelocity(300);
       if(topLight.get_value() <=2800){
+        full =1;
         indexerStop();
       }
-      double currentHue = optical.get_hue();
+      double currentHue = (LOptical.get_hue() + ROptical.get_hue())/2;
       printf("currentHue %F\n", currentHue); //debug code
-      if(optical.get_hue() <= 5){ //Sees RED Ball //If there is a ball at the top already it will stop this ball at the Optical Sensor
-        if(topLight.get_value()<=2800)middleStop();
-      }
-      if(optical.get_hue() >= 220){middleSpinVelocity(600); if(topLight.get_value() >=2800){indexerSpinVelocity(-600);}} //If there is a blue ball it will send it out back.
+      if(currentHue <= 10 && full==1){ //Sees RED Ball //If there is a ball at the top already it will stop this ball at the Optical Sensor
+        middleStop();
+      }else{middleSpinVelocity(300);}
+      if(currentHue >= 200){middleSpinVelocity(600); if(topLight.get_value() >=2800){indexerSpinVelocity(-600);}pros::delay(50);} //If there is a blue ball it will send it out back.
       break;
     }
     case BLUEBALL:{
-      optical.set_led_pwm(ledLevel);
+      LOptical.set_led_pwm(ledLevel);
+      ROptical.set_led_pwm(ledLevel);
       intakeSpinVelocity(600);
       middleSpinVelocity(300);
       indexerSpinVelocity(300);
       if(topLight.get_value() <=2800){
         indexerStop();
       }
-      double currentHue = optical.get_hue();
+      double currentHue = (LOptical.get_hue() + ROptical.get_hue())/2;
       printf("currentHue %F\n", currentHue); //debug code
-      if(optical.get_hue() >=220){ //Sees BLUE Ball //If there is a ball at the top already it will stop this ball at the Optical Sensor
+      if(currentHue >=220){ //Sees BLUE Ball //If there is a ball at the top already it will stop this ball at the Optical Sensor
         if(topLight.get_value()<=2800)middleStop();
       }
-      if(optical.get_hue() <=5){middleSpinVelocity(600); if(topLight.get_value() >=2800){indexerSpinVelocity(-600);}} //If there is a RED ball it will send it out back.
+      if(currentHue <=5){middleSpinVelocity(600); if(topLight.get_value() >=2800){indexerSpinVelocity(-600);}} //If there is a RED ball it will send it out back.
       break;
     }
   }
@@ -157,25 +160,27 @@ void Intake::autoSort(int allianceColor){
 void Intake::goalSort(int allianceColor){
   switch (allianceColor){
     case REDBALL:{
-      optical.set_led_pwm(ledLevel);
+      LOptical.set_led_pwm(ledLevel);
+      ROptical.set_led_pwm(ledLevel);
       intakeSpin(200);
       indexerSpin(600);
       pros::delay(doubleShotDelay);
       middleSpin(600);
-      double currentHue = optical.get_hue();
+      double currentHue = (LOptical.get_hue() + ROptical.get_hue())/2;
       printf("currentHue %F\n", currentHue); //debug code
-      if(optical.get_hue() >= 220){indexerSpin(-600);} //If there is a blue ball it will send it out back.
+      if(currentHue >= 190){indexerSpin(-600);pros::delay(250);} //If there is a blue ball it will send it out back.
       break;
     }
     case BLUEBALL:{
-      optical.set_led_pwm(ledLevel);
+      LOptical.set_led_pwm(ledLevel);
+      ROptical.set_led_pwm(ledLevel);
       intakeSpin(200);
       indexerSpin(600);
       pros::delay(doubleShotDelay);
       middleSpin(600);
-      double currentHue = optical.get_hue();
+      double currentHue = (LOptical.get_hue() + ROptical.get_hue())/2;
       printf("currentHue %F\n", currentHue); //debug code
-      if(optical.get_hue() <= 10){indexerSpin(-600);} //If there is a red ball it will send it out back.
+      if(currentHue <= 5){indexerSpin(-600);} //If there is a red ball it will send it out back.
       break;
     }
   }

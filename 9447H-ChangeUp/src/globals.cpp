@@ -20,8 +20,8 @@ pros::Motor LF(16, MOTOR_GEARSET_18, 0, MOTOR_ENCODER_COUNTS), //19,9,13,
             RB(7, MOTOR_GEARSET_18, 0, MOTOR_ENCODER_COUNTS);
 
 //Optical Sensor
-pros::Optical optical(2);
-
+pros::Optical ROptical(2);
+pros::Optical LOptical(12);
 /*
 Inertial sensor
 L_IMU  Left facing inertial sensor.
