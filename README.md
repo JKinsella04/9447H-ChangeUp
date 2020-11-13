@@ -22,7 +22,6 @@ To find out what functions do what look at all the header files in /include/clas
 
 The Auton Builder was built specifically for Change Up but the idea can be implemented in any season.
 
-
-## People who helped 
-
-* Gauthier from 7K
+## Engineering Notebook
+Our notebook can be found 
+[here](https://jkinsella04.github.io/OperationPheasant/intro.html)
