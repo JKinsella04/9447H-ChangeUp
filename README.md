@@ -5,23 +5,21 @@ This is the offical code for 9447H. This code is for the VRC 2020-2021 Change Up
 
 ## Getting Started
 
-Clone, unzip and open up in PROS.
-
-### Prerequisites
-
-PROS
+- This is a PROS project, so you will need PROS.
+> Download [PROS](https://pros.cs.purdue.edu/).
+- Clone and open the project in PROS.
 
 ## Using this Code
 
-If you want to use this code all you have to do after downloading and opening it is download to your robot. <br />
-To edit the Auton Builder, edit the function Auton::run in /src/class/control/auton.cpp <br />
-If you dont want that and just want to make the robot move during autonomous with the Auton Builder edit the /src/autonomous.cpp file <br />
-To find out what functions do what look at all the header files in /include/class/control and displayController.h <br />
+To edit the Auton Builder, edit the function `Auton::run` in [auton.cpp](https://github.com/PSASchool/9447H-ChangeUp/blob/master/9447H-ChangeUp/src/class/control/auton.cpp).
+
+To find out what functions do look at the header files in [/include/class/control](https://github.com/PSASchool/9447H-ChangeUp/tree/master/9447H-ChangeUp/include/class).
+
+All motor & sensor declarations/definitions are in [globals.h](https://github.com/PSASchool/9447H-ChangeUp/blob/master/9447H-ChangeUp/include/globals.h) and [globals.cpp](https://github.com/PSASchool/9447H-ChangeUp/blob/master/9447H-ChangeUp/src/globals.cpp).
 
 ## Other Info about features
 
 The Auton Builder was built specifically for Change Up but the idea can be implemented in any season.
 
 ## Engineering Notebook
-Our notebook can be found 
-[here](https://jkinsella04.github.io/OperationPheasant/intro.html)
+Our notebook can be found [here](https://jkinsella04.github.io/OperationPheasant/intro.html).
