@@ -2,7 +2,8 @@
 
 #include "class/control/intakes.h"
 
-int Intake::ledLevel = 75, doubleShotDelay = 100;
+int Intake::ledLevel = 75, Intake::doubleShotDelay = 100, Intake::redHue = 10, Intake::blueHue = 200;
+bool Intake::full=0;
 
 void Intake::intakeSpin(int speed){
   leftIntake.move(speed);
@@ -120,38 +121,39 @@ void Intake::deploy(){
 void Intake::autoSort(int allianceColor){
   switch (allianceColor){
     case REDBALL:{
-      bool full =0;
+      full=0;
       LOptical.set_led_pwm(ledLevel);
       ROptical.set_led_pwm(ledLevel);
       intakeSpinVelocity(600);
-      indexerSpinVelocity(300);
+      indexerSpinVelocity(100);
       if(topLight.get_value() <=2800){
-        full =1;
+        full=1;
         indexerStop();
       }
       double currentHue = (LOptical.get_hue() + ROptical.get_hue())/2;
       printf("currentHue %F\n", currentHue); //debug code
-      if(currentHue <= 10 && full==1){ //Sees RED Ball //If there is a ball at the top already it will stop this ball at the Optical Sensor
+      if(currentHue <= redHue && full==1){ //Sees RED Ball //If there is a ball at the top already it will stop this ball at the Optical Sensor
         middleStop();
       }else{middleSpinVelocity(300);}
-      if(currentHue >= 200){middleSpinVelocity(600); if(topLight.get_value() >=2800){indexerSpinVelocity(-600);}pros::delay(50);} //If there is a blue ball it will send it out back.
+      if(currentHue >= blueHue){middleSpinVelocity(600); if(topLight.get_value() >=2800){indexerSpinVelocity(-200);}pros::delay(50);} //If there is a blue ball it will send it out back.
       break;
     }
     case BLUEBALL:{
+      full=0;
       LOptical.set_led_pwm(ledLevel);
       ROptical.set_led_pwm(ledLevel);
       intakeSpinVelocity(600);
-      middleSpinVelocity(300);
-      indexerSpinVelocity(300);
+      indexerSpinVelocity(100);
       if(topLight.get_value() <=2800){
+        full=1;
         indexerStop();
       }
       double currentHue = (LOptical.get_hue() + ROptical.get_hue())/2;
       printf("currentHue %F\n", currentHue); //debug code
-      if(currentHue >=220){ //Sees BLUE Ball //If there is a ball at the top already it will stop this ball at the Optical Sensor
-        if(topLight.get_value()<=2800)middleStop();
-      }
-      if(currentHue <=5){middleSpinVelocity(600); if(topLight.get_value() >=2800){indexerSpinVelocity(-600);}} //If there is a RED ball it will send it out back.
+      if(currentHue >= blueHue && full==1){ //Sees BLUE Ball //If there is a ball at the top already it will stop this ball at the Optical Sensor
+        middleStop();
+      }else{middleSpinVelocity(300);}
+      if(currentHue <= redHue){middleSpinVelocity(600); if(topLight.get_value() >=2800){indexerSpinVelocity(-200);}pros::delay(50);} //If there is a RED ball it will send it out back.
       break;
     }
   }
@@ -163,24 +165,22 @@ void Intake::goalSort(int allianceColor){
       LOptical.set_led_pwm(ledLevel);
       ROptical.set_led_pwm(ledLevel);
       intakeSpin(200);
-      indexerSpin(600);
-      pros::delay(doubleShotDelay);
+      indexerSpin(200);
       middleSpin(600);
       double currentHue = (LOptical.get_hue() + ROptical.get_hue())/2;
       printf("currentHue %F\n", currentHue); //debug code
-      if(currentHue >= 190){indexerSpin(-600);pros::delay(250);} //If there is a blue ball it will send it out back.
+      if(currentHue >= blueHue){indexerSpin(-200);pros::delay(250);} //If there is a blue ball it will send it out back.
       break;
     }
     case BLUEBALL:{
       LOptical.set_led_pwm(ledLevel);
       ROptical.set_led_pwm(ledLevel);
       intakeSpin(200);
-      indexerSpin(600);
-      pros::delay(doubleShotDelay);
+      indexerSpin(200);
       middleSpin(600);
       double currentHue = (LOptical.get_hue() + ROptical.get_hue())/2;
       printf("currentHue %F\n", currentHue); //debug code
-      if(currentHue <= 5){indexerSpin(-600);} //If there is a red ball it will send it out back.
+      if(currentHue <= redHue){indexerSpin(-200);pros::delay(250);} //If there is a red ball it will send it out back.
       break;
     }
   }

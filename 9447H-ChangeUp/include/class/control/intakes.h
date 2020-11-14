@@ -131,6 +131,6 @@ class Intake{
     void waitUntilSettled();
 
   private:
-    static int ledLevel;
-     int doubleShotDelay;
+    static int ledLevel, doubleShotDelay, redHue, blueHue;
+    static bool full;
 };
