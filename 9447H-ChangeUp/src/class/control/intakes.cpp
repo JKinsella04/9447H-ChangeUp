@@ -126,7 +126,7 @@ void Intake::autoSort(int allianceColor){
       ROptical.set_led_pwm(ledLevel);
       intakeSpinVelocity(600);
       indexerSpinVelocity(100);
-      if(topLight.get_value() <=2800){
+      if(topLight.get_value() <=2700){
         full=1;
         indexerStop();
       }
@@ -144,7 +144,7 @@ void Intake::autoSort(int allianceColor){
       ROptical.set_led_pwm(ledLevel);
       intakeSpinVelocity(600);
       indexerSpinVelocity(100);
-      if(topLight.get_value() <=2800){
+      if(topLight.get_value() <=2700){
         full=1;
         indexerStop();
       }

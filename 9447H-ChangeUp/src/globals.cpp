@@ -52,9 +52,9 @@ pros::ADIAnalogIn topLight('F');
  @param alliance Determines what color to sort for when running the autoSort intake class member function.
 */
 int currentPos = 0,
-    startPos = 0,
-    firstPos = 0,
-    secondPos = 0,
+    startPos = 2,
+    firstPos = 2,
+    secondPos = 1,
     thirdPos = 0,
     alliance = 0;
 

@@ -97,7 +97,7 @@ Chassis& Chassis::turn(double theta_){
           }else if(output >= power){
             output -= rate_turn;
           }
-            if(direction_turn == LEFT){
+          if(direction_turn == LEFT){
               LF.move(output);
               LB.move(output);
               RF.move(output);
@@ -108,17 +108,13 @@ Chassis& Chassis::turn(double theta_){
               RF.move(-output);
               RB.move(-output);
             }
-          // LF.move(-output);
-          // LB.move(-output);
-          // RF.move(-output);
-          // RB.move(-output);
-          double tpower = LF.get_target_velocity(); //Speed sent to motors
-          double rpower = LF.get_actual_velocity(); //Actual speed of the motors
-          if(leftheading > 355|| rightheading > 355 || middleheading > 355){
-            averageheading = 0;
-          } //Zeroes the average so it has a zero position
-          printf("L_IMU, M_IMU, R_IMU,Average, TPower, RPower %f %f %f %f %f %f \n", leftheading, middleheading, rightheading, averageheading, tpower, rpower);
-          if(averageheading >= theta-1 && averageheading <= theta+1){ //If it gets really close to the wanted angle it breaks the loop
+          // double tpower = LF.get_target_velocity(); //Speed sent to motors
+          // double rpower = LF.get_actual_velocity(); //Actual speed of the motors
+          // if(leftheading > 355|| rightheading > 355 || middleheading > 355){
+          //   averageheading = 0;
+          // } //Zeroes the average so it has a zero position
+          // printf("L_IMU, M_IMU, R_IMU,Average, TPower, RPower %f %f %f %f %f %f \n", leftheading, middleheading, rightheading, averageheading, tpower, rpower);
+          if(averageheading >= theta-10 && averageheading <= theta+10){ //If it gets really close to the wanted angle it breaks the loop
             isSettled = true;
             LF.move(0);
             LB.move(0);
