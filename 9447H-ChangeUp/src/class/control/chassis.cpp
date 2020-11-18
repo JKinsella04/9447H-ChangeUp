@@ -73,7 +73,7 @@ Chassis& Chassis::withTurnPD(double kP_, double kD_){
   return *this;
 }
 
-Chassis& Chassis::withTurnDirection(double direction_turn_){
+Chassis& Chassis::withTurnDirection(int direction_turn_){
   direction_turn = direction_turn_;
   return *this;
 }
@@ -114,21 +114,20 @@ Chassis& Chassis::turn(double theta_){
           }else if(output >= power){
             output -= rate_turn;
           }
-            if(direction_turn == LEFT){
-              LF.move(output);
-              LB.move(output);
-              RF.move(output);
-              RB.move(output);
-            }else if(direction_turn == RIGHT){
-              LF.move(-output);
-              LB.move(-output);
-              RF.move(-output);
-              RB.move(-output);
-            }
-          // LF.move(-output);
-          // LB.move(-output);
-          // RF.move(-output);
-          // RB.move(-output);
+          switch (direction_turn){
+            case LEFT: {
+              LF.move_voltage(output);
+              LB.move_voltage(output);
+              RF.move_voltage(output);
+              RB.move_voltage(output);
+            break;}
+            case RIGHT: {
+              LF.move_voltage(-output);
+              LB.move_voltage(-output);
+              RF.move_voltage(-output);
+              RB.move_voltage(-output);
+            break;}
+          }
           double tpower = LF.get_target_velocity(); //Speed sent to motors
           double rpower = LF.get_actual_velocity(); //Actual speed of the motors
           if(leftheading > 355|| rightheading > 355 || middleheading > 355){

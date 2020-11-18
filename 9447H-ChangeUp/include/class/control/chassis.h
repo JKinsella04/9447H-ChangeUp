@@ -53,7 +53,7 @@ class Chassis {
 
     @param direction_turn_ Either RIGHT or LEFT.
     */
-    Chassis& withTurnDirection(double direction_turn_);
+    Chassis& withTurnDirection(int direction_turn_);
 
     /*
     Sets Drive rate for the slew acceleration.
@@ -99,6 +99,7 @@ class Chassis {
     static double leftheading, middleheading, rightheading, averageheading;
 
     static double power,rate_drive, rate_turn, drive_theta;
-    static double kP_drive, kD_drive, kP_turn, kD_turn, direction_turn;
+    static double kP_drive, kD_drive, kP_turn, kD_turn; 
+    static int direction_turn;
     static int output;
 };

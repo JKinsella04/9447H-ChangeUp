@@ -39,6 +39,8 @@ Auton& Auton::run(){
         case 2: {
           chassis.setState(HOLD);
           intake.indexerSpinVelocity(200);
+          pros::delay(100);
+          intake.indexerStop();
           currentPos = 2; break; }//robot's mvmt from -1 to 2
         case 3: {currentPos = 3; }//robot's mvmt from -1 to 3
         case 4: {currentPos = 4; }//robot's mvmt from -1 to 4
@@ -64,18 +66,12 @@ Auton& Auton::run(){
           chassis.withPD(0.075,0.001).withSlew(50).withHeading(0).drive(1000);
           pros::delay(200);
           chassis.withTurnPD(1.52,.8).withTurnSlew(.15).withTurnDirection(LEFT).turn(275).waitUntilSettled();
-          pros::delay(200);
+          // pros::delay(200);
           intake.intakeSpinVelocity(200);
           intake.middleSpinVelocity(600);
-          // intake.indexerSpinVelocity(200);
+          intake.indexerSpinVelocity(200);
           chassis.withPD(0.075,0.001).withSlew(100).withHeading(0).drive(750);
           currentPos = 1; break;
-          // chassis.withTurnPD(1,.1).withTurnSlew(1).withTurnDirection(LEFT).turn(225).waitUntilSettled();
-          // intake.intakeSpinVelocity(600);
-          // intake.middleSpin(600);
-          // intake.indexerSpinVelocity(600);
-          // chassis.withPD(0.075,0.001).withSlew(100).withHeading(0).drive(1500);
-
         }//robot's mvmt from 2 to 1
         case 3: {//robot's mvmt from 2 to 3
           chassis.withPD(0.075,0.001).withSlew(100).withHeading(0).drive(1500);
@@ -124,7 +120,12 @@ Auton& Auton::run(){
     case 1: {
       switch (thirdPos) {
         case 2: {currentPos = 2;}//robot's mvmt from 1 to 2
-        case 3: {currentPos = 3;}//robot's mvmt from 1 to 3
+        case 3: {
+          chassis.withPD(0.075,0.001).withSlew(50).withHeading(0).drive(-1000);
+          pros::delay(200);
+          chassis.withTurnPD(1.52,.8).withTurnSlew(.15).withTurnDirection(LEFT).turn(135).waitUntilSettled();
+          currentPos = 3; break;
+        }//robot's mvmt from 1 to 3
         case 4: {currentPos = 4;}//robot's mvmt from 1 to 4
         case 5: {currentPos = 5;}//robot's mvmt from 1 to 5
         case 6: {currentPos = 6;}//robot's mvmt from 1 to 6
