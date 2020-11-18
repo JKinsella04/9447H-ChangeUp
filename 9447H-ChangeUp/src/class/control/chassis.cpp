@@ -45,6 +45,23 @@ void Chassis::waitUntilSettled() {
   while(!isSettled) pros::delay(20);
 }
 
+void Chassis::setState(int state_){
+  switch (state_){
+    case 1:{
+      LF.set_brake_mode(MOTOR_BRAKE_HOLD);
+      LB.set_brake_mode(MOTOR_BRAKE_HOLD);
+      RF.set_brake_mode(MOTOR_BRAKE_HOLD);
+      RB.set_brake_mode(MOTOR_BRAKE_HOLD);
+      break;}
+    case 2:{
+      LF.set_brake_mode(MOTOR_BRAKE_COAST);
+      LB.set_brake_mode(MOTOR_BRAKE_COAST);
+      RF.set_brake_mode(MOTOR_BRAKE_COAST);
+      RB.set_brake_mode(MOTOR_BRAKE_COAST);
+      break;}
+  }
+}
+
 Chassis& Chassis::withTurnSlew(double rate_){
   rate_turn = rate_;
   return *this;
@@ -97,7 +114,7 @@ Chassis& Chassis::turn(double theta_){
           }else if(output >= power){
             output -= rate_turn;
           }
-          if(direction_turn == LEFT){
+            if(direction_turn == LEFT){
               LF.move(output);
               LB.move(output);
               RF.move(output);
@@ -108,13 +125,17 @@ Chassis& Chassis::turn(double theta_){
               RF.move(-output);
               RB.move(-output);
             }
-          // double tpower = LF.get_target_velocity(); //Speed sent to motors
-          // double rpower = LF.get_actual_velocity(); //Actual speed of the motors
-          // if(leftheading > 355|| rightheading > 355 || middleheading > 355){
-          //   averageheading = 0;
-          // } //Zeroes the average so it has a zero position
-          // printf("L_IMU, M_IMU, R_IMU,Average, TPower, RPower %f %f %f %f %f %f \n", leftheading, middleheading, rightheading, averageheading, tpower, rpower);
-          if(averageheading >= theta-10 && averageheading <= theta+10){ //If it gets really close to the wanted angle it breaks the loop
+          // LF.move(-output);
+          // LB.move(-output);
+          // RF.move(-output);
+          // RB.move(-output);
+          double tpower = LF.get_target_velocity(); //Speed sent to motors
+          double rpower = LF.get_actual_velocity(); //Actual speed of the motors
+          if(leftheading > 355|| rightheading > 355 || middleheading > 355){
+            averageheading = 0;
+          } //Zeroes the average so it has a zero position
+          printf("L_IMU, M_IMU, R_IMU,Average, TPower, RPower %f %f %f %f %f %f \n", leftheading, middleheading, rightheading, averageheading, tpower, rpower);
+          if(averageheading >= theta-1 && averageheading <= theta+1){ //If it gets really close to the wanted angle it breaks the loop
             isSettled = true;
             LF.move(0);
             LB.move(0);

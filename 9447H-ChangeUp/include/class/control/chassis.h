@@ -3,6 +3,8 @@
 
 #define RIGHT 1
 #define LEFT 2
+#define HOLD 1
+#define COAST 2
 
 class Chassis {
   public:
@@ -23,6 +25,13 @@ class Chassis {
     Delays the calling thread until the robot completes its action.
     */
     void waitUntilSettled();
+
+    /*
+    Sets the drive base motors to either HOLD or COAST
+
+    @param int state_ The State of the motor
+    */
+    void setState(int state_);
 
     /*
     Sets Turn rate for the slew acceleration.
