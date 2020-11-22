@@ -7,7 +7,8 @@ double Chassis::leftheading = L_IMU.get_heading(), Chassis::middleheading = M_IM
 
 double Chassis::power, Chassis::drive_theta=0;
 
-double Chassis::kP_drive, Chassis::kD_drive, Chassis::kP_turn, Chassis::kD_turn, Chassis::direction_turn;
+double Chassis::kP_drive, Chassis::kD_drive, Chassis::kP_turn, Chassis::kD_turn;
+int Chassis::direction_turn;
 
 double Chassis::rate_drive, Chassis::rate_turn;
 
@@ -38,7 +39,7 @@ void Chassis::reset() {
 void Chassis::odomReset() {
   REncoder.reset();
   LEncoder.reset();
-  pros::delay(50);
+  pros::delay(100);
 }
 
 void Chassis::waitUntilSettled() {
@@ -103,29 +104,30 @@ Chassis& Chassis::turn(double theta_){
            rightheading = R_IMU.get_heading();
            averageheading = (leftheading + middleheading + rightheading)/3;
           if(leftheading > 355|| rightheading > 355 || middleheading > 355){
-              averageheading = 0;
+            if(direction_turn ==LEFT){ averageheading=360;}
+            else{averageheading = 0;}  
           }
           double error = theta - averageheading;
           double prevError = error;
           double derivative = error - prevError;
           power = error*kP_turn + derivative*kD_turn;
-          if (output <= power) {
-            output += rate_turn;
-          }else if(output >= power){
-            output -= rate_turn;
-          }
+          // if (output <= power) {
+          //   output += rate_turn;
+          // }else if(output >= power){
+          //   output -= rate_turn;
+          // }
           switch (direction_turn){
             case LEFT: {
-              LF.move_voltage(output);
-              LB.move_voltage(output);
-              RF.move_voltage(output);
-              RB.move_voltage(output);
+              LF.move_velocity(abs(power));
+              LB.move_velocity(abs(power));
+              RF.move_velocity(abs(power));
+              RB.move_velocity(abs(power));
             break;}
             case RIGHT: {
-              LF.move_voltage(-output);
-              LB.move_voltage(-output);
-              RF.move_voltage(-output);
-              RB.move_voltage(-output);
+              LF.move_velocity(-power);
+              LB.move_velocity(-power);
+              RF.move_velocity(-power);
+              RB.move_velocity(-power);
             break;}
           }
           double tpower = LF.get_target_velocity(); //Speed sent to motors
@@ -134,7 +136,7 @@ Chassis& Chassis::turn(double theta_){
             averageheading = 0;
           } //Zeroes the average so it has a zero position
           printf("L_IMU, M_IMU, R_IMU,Average, TPower, RPower %f %f %f %f %f %f \n", leftheading, middleheading, rightheading, averageheading, tpower, rpower);
-          if(averageheading >= theta-1 && averageheading <= theta+1){ //If it gets really close to the wanted angle it breaks the loop
+          if(averageheading >= theta-5 && averageheading <= theta+5){ //If it gets really close to the wanted angle it breaks the loop
             isSettled = true;
             LF.move(0);
             LB.move(0);
@@ -142,7 +144,7 @@ Chassis& Chassis::turn(double theta_){
             RB.move(0);
             break;
           }
-        pros::delay(20);
+        pros::delay(15);
       }
       return *this;
     }
@@ -152,7 +154,7 @@ Chassis& Chassis::drive(double target){
     double leftvalue =LEncoder.get_value();
     double rightvalue =REncoder.get_value();
     printf("Left, Right %f %f  \n", leftvalue, rightvalue);
-    pros::delay(1000);
+    // pros::delay(1000);
     isSettled = false;
     double averagePos = REncoder.get_value() + LEncoder.get_value()/2;
     while(target != averagePos) {
@@ -168,20 +170,20 @@ Chassis& Chassis::drive(double target){
       }
       double LOutput = output;
       double ROutput = output;
-      leftheading = L_IMU.get_heading();
-      middleheading = M_IMU.get_heading();
-      rightheading = R_IMU.get_heading();
-      averageheading = (leftheading + middleheading + rightheading)/3;
-      if( averageheading != drive_theta){
-        double headDifference = drive_theta - averageheading;
-        if(abs(headDifference) < 180){
-          LOutput = LOutput -5;
-          ROutput = ROutput +5;
-        }else{
-          ROutput = ROutput -5;
-          LOutput = LOutput -5;
-        }
-      }
+      // leftheading = L_IMU.get_heading();
+      // middleheading = M_IMU.get_heading();
+      // rightheading = R_IMU.get_heading();
+      // averageheading = (leftheading + middleheading + rightheading)/3;
+      // if( averageheading != drive_theta){
+      //   double headDifference = drive_theta - averageheading;
+      //   // if(abs(headDifference) < 180){
+      //   //   LOutput = LOutput -5;
+      //   //   ROutput = ROutput +5;
+      //   // }else{
+      //   //   ROutput = ROutput -5;
+      //   //   LOutput = LOutput -5;
+      //   // }
+      // }
       RF.move(ROutput);
       RB.move(ROutput);
       LF.move(-LOutput);
