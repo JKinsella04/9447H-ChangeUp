@@ -105,17 +105,12 @@ Chassis& Chassis::turn(double theta_){
            averageheading = (leftheading + middleheading + rightheading)/3;
           if(leftheading > 355|| rightheading > 355 || middleheading > 355){
             if(direction_turn ==LEFT){ averageheading=360;}
-            else{averageheading = 0;}  
+            else{averageheading = 0;}
           }
           double error = theta - averageheading;
           double prevError = error;
           double derivative = error - prevError;
           power = error*kP_turn + derivative*kD_turn;
-          // if (output <= power) {
-          //   output += rate_turn;
-          // }else if(output >= power){
-          //   output -= rate_turn;
-          // }
           switch (direction_turn){
             case LEFT: {
               LF.move_velocity(abs(power));

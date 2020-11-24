@@ -116,12 +116,16 @@ class Intake{
     /*
     Sorts out the enemy ball based on color.
     The opposing color is determined during the auton selection before a match.
+
+    @param allianceColor Color of user's alliance.
     */
     void autoSort(int allianceColor);
 
     /*
     Sorts out the enemy ball based on color.
     This is used to auto sort while interacting with the gaols.
+
+    @param allianceColor Color of user's alliance.
     */
     void goalSort(int allianceColor);
 

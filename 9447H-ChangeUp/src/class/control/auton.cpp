@@ -1,14 +1,28 @@
 #include "main.h"
-
 #include "class/control/auton.h"
 #include "class/control/chassis.h"
 #include "class/control/intakes.h"
 
 static Chassis chassis;
 static Intake intake;
+int * param =0;
+
+void redAutoSort(void * param) {
+  intake.autoSort(REDBALL);
+}
+void blueAutoSort(void * param) {
+  intake.autoSort(REDBALL);
+}
+
+pros::Task redAutoSortTask (redAutoSort, (void*)"PROS", TASK_PRIORITY_DEFAULT,
+               TASK_STACK_DEPTH_DEFAULT, "redAutoSort");
+pros::Task blueAutoSortTask (blueAutoSort, (void*)"PROS", TASK_PRIORITY_DEFAULT,
+               TASK_STACK_DEPTH_DEFAULT, "blueAutoSort");
 
 Auton& Auton::run(){
  while(true){
+ blueAutoSortTask.suspend();
+ redAutoSortTask.suspend();
   switch (startPos) { //Where am I? Starting Position
     case 1: {
       switch (firstPos) {
@@ -76,7 +90,6 @@ Auton& Auton::run(){
         case 3: {//robot's mvmt from 2 to 3
           chassis.withPD(0.075,0.001).withSlew(100).withHeading(0).drive(1500);
           chassis.withTurnPD(1,.1).withTurnSlew(1).withTurnDirection(RIGHT).turn(135).waitUntilSettled();
-
           currentPos = 3; break;}
         case 4: {currentPos = 4;}//robot's mvmt from 2 to 4
         case 5: {currentPos = 5;}//robot's mvmt from 2 to 5
