@@ -65,7 +65,7 @@ void Intake::runIntakes(){ // Runs the intakes based on L1,L2,R1,R2 and, Y and i
   else if(master.get_digital(DIGITAL_L2) ==1)intakeSpin(-600);
   else if(master.get_digital(DIGITAL_L1) !=1 && master.get_digital(DIGITAL_L2) !=1 && master.get_digital(DIGITAL_Y) !=1){ intakeStop();}
   if(master.get_digital(DIGITAL_R2) ==1){indexerSpin(-400); middleSpin(400);if(master.get_digital(DIGITAL_L2) ==1){intakeSpin(600);}}
-  else if(master.get_digital(DIGITAL_R1) ==1 && master.get_digital(DIGITAL_L1) !=1){indexerSpin(600); if(master.get_digital(DIGITAL_L2) ==1){intakeSpin(600);} pros::delay(doubleShotDelay); middleSpin(600);}
+  else if(master.get_digital(DIGITAL_R1) ==1 && master.get_digital(DIGITAL_L1) !=1){indexerSpin(600); middleSpin(600); if(master.get_digital(DIGITAL_L2) ==1){intakeSpin(600);}}
   else if(master.get_digital(DIGITAL_Y) ==1){intakeSpin(-600); middleSpin(-600); indexerSpin(-600);}
   else if(master.get_digital(DIGITAL_R1) !=1 && master.get_digital(DIGITAL_R2) !=1 && master.get_digital(DIGITAL_Y) !=1 && master.get_digital(DIGITAL_L1) !=1){indexerStop(); middleStop();}
   if(master.get_digital(DIGITAL_L1) !=1 && master.get_digital(DIGITAL_L2) !=1 && master.get_digital(DIGITAL_R1) !=1 && master.get_digital(DIGITAL_R2) !=1 && master.get_digital(DIGITAL_Y) !=1){intakeStop(); indexerStop(); middleStop();}
@@ -73,7 +73,7 @@ void Intake::runIntakes(){ // Runs the intakes based on L1,L2,R1,R2 and, Y and i
 
 void Intake::runAutoIndexer(){
   // if(master.get_digital(DIGITAL_L1) == 1){
-    double midLightAverage = botLight.get_value(); //+ topLight.get_value())/2;
+    double midLightAverage = topLight.get_value();//botLight.get_value(); //+ topLight.get_value())/2;
     double topLightAverage = topLight.get_value();
     if(topLightAverage <=2800){
       indexerStop();

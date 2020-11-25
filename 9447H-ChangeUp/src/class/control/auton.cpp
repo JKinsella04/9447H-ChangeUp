@@ -5,24 +5,32 @@
 
 static Chassis chassis;
 static Intake intake;
-int * param =0;
 
-void redAutoSort(void * param) {
-  intake.autoSort(REDBALL);
-}
-void blueAutoSort(void * param) {
-  intake.autoSort(REDBALL);
-}
+/*
+When Adjusting PD and Slew values use this as a guide for what needs to change.
 
-pros::Task redAutoSortTask (redAutoSort, (void*)"PROS", TASK_PRIORITY_DEFAULT,
-               TASK_STACK_DEPTH_DEFAULT, "redAutoSort");
-pros::Task blueAutoSortTask (blueAutoSort, (void*)"PROS", TASK_PRIORITY_DEFAULT,
-               TASK_STACK_DEPTH_DEFAULT, "blueAutoSort");
+Not going far enough? Increase kP
+Not Smooth second half? Incrase kD
+Startup too slow? Increase slew_rate
+Isn't settling? Increase kP or broaden exit range
+*/
+// int * param =0;
+// void redAutoSort(void * param) {
+//   while(1){intake.autoSort(REDBALL);pros::delay(15);}
+// }
+// void blueAutoSort(void * param) {
+//   while(1){intake.autoSort(REDBALL);pros::delay(15);}
+// }
+
+// pros::Task redAutoSortTask (redAutoSort, (void*)"PROS", TASK_PRIORITY_DEFAULT,
+//                TASK_STACK_DEPTH_DEFAULT, "redAutoSort");
+// pros::Task blueAutoSortTask (blueAutoSort, (void*)"PROS", TASK_PRIORITY_DEFAULT,
+//                TASK_STACK_DEPTH_DEFAULT, "blueAutoSort");
 
 Auton& Auton::run(){
  while(true){
- blueAutoSortTask.suspend();
- redAutoSortTask.suspend();
+ // blueAutoSortTask.suspend();
+ // redAutoSortTask.suspend();
   switch (startPos) { //Where am I? Starting Position
     case 1: {
       switch (firstPos) {
@@ -204,7 +212,16 @@ pros::delay(20);} //while
 }
 
 Auton& Auton::runSkills(){
-  intake.indexerSpinVelocity(200);
+  // redAutoSortTask.resume();
+  // chassis.withPD(.22,0.001).withSlew(1).withHeading(0).drive(900);
+  // chassis.withPD(0.1,0.001).withSlew(1).withHeading(0).drive(900);
+  chassis.withTurnPD(1,0.1).withTurnSlew(2).withTurnDirection(LEFT).turn(270).waitUntilSettled();
+  // chassis.withPD(0.075,0.001).withSlew(50).withHeading(0).drive(950);
+  // chassis.withTurnPD(.9,.8).withTurnDirection(LEFT).turn(180).waitUntilSettled();
+  // chassis.withPD(0.075,0.001).withSlew(50).withHeading(0).drive(500);
+  // chassis.withTurnPD(.9,.8).withTurnDirection(LEFT).turn(0).waitUntilSettled();
+
+  // intake.indexerSpinVelocity(200);
   // chassis.withPD(0.15,1).withSlew(2).withHeading(0).drive(1500);
   // chassis.withTurnPD(2,.15).withTurnSlew(2).withTurnDirection(RIGHT).turn(135).waitUntilSettled();
   // intake.deploy();
@@ -232,12 +249,5 @@ Auton& Auton::runSkills(){
   // chassis.withPD(0.15,1).withSlew(2).withHeading(0).drive(750);
   // intake.indexerSpin(600);
   // chassis.withTurnPD(.9,.1).withTurnSlew(2).withTurnDirection(RIGHT).turn(225).waitUntilSettled();
-  //turn right to goal
-  //go forward
-  //deposit
-  //back up
-  //turn right to 270
-  //go forward and pick up ball
-  //turn left
   return *this;
 }

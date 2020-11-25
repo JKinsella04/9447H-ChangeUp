@@ -14,9 +14,9 @@ pros::Motor rightIntake(14, MOTOR_GEARSET_18, 1, MOTOR_ENCODER_ROTATIONS); //16
 pros::Motor indexer(20, MOTOR_GEARSET_18, 0, MOTOR_ENCODER_ROTATIONS); //1
 
 //Drive Base
-pros::Motor LF(16, MOTOR_GEARSET_18, 0, MOTOR_ENCODER_COUNTS), //19,9,13,
+pros::Motor LF(16, MOTOR_GEARSET_18, 1, MOTOR_ENCODER_COUNTS), //19,9,13,
             LB(10, MOTOR_GEARSET_18, 0, MOTOR_ENCODER_COUNTS),
-            RF(3, MOTOR_GEARSET_18, 0, MOTOR_ENCODER_COUNTS),
+            RF(3, MOTOR_GEARSET_18, 1, MOTOR_ENCODER_COUNTS),
             RB(7, MOTOR_GEARSET_18, 0, MOTOR_ENCODER_COUNTS);
 
 /*
@@ -38,7 +38,6 @@ pros::Imu M_IMU(6), L_IMU(9), R_IMU(5);
 pros::ADIEncoder LEncoder('G', 'H'),
                  REncoder('B', 'A', false);
 //Line Sensors
-pros::ADIAnalogIn botLight('C');
 pros::ADIAnalogIn topLight('F');
 
 /*

@@ -119,7 +119,7 @@ class Intake{
 
     @param allianceColor Color of user's alliance.
     */
-    void autoSort(int allianceColor);
+    void autoSort(int allianceColor = alliance);
 
     /*
     Sorts out the enemy ball based on color.
@@ -127,7 +127,7 @@ class Intake{
 
     @param allianceColor Color of user's alliance.
     */
-    void goalSort(int allianceColor);
+    void goalSort(int allianceColor = alliance);
 
     /*
     Delays the calling thread until the robot completes its action.

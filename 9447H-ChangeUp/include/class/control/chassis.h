@@ -38,7 +38,7 @@ class Chassis {
 
     @param rate_ Default rate = 5
     */
-    Chassis& withTurnSlew(double rate_ = 5);
+    Chassis& withTurnSlew(double rate_ = 1);
 
     /*
     Sets the Turn kP and kD variables.
@@ -60,7 +60,7 @@ class Chassis {
 
     @param rate_ Default rate = 5
     */
-    Chassis& withSlew(double rate_ =5);
+    Chassis& withSlew(double rate_ =1);
     /*
     Sets Drive kP and kD variables
 
@@ -79,6 +79,7 @@ class Chassis {
     Turns the robot to a set angle.
 
     Use withTurnSlew & withTurnPD with this.
+    Slew rate control controls the speed of the turning until the speed of the slew rate and the PD loop meet then the PD loop takes control.
 
     @param theta_ The wanted angle.
     */
@@ -88,6 +89,7 @@ class Chassis {
     Drives the robot a set distance
 
     Use withSlew & withPD with this.
+    Slew rate control controls the speed of the turning until the speed of the slew rate and the PD loop meet then the PD loop takes control.
 
     @param target The wanted distance
     */
@@ -98,8 +100,8 @@ class Chassis {
 
     static double leftheading, middleheading, rightheading, averageheading;
 
-    static double power,rate_drive, rate_turn, drive_theta;
-    static double kP_drive, kD_drive, kP_turn, kD_turn; 
+    static double power, rate_drive, rate_turn, drive_theta;
+    static double kP_drive, kD_drive, kP_turn, kD_turn;
     static int direction_turn;
     static int output;
 };

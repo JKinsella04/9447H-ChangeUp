@@ -13,20 +13,14 @@ Intake intake;
 
 
 void opcontrol() {
+  LF.set_brake_mode(MOTOR_BRAKE_HOLD);
+  LB.set_brake_mode(MOTOR_BRAKE_HOLD);
+  RF.set_brake_mode(MOTOR_BRAKE_HOLD);
+  RB.set_brake_mode(MOTOR_BRAKE_HOLD);
+  intake.iiInit();
   while (true) {
-    LF.set_brake_mode(MOTOR_BRAKE_HOLD);
-    LB.set_brake_mode(MOTOR_BRAKE_HOLD);
-    RF.set_brake_mode(MOTOR_BRAKE_HOLD);
-    RB.set_brake_mode(MOTOR_BRAKE_HOLD);
-    intake.iiInit();
-    // intake.autoSort();
-    slew.driveSlew(1000, 900, 900); //7.5
+    slew.driveSlew(1000, 900, 900);
     intake.runIntakes();
-    // intake.runAutoIndexer();
-    // slew.allSlew(1, 50);
-    // pros::ADIAnalogIn sensor('C');
-  pros::delay(20);
-} //while
-
-
+    pros::delay(15);
+  }
 }

@@ -17,7 +17,7 @@ extern pros::Imu M_IMU, L_IMU, R_IMU;
 
 //Motor Encoders
 extern pros::ADIEncoder LEncoder, REncoder;
-extern pros::ADIAnalogIn botLight, topLight;
+extern pros::ADIAnalogIn topLight;
 
 //Global Variables
 extern int currentPos, startPos, firstPos, secondPos, thirdPos, alliance;
