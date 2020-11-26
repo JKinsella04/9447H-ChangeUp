@@ -1,6 +1,5 @@
 #include "main.h"
 
-#include "class/control/chassis.h"
 #include "class/control/auton.h"
 
 Auton auton;

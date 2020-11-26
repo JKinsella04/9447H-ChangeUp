@@ -72,7 +72,6 @@ void Intake::runIntakes(){ // Runs the intakes based on L1,L2,R1,R2 and, Y and i
 }
 
 void Intake::runAutoIndexer(){
-  // if(master.get_digital(DIGITAL_L1) == 1){
     double midLightAverage = topLight.get_value();//botLight.get_value(); //+ topLight.get_value())/2;
     double topLightAverage = topLight.get_value();
     if(topLightAverage <=2800){
@@ -89,10 +88,11 @@ void Intake::runAutoIndexer(){
     indexerSpin(50);
   }
   printf("lightAverage  %F \n",midLightAverage);
-// }// else if(master.get_digital(DIGITAL_R1) !=1 && master.get_digital(DIGITAL_R2) !=1 && master.get_digital(DIGITAL_Y) !=1 && master.get_digital(DIGITAL_A)){indexerStop(); middleStop();}
 }
 
 void Intake::iiInit(){
+  LOptical.set_led_pwm(ledLevel);
+  ROptical.set_led_pwm(ledLevel);
   leftIntake.set_brake_mode(MOTOR_BRAKE_COAST);
   middleIntake.set_brake_mode(MOTOR_BRAKE_COAST);
   rightIntake.set_brake_mode(MOTOR_BRAKE_COAST);
@@ -121,8 +121,6 @@ void Intake::autoSort(int allianceColor){
   switch (allianceColor){
     case REDBALL:{
       full=0;
-      LOptical.set_led_pwm(ledLevel);
-      ROptical.set_led_pwm(ledLevel);
       intakeSpinVelocity(600);
       indexerSpinVelocity(100);
       if(topLight.get_value() <=2700){
@@ -139,8 +137,6 @@ void Intake::autoSort(int allianceColor){
     }
     case BLUEBALL:{
       full=0;
-      LOptical.set_led_pwm(ledLevel);
-      ROptical.set_led_pwm(ledLevel);
       intakeSpinVelocity(600);
       indexerSpinVelocity(100);
       if(topLight.get_value() <=2700){
@@ -161,8 +157,6 @@ void Intake::autoSort(int allianceColor){
 void Intake::goalSort(int allianceColor){
   switch (allianceColor){
     case REDBALL:{
-      LOptical.set_led_pwm(ledLevel);
-      ROptical.set_led_pwm(ledLevel);
       intakeSpin(200);
       indexerSpin(200);
       middleSpin(600);
@@ -172,8 +166,6 @@ void Intake::goalSort(int allianceColor){
       break;
     }
     case BLUEBALL:{
-      LOptical.set_led_pwm(ledLevel);
-      ROptical.set_led_pwm(ledLevel);
       intakeSpin(200);
       indexerSpin(200);
       middleSpin(600);

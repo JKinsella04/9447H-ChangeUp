@@ -73,8 +73,9 @@ class Chassis {
     Sets the wanted angle for the robot to stick to while driving.
 
     @param theta_ The wanted angle.
+    @param correction_rate_ The amount you want to correct by. Default 1.
     */
-    Chassis& withHeading(double drive_theta_);
+    Chassis& withHeading(double drive_theta_, double correction_rate_ = 1);
     /*
     Turns the robot to a set angle.
 
@@ -100,8 +101,11 @@ class Chassis {
 
     static double leftheading, middleheading, rightheading, averageheading;
 
-    static double power, rate_drive, rate_turn, drive_theta;
+    static double power, rate_drive, rate_turn;
     static double kP_drive, kD_drive, kP_turn, kD_turn;
+    static double correction_rate;
     static int direction_turn;
     static int output;
+    static int drive_theta;
+
 };

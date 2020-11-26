@@ -5,12 +5,13 @@ bool Chassis::isSettled = true;
 double Chassis::leftheading = L_IMU.get_heading(), Chassis::middleheading = M_IMU.get_heading(), Chassis::rightheading = R_IMU.get_heading(),
  Chassis::averageheading = (leftheading + middleheading + rightheading)/3;
 
-double Chassis::power, Chassis::drive_theta=0;
+double Chassis::power;
+int Chassis::drive_theta;
 
 double Chassis::kP_drive, Chassis::kD_drive, Chassis::kP_turn, Chassis::kD_turn;
 int Chassis::direction_turn;
 
-double Chassis::rate_drive, Chassis::rate_turn;
+double Chassis::rate_drive, Chassis::rate_turn, Chassis::correction_rate;
 
 int Chassis::output = 0;
 
@@ -90,8 +91,9 @@ Chassis& Chassis::withPD(double kP_, double kD_){
   return *this;
 }
 
-Chassis& Chassis::withHeading(double drive_theta_){
+Chassis& Chassis::withHeading(double drive_theta_, double correction_rate_){
   drive_theta = drive_theta_;
+  correction_rate = correction_rate_;
   return *this;
 }
 
@@ -173,14 +175,42 @@ Chassis& Chassis::drive(double target){
     middleheading = M_IMU.get_heading();
     rightheading = R_IMU.get_heading();
     averageheading = (leftheading + middleheading + rightheading)/3;
-    if( averageheading != drive_theta){
-      double headDifference = drive_theta - averageheading;
-      if(abs(headDifference) < 180){
-        LOutput -=1;
-        ROutput +=1;
-      }else{
-        LOutput +=1;
-        ROutput -=1;
+    if(leftheading > 355 || rightheading > 355 || middleheading > 355){
+      averageheading=0;
+    }
+    if( averageheading != drive_theta){ //Corrects the robot if it is straying from the wanted angle.
+      int headDifference = drive_theta - averageheading;
+      switch (drive_theta){
+        case 0: {
+          if(abs(headDifference) < 180){
+            LOutput -=correction_rate;
+            ROutput +=correction_rate;
+          }else{
+            LOutput +=correction_rate;
+            ROutput -=correction_rate;
+          }
+          break;
+        }
+        default:{
+          // if(headDifference < drive_theta){
+          if(averageheading < drive_theta && averageheading!=0){
+            LOutput +=correction_rate;
+            ROutput -=correction_rate;
+          }
+          // else if(headDifference > drive_theta){
+          else if(averageheading > drive_theta && averageheading!=0){
+            LOutput -=correction_rate;
+            ROutput +=correction_rate;
+          }
+          if(headDifference >180 && averageheading ==0){
+            LOutput -=correction_rate;
+            ROutput +=correction_rate;
+          }else if(headDifference <180 && averageheading ==0){
+            LOutput +=correction_rate;
+            ROutput -=correction_rate;
+          }
+          break;
+        }
       }
     }
     RF.move_velocity(ROutput);
