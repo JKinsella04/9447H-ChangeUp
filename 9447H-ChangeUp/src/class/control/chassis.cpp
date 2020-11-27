@@ -1,7 +1,10 @@
 #include "main.h"
+#include "intakes.h"
 #include "chassis.h"
 
-bool Chassis::isSettled = true;
+static Intake intake;
+
+bool Chassis::isSettled = true, Chassis::autoSort_enabled;
 double Chassis::leftheading = L_IMU.get_heading(), Chassis::middleheading = M_IMU.get_heading(), Chassis::rightheading = R_IMU.get_heading(),
  Chassis::averageheading = (leftheading + middleheading + rightheading)/3;
 
@@ -80,6 +83,11 @@ Chassis& Chassis::withTurnDirection(int direction_turn_){
   return *this;
 }
 
+Chassis& Chassis::withAutoSort(bool autoSort_enabled_){
+  autoSort_enabled = autoSort_enabled_;
+  return *this;
+}
+
 Chassis& Chassis::withSlew(double rate_){
   rate_drive = rate_;
   return *this;
@@ -132,6 +140,7 @@ Chassis& Chassis::turn(double theta_){
         RB.move_velocity(-output);
         break;}
     }
+    if(autoSort_enabled){intake.autoSort(REDBALL);}
     double tpower = LF.get_target_velocity(); //Speed sent to motors
     double rpower = LF.get_actual_velocity(); //Actual speed of the motors
     if(leftheading > 355|| rightheading > 355 || middleheading > 355){
@@ -144,6 +153,11 @@ Chassis& Chassis::turn(double theta_){
       LB.move(0);
       RF.move(0);
       RB.move(0);
+      if(autoSort_enabled){
+      intake.intakeStop();
+      intake.middleStop();
+      intake.indexerStop();
+      }
       break;
     }
   pros::delay(15);
@@ -217,6 +231,7 @@ Chassis& Chassis::drive(double target){
     RB.move_velocity(ROutput);
     LF.move_velocity(-LOutput);
     LB.move_velocity(-LOutput);
+    if(autoSort_enabled){intake.autoSort(REDBALL);}
     double leftvalue =LEncoder.get_value();
     double rightvalue =REncoder.get_value();
     printf("Error, AveragePos, LOutput, ROutput,Left, Right %f %f %f %f %f %f\n", error, averagePos, LOutput, ROutput,leftvalue, rightvalue);
@@ -227,6 +242,11 @@ Chassis& Chassis::drive(double target){
       LB.move(0);
       RF.move(0);
       RB.move(0);
+      if(autoSort_enabled){
+      intake.intakeStop();
+      intake.middleStop();
+      intake.indexerStop();
+      }
       break;
     }
   }

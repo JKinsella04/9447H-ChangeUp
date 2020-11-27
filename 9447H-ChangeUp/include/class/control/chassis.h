@@ -56,6 +56,13 @@ class Chassis {
     Chassis& withTurnDirection(int direction_turn_);
 
     /*
+    If called it will run the autoSort function while driving or turning.
+
+    @param autoSort_enabled_ Boolean for whether autosorting is enabled.
+    */
+    Chassis& withAutoSort(bool autoSort_enabled_ = 0);
+
+    /*
     Sets Drive rate for the slew acceleration.
 
     @param rate_ Default rate = 5
@@ -97,7 +104,7 @@ class Chassis {
     Chassis& drive(double target);
 
   private:
-    static bool isSettled;
+    static bool isSettled, autoSort_enabled;
 
     static double leftheading, middleheading, rightheading, averageheading;
 
