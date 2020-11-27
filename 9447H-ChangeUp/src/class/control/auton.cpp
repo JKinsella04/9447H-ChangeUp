@@ -85,7 +85,7 @@ Auton& Auton::run(){
     case 2: {
       switch (secondPos) {
         case 1: {
-          chassis.withPD(0.21,0.001).withSlew(1).withHeading(0,1).withAutoSort(1).drive(950);
+          chassis.withPD(0.21,0.001).withSlew(1).withHeading(0,1).withAutoSort().drive(950);
           pros::delay(200);
           chassis.withTurnPD(1,1).withTurnSlew(1).withTurnDirection(LEFT).turn(270).waitUntilSettled();
           intake.intakeSpinVelocity(200);

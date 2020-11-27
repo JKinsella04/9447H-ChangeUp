@@ -16,7 +16,8 @@ void opcontrol() {
   RB.set_brake_mode(MOTOR_BRAKE_HOLD);
   intake.iiInit();
   while (true) {
-    slew.driveSlew(1000, 900, 900);
+    slew.tankDrive(1000, 900, 900);
+    // slew.arcadeControl(1000, 900, 900);
     intake.runIntakes();
     pros::delay(15);
   }

@@ -4,11 +4,22 @@
 class Slew {
   public:
     /*
-    Starts Driver Slew code with the given acceleration.
+    Starts Drive Tank Control with the given slew values.
 
-    @param accel Acceleration
+    @param fwdAccel Forward acceleration rate.
+    @param deccel Decceleration rate.
+    @param revAccel Reverse/backward accerleration rate.
     */
-    int driveSlew(double fwdAccel, double deccel, double revAccel);
+    int tankDrive(double fwdAccel, double deccel, double revAccel);
+
+    /*
+    Starts Driver arcade control with given slew values.
+
+    @param fwdAccel Forward acceleration rate.
+    @param deccel Decceleration rate.
+    @param revAccel Reverse/backward accerleration rate.
+    */
+    void arcadeControl(int fwdAccel, int deccel, int revAccel);
 
     /*
     Starts Intake Slew code with the given accerleration.
@@ -36,4 +47,5 @@ class Slew {
     double LslewOutput = 0, RslewOutput = 0, IntakeOutput =0, IndexerOutput =0, middleIntakeOutput =0, driveMax = 12000;
     double IslewMax = 600, IslewMin = -600, middleIntakeMax = 400, middleIntakeMin  = -600; //Real Robot 600 RPM
     double leftJoystick, rightJoystick, leftError, rightError, leftOvershoot, rightOvershoot;
+    double leftSide, rightSide;
 };
