@@ -83,7 +83,7 @@ Chassis& Chassis::withTurnDirection(int direction_turn_){
   return *this;
 }
 
-Chassis& Chassis::withAutoSort(bool autoSort_enabled_){
+Chassis& Chassis::autoSort(bool autoSort_enabled_){
   autoSort_enabled = autoSort_enabled_;
   return *this;
 }
@@ -246,6 +246,7 @@ Chassis& Chassis::drive(double target){
       intake.intakeStop();
       intake.middleStop();
       intake.indexerStop();
+      autoSort_enabled = false;
       }
       break;
     }

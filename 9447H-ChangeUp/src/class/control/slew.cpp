@@ -52,7 +52,7 @@ void Slew::arcadeControl(int fwdAccel, int deccel, int revAccel){
   if(abs(leftSide) <5 ) leftSide = 0;
   if(abs(rightSide) <5 ) rightSide = 0;
 
-  leftError = leftSide*94.488 - LslewOutput; //1.58
+  leftError = leftSide*47.244 - LslewOutput; //1.58
   leftOvershoot = deccel - abs(LslewOutput);
   if(abs(leftError) == 400)LslewOutput = 0;
   if(leftError > 0){if(leftSide == 0){ if(leftOvershoot >0){deccel -= leftOvershoot;}LslewOutput +=deccel;}else if(LslewOutput < driveMax){LslewOutput +=fwdAccel;}}

@@ -60,7 +60,7 @@ class Chassis {
 
     @param autoSort_enabled_ Boolean for whether autosorting is enabled.
     */
-    Chassis& withAutoSort(bool autoSort_enabled_ = 0);
+    Chassis& autoSort(bool autoSort_enabled_ = 0);
 
     /*
     Sets Drive rate for the slew acceleration.
