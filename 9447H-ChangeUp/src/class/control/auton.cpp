@@ -213,22 +213,33 @@ pros::delay(20);} //while
 }
 
 Auton& Auton::runSkills(){
+  intake.iiInit();
   intake.indexerSpinVelocity(200);
   //Goal 1 (G)
   pros::delay(100);
   intake.indexerStop();
-  chassis.withPD(0.21,0.001).withSlew(1).withHeading(0).autoSort(1).drive(950);
-  chassis.withTurnPD(1,1).withTurnSlew(1).withTurnDirection(LEFT).turn(270).waitUntilSettled();
-  chassis.withPD(0.2,0.001).withSlew(1).withHeading(270).autoSort(0).drive(1000);
+  chassis.withPD(0.4,0.001).withSlew(1).withHeading(0).autoSort(1).drive(700);
+  chassis.withTurnPD(1,1).withTurnSlew(1).withTurnDirection(LEFT).turn(295).waitUntilSettled();
+  chassis.withPD(0.35,0.001).withSlew(1).withHeading(295).autoSort(0).drive(575);
+  intake.middleSpinVelocity(200);
   intake.indexerSpinVelocity(200);
+  pros::delay(1000);
+  intake.middleStop();
+  intake.indexerStop();
   //Goal 2 (D)
-  chassis.withPD(0.2,0.001).withSlew(1).withHeading(270).drive(-1000);
-  chassis.withTurnPD(1,1).withTurnSlew(1).withTurnDirection(RIGHT).turn(315).waitUntilSettled();
-  chassis.withPD(0.08,1).withSlew(1).withHeading(315).autoSort(1).drive(2500);
-  chassis.withTurnPD(1,1).withTurnSlew(1).withTurnDirection(LEFT).turn(270).waitUntilSettled();
-  chassis.withPD(0.2,1).withSlew(1).withHeading(270).autoSort(0).drive(1000);
+  chassis.withPD(0.25,0.001).withSlew(1).withHeading(295).drive(-410);
+  pros::delay(500);
+  chassis.withTurnPD(1,1).withTurnSlew(1).withTurnDirection(RIGHT).justPD(1).turn(330).waitUntilSettled();
+  chassis.withPD(0.125,1).withSlew(2).withHeading(330).autoSort(1).drive(1600);
+  chassis.withTurnPD(1,1).withTurnSlew(1).withTurnDirection(LEFT).turn(280).waitUntilSettled();
+  chassis.withPD(0.2,1).withSlew(1).withHeading(270).autoSort(0).drive(200);
+  intake.middleSpinVelocity(200);
   intake.indexerSpinVelocity(200);
+  pros::delay(1000);
+  intake.middleStop();
+  intake.indexerStop();
   //Goal 3 (A)
+/*
   chassis.withPD(0.2,0.001).withSlew(1).withHeading(270).drive(-1000);
   chassis.withTurnPD(1,1).withTurnSlew(1).withTurnDirection(RIGHT).turn(45).waitUntilSettled();
   chassis.withPD(0.133,0.001).withSlew(1).withHeading(45).autoSort(1).drive(1500);
@@ -272,6 +283,7 @@ Auton& Auton::runSkills(){
   chassis.withPD(0.4,0.001).withSlew(1).withHeading(315).autoSort(1).drive(1000);
   intake.indexerSpinVelocity(200);
   //Goal 9 (E)
+  */
 
   return *this;
 }

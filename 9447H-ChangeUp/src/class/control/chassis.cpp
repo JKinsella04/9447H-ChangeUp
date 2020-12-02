@@ -5,6 +5,7 @@
 static Intake intake;
 
 bool Chassis::isSettled = true, Chassis::autoSort_enabled;
+bool Chassis::justPID=false;
 double Chassis::leftheading = L_IMU.get_heading(), Chassis::middleheading = M_IMU.get_heading(), Chassis::rightheading = R_IMU.get_heading(),
  Chassis::averageheading = (leftheading + middleheading + rightheading)/3;
 
@@ -105,6 +106,11 @@ Chassis& Chassis::withHeading(double drive_theta_, double correction_rate_){
   return *this;
 }
 
+Chassis& Chassis::justPD(bool justPD_){
+  justPID = justPD_;
+  return *this;
+}
+
 Chassis& Chassis::turn(double theta_){
   isSettled = false;
   while(averageheading != theta_){
@@ -121,7 +127,7 @@ Chassis& Chassis::turn(double theta_){
     double prevError = error;
     double derivative = error - prevError;
     power = error*kP_turn + derivative*kD_turn;
-    if(output < power) {
+    if(output < power && !justPID) {
       output += rate_turn;
     }else{
       output = power;
@@ -140,24 +146,18 @@ Chassis& Chassis::turn(double theta_){
         RB.move_velocity(-output);
         break;}
     }
-    if(autoSort_enabled){intake.autoSort(REDBALL);}
     double tpower = LF.get_target_velocity(); //Speed sent to motors
     double rpower = LF.get_actual_velocity(); //Actual speed of the motors
     if(leftheading > 355|| rightheading > 355 || middleheading > 355){
       averageheading = 0;
     } //Zeroes the average so it has a zero position
-    printf("L_IMU, M_IMU, R_IMU,Average, TPower, RPower %f %f %f %f %d %f \n", leftheading, middleheading, rightheading, averageheading, output, power);
+    printf("L_IMU, M_IMU, R_IMU,Average, output, error %f %f %f %f %d %f \n", leftheading, middleheading, rightheading, averageheading, output, error);
     if(averageheading >= theta-1 && averageheading <= theta+1){ //If it gets really close to the wanted angle it breaks the loop
       isSettled = true;
       LF.move(0);
       LB.move(0);
       RF.move(0);
       RB.move(0);
-      if(autoSort_enabled){
-      intake.intakeStop();
-      intake.middleStop();
-      intake.indexerStop();
-      }
       break;
     }
   pros::delay(15);
@@ -237,7 +237,6 @@ Chassis& Chassis::drive(double target){
     printf("Error, AveragePos, LOutput, ROutput,Left, Right %f %f %f %f %f %f\n", error, averagePos, LOutput, ROutput,leftvalue, rightvalue);
     pros::delay(10);
     if(averagePos < target+50 && averagePos > target-50) {
-      isSettled = true;
       LF.move(0);
       LB.move(0);
       RF.move(0);
@@ -248,6 +247,7 @@ Chassis& Chassis::drive(double target){
       intake.indexerStop();
       autoSort_enabled = false;
       }
+      isSettled = true;
       break;
     }
   }

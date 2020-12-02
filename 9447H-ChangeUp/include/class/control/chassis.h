@@ -83,6 +83,13 @@ class Chassis {
     @param correction_rate_ The amount you want to correct by. Default 1.
     */
     Chassis& withHeading(double drive_theta_, double correction_rate_ = 1);
+
+    /*
+    Sets justPD Boolean
+
+    @param justPD_ boolean for running just PD no slew.
+    */
+    Chassis& justPD(bool justPD_);
     /*
     Turns the robot to a set angle.
 
@@ -114,5 +121,6 @@ class Chassis {
     static int direction_turn;
     static int output;
     static int drive_theta;
+    static bool justPID;
 
 };
