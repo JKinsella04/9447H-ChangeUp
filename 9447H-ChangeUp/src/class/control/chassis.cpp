@@ -19,6 +19,9 @@ double Chassis::rate_drive, Chassis::rate_turn, Chassis::correction_rate;
 
 int Chassis::output = 0;
 
+double Chassis::distTarget;
+bool Chassis::distSensorEnabled = false;
+
 Chassis::Chassis() { }
 Chassis::~Chassis() {
   reset();
@@ -108,6 +111,12 @@ Chassis& Chassis::withHeading(double drive_theta_, double correction_rate_){
 
 Chassis& Chassis::justPD(bool justPD_){
   justPID = justPD_;
+  return *this;
+}
+
+Chassis& Chassis::withDist(double distTarget_){
+  distSensorEnabled = true;
+  distTarget = distTarget_;
   return *this;
 }
 
@@ -234,7 +243,7 @@ Chassis& Chassis::drive(double target){
     if(autoSort_enabled){intake.autoSort(REDBALL);}
     double leftvalue =LEncoder.get_value();
     double rightvalue =REncoder.get_value();
-    printf("Error, AveragePos, LOutput, ROutput,Left, Right %f %f %f %f %f %f\n", error, averagePos, LOutput, ROutput,leftvalue, rightvalue);
+    printf("Error, AveragePos, LOutput, ROutput,Left, Right goalDist %f %f %f %f %f %f %d\n", error, averagePos, LOutput, ROutput,leftvalue, rightvalue,goalDist.get());
     pros::delay(10);
     if(averagePos < target+50 && averagePos > target-50) {
       LF.move(0);
@@ -246,9 +255,27 @@ Chassis& Chassis::drive(double target){
       intake.middleStop();
       intake.indexerStop();
       autoSort_enabled = false;
+      distSensorEnabled=false;
       }
       isSettled = true;
       break;
+    }
+    if(distSensorEnabled){
+      if(goalDist.get() < distTarget && goalDist.get() != 0){
+        LF.move(0);
+        LB.move(0);
+        RF.move(0);
+        RB.move(0);
+        if(autoSort_enabled){
+        intake.intakeStop();
+        intake.middleStop();
+        intake.indexerStop();
+        autoSort_enabled = false;
+        }
+        isSettled = true;
+        distSensorEnabled=false;
+        break;
+      }
     }
   }
 return *this;

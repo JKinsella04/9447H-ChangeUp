@@ -25,6 +25,7 @@ ROptical Optical Sensor on the right of the robot.
 LOptical Optical Sensor on the left of the robot.
 */
 pros::Optical ROptical(2), LOptical(12);
+pros::Distance goalDist(4);
 
 /*
 Inertial sensor

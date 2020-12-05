@@ -90,6 +90,15 @@ class Chassis {
     @param justPD_ boolean for running just PD no slew.
     */
     Chassis& justPD(bool justPD_);
+
+
+    /*
+    When called with Drive it will stop the drive function if it deteects something in the distance sensor an amount away.
+
+    @param distTarget_ wanted distance from the target
+    */
+    Chassis& withDist(double distTarget_);
+
     /*
     Turns the robot to a set angle.
 
@@ -122,5 +131,6 @@ class Chassis {
     static int output;
     static int drive_theta;
     static bool justPID;
-
+    static double distTarget;
+    static bool distSensorEnabled;
 };
