@@ -56,6 +56,6 @@ int currentPos = 0,
     firstPos = 0,
     secondPos = 0,
     thirdPos = 0,
-    alliance = 0;
+    alliance = 1;
 
 bool *isSetup = new bool[false];
