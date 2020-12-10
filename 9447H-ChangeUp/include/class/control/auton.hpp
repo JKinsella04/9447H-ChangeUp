@@ -1,7 +1,7 @@
 #include "main.h"
-#include "globals.h"
+#include "globals.hpp"
 
-#include "class/displayController.h"
+#include "class/displayController.hpp"
 
 class Auton {
   public:

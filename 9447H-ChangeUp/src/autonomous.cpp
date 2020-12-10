@@ -1,6 +1,6 @@
 #include "main.h"
 
-#include "class/control/auton.h"
+#include "class/control/auton.hpp"
 
 Auton auton;
 

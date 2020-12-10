@@ -1,7 +1,7 @@
 #include "main.h"
-#include "class/control/auton.h"
-#include "class/control/chassis.h"
-#include "class/control/intakes.h"
+#include "class/control/auton.hpp"
+#include "class/control/chassis.hpp"
+#include "class/control/intakes.hpp"
 
 static Chassis chassis;
 static Intake intake;
@@ -14,18 +14,6 @@ Not Smooth second half? Incrase kD
 Startup too slow? Increase slew_rate
 Isn't settling? Increase kP or broaden exit range
 */
-// int * param =0;
-// void redAutoSort(void * param) {
-//   while(1){intake.autoSort(REDBALL);pros::delay(15);}
-// }
-// void blueAutoSort(void * param) {
-//   while(1){intake.autoSort(REDBALL);pros::delay(15);}
-// }
-
-// pros::Task redAutoSortTask (redAutoSort, (void*)"PROS", TASK_PRIORITY_DEFAULT,
-//                TASK_STACK_DEPTH_DEFAULT, "redAutoSort");
-// pros::Task blueAutoSortTask (blueAutoSort, (void*)"PROS", TASK_PRIORITY_DEFAULT,
-//                TASK_STACK_DEPTH_DEFAULT, "blueAutoSort");
 
 Auton& Auton::run(){
  while(true){

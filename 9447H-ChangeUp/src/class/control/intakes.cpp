@@ -1,5 +1,5 @@
 #include "globals.h"
-#include "class/control/intakes.h"
+#include "class/control/intakes.hpp"
 
 int Intake::ledLevel = 75, Intake::doubleShotDelay = 100, Intake::redHue = 10, Intake::blueHue = 200;
 bool Intake::full=0;

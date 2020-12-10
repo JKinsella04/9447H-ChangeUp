@@ -1,8 +1,8 @@
 #include "main.h"
 #include "globals.h"
 
-#include "class/control/intakes.h"
-#include "class/control/slew.h"
+#include "class/control/intakes.hpp"
+#include "class/control/slew.hpp"
 
 // Class Initialization
 Slew slew;

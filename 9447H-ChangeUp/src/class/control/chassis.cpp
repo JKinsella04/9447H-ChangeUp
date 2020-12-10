@@ -1,6 +1,6 @@
 #include "main.h"
-#include "intakes.h"
-#include "chassis.h"
+#include "class/control/intakes.hpp"
+#include "class/control/chassis.hpp"
 
 static Intake intake;
 

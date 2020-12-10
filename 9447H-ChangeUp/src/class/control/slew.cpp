@@ -1,6 +1,6 @@
 #include "main.h"
 
-#include "class/control/slew.h"
+#include "class/control/slew.hpp"
 
 
 int Slew::tankDrive(double fwdAccel, double deccel, double revAccel){

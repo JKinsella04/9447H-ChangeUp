@@ -1,5 +1,5 @@
 #include "main.h"
-#include "globals.h"
+#include "globals.hpp"
 
 #define REDBALL 1
 #define BLUEBALL 2

@@ -1,6 +1,6 @@
 #include "main.h"
 
-#include "class/displayController.h"
+#include "class/displayController.hpp"
 
 Display display;
 

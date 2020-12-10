@@ -1,5 +1,5 @@
 #include "main.h"
-#include "globals.h"
+#include "globals.hpp"
 
 #include <bits/stdc++.h>
 #include <vector>
