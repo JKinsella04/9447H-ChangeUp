@@ -47,7 +47,7 @@ Auton& Auton::run(){
           chassis.withPD(0.075,0.001).withSlew(2).withHeading(0,1).drive(-5000);
           currentPos = 1; break;}//robot's mvmt from -1 to 1 //
         case 2: {
-          chassis.setState(HOLD);
+          // chassis.setState(HOLD);
           intake.indexerSpinVelocity(200);
           pros::delay(500);
           intake.indexerStop();
@@ -73,15 +73,12 @@ Auton& Auton::run(){
     case 2: {
       switch (secondPos) {
         case 1: {
-          chassis.withPD(0.21,0.001).withSlew(1).withHeading(0,1).autoSort().drive(950);
+          chassis.withPD(0.4,0.001).withSlew(1).withHeading(0,1).drive(500);
           pros::delay(200);
           chassis.withTurnPD(1,1).withTurnSlew(1).withTurnDirection(LEFT).turn(270).waitUntilSettled();
-          intake.intakeSpinVelocity(200);
-          intake.middleSpinVelocity(600);
-          intake.indexerSpinVelocity(200);
           // chassis.withPD(0.22,0.001).withSlew(1).withHeading(270).drive(900);
-          chassis.withPD(0.25,0.001).withSlew(1).withHeading(270,1).drive(800);
-          pros::delay(750);
+          chassis.withPD(0.25,0.001).withSlew(1).withHeading(270,1).autoSort(1).withDist(30).drive(800);
+          // pros::delay(750);
           currentPos = 1; break;
         }//robot's mvmt from 2 to 1
         case 3: {//robot's mvmt from 2 to 3
@@ -139,9 +136,8 @@ Auton& Auton::run(){
           chassis.withTurnPD(1,.1).withTurnDirection(LEFT).turn(140).waitUntilSettled();
           chassis.withPD(0.075,0.001).withSlew(100).withHeading(0,1).drive(2500);
           chassis.withTurnPD(1,.1).withTurnDirection(RIGHT).turn(185).waitUntilSettled();
-          intake.intakeSpinVelocity(200);
           pros::delay(200);
-          chassis.withPD(0.15,0.001).withSlew(2).drive(950);
+          chassis.withPD(0.15,0.001).withSlew(2).autoSort(1).withDist(30).drive(950);
           intake.middleSpinVelocity(600);
           intake.indexerSpinVelocity(200);
           currentPos = 3; break;

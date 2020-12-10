@@ -240,7 +240,12 @@ Chassis& Chassis::drive(double target){
     RB.move_velocity(ROutput);
     LF.move_velocity(-LOutput);
     LB.move_velocity(-LOutput);
-    if(autoSort_enabled){intake.autoSort(REDBALL);}
+    if(autoSort_enabled){
+      switch(alliance){
+        case 3:{intake.autoSort(REDBALL);} //If skills autosort as if Red Alliance.
+        default:{intake.autoSort(alliance);}
+      }
+    }
     double leftvalue =LEncoder.get_value();
     double rightvalue =REncoder.get_value();
     printf("Error, AveragePos, LOutput, ROutput,Left, Right goalDist %f %f %f %f %f %f %d\n", error, averagePos, LOutput, ROutput,leftvalue, rightvalue,goalDist.get());
