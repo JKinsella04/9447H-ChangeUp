@@ -1,5 +1,5 @@
 #include "main.h"
-#include "globals.h"
+#include "globals.hpp"
 
 #include "class/control/intakes.hpp"
 #include "class/control/slew.hpp"
@@ -14,9 +14,9 @@ void opcontrol() {
   LB.set_brake_mode(MOTOR_BRAKE_HOLD);
   RF.set_brake_mode(MOTOR_BRAKE_HOLD);
   RB.set_brake_mode(MOTOR_BRAKE_HOLD);
-  intake.iiInit();
+  // intake.iiInit();
   while (true) {
-    slew.tankDrive(1000, 900, 900);
+    slew.tankDrive(1000, 500, 900);
     // slew.arcadeControl(1000, 900, 900);
     intake.runIntakes();
     pros::delay(15);

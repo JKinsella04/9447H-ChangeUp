@@ -48,4 +48,5 @@ class Slew {
     double IslewMax = 600, IslewMin = -600, middleIntakeMax = 400, middleIntakeMin  = -600; //Real Robot 600 RPM
     double leftJoystick, rightJoystick, leftError, rightError, leftOvershoot, rightOvershoot;
     double leftSide, rightSide;
+    int rightTarget, leftTarget;
 };

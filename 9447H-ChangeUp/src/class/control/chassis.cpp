@@ -163,6 +163,7 @@ Chassis& Chassis::turn(double theta_){
     printf("L_IMU, M_IMU, R_IMU,Average, output, error %f %f %f %f %d %f \n", leftheading, middleheading, rightheading, averageheading, output, error);
     if(averageheading >= theta-1 && averageheading <= theta+1){ //If it gets really close to the wanted angle it breaks the loop
       isSettled = true;
+      justPID = false;
       LF.move(0);
       LB.move(0);
       RF.move(0);
@@ -187,7 +188,7 @@ Chassis& Chassis::drive(double target){
     double prevError = error;
     double derivative = error - prevError;
     double power = error*kP_drive + derivative*kD_drive;
-    if(output < power) {
+    if(output < power && !justPID) {
       output += rate_drive;
     }else{
       output = power;
@@ -250,11 +251,13 @@ Chassis& Chassis::drive(double target){
     double rightvalue =REncoder.get_value();
     printf("Error, AveragePos, LOutput, ROutput,Left, Right goalDist %f %f %f %f %f %f %d\n", error, averagePos, LOutput, ROutput,leftvalue, rightvalue,goalDist.get());
     pros::delay(10);
-    if(averagePos < target+50 && averagePos > target-50) {
+    if(averagePos < target+10 && averagePos > target-10) {
       LF.move(0);
       LB.move(0);
       RF.move(0);
       RB.move(0);
+      odomReset();
+      justPID = false;
       if(autoSort_enabled){
       intake.intakeStop();
       intake.middleStop();
@@ -271,6 +274,8 @@ Chassis& Chassis::drive(double target){
         LB.move(0);
         RF.move(0);
         RB.move(0);
+        odomReset();
+        justPID = false;
         if(autoSort_enabled){
         intake.intakeStop();
         intake.middleStop();

@@ -130,11 +130,19 @@ class Intake{
     void goalSort(int allianceColor = alliance);
 
     /*
+    Runs the goalSort for an amount of time.
+
+    @param int allianceColor your alliance REDBALL or BLUEBALL
+    @param int time length of the timer
+    */
+    void goalSort(int allianceColor, int time);
+
+    /*
     Delays the calling thread until the robot completes its action.
     */
     void waitUntilSettled();
 
   private:
-    static int ledLevel, doubleShotDelay, redHue, blueHue;
+    static int ledLevel, doubleShotDelay, redHue, blueHue, time;
     static bool full;
 };

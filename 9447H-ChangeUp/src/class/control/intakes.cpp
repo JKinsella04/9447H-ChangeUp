@@ -1,4 +1,4 @@
-#include "globals.h"
+#include "globals.hpp"
 #include "class/control/intakes.hpp"
 
 int Intake::ledLevel = 75, Intake::doubleShotDelay = 100, Intake::redHue = 10, Intake::blueHue = 200;
@@ -175,4 +175,14 @@ void Intake::goalSort(int allianceColor){
       break;
     }
   }
+}
+
+void Intake::goalSort(int allianceColor, int time){
+  for(int i=0; i<time;i++){
+    goalSort(allianceColor);
+    pros::delay(15);
+  }
+  intakeStop();
+  middleStop();
+  indexerStop();
 }

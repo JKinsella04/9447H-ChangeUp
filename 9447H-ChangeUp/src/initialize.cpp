@@ -1,11 +1,14 @@
 #include "main.h"
 
 #include "class/displayController.hpp"
+#include "class/control/intakes.hpp"
 
 Display display;
+static Intake intake;
 
 void initialize() {
   display.setup();
+  intake.iiInit();
 if(isSetup){display.destroy();}
 }
 
