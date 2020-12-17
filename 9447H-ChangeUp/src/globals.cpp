@@ -55,11 +55,11 @@ pros::ADIAnalogIn topLight('F');
  @param thirdPos third place for the robot to go to during autonomous.
  @param alliance Determines what color to sort for when running the autoSort intake class member function.
 */
-int currentPos = 0,
-    startPos = 0,
-    firstPos = 0,
-    secondPos = 0,
-    thirdPos = 0,
-    alliance = 0;
+static int currentPos = 0,
+           startPos = 0,
+           firstPos = 0,
+           secondPos = 0,
+           thirdPos = 0,
+           alliance = 0;
 
 bool *isSetup = new bool[false];
