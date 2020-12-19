@@ -6,9 +6,9 @@ pros::Controller master(CONTROLLER_MASTER);
 //Motor Definitions
 
 //Intakes
-pros::Motor leftIntake(15, MOTOR_GEARSET_18, 0, MOTOR_ENCODER_ROTATIONS); //1
+pros::Motor leftIntake(15, MOTOR_GEARSET_6, 0, MOTOR_ENCODER_ROTATIONS); //1
 pros::Motor middleIntake(1, MOTOR_GEARSET_6, 0, MOTOR_ENCODER_ROTATIONS); //1
-pros::Motor rightIntake(14, MOTOR_GEARSET_18, 1, MOTOR_ENCODER_ROTATIONS); //16
+pros::Motor rightIntake(14, MOTOR_GEARSET_6, 1, MOTOR_ENCODER_ROTATIONS); //16
 
 //Indexer Motors
 pros::Motor indexer(20, MOTOR_GEARSET_18, 0, MOTOR_ENCODER_ROTATIONS); //1

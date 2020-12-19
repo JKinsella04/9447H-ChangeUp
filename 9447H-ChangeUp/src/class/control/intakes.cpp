@@ -2,7 +2,7 @@
 #include "class/control/intakes.hpp"
 
 int Intake::ledLevel = 75, Intake::doubleShotDelay = 100, Intake::redHue = 10, Intake::blueHue = 200;
-bool Intake::full=0;
+bool Intake::full=0, Intake::blueBall=0, Intake::holdComplete=0;
 
 void Intake::intakeSpin(int speed){
   leftIntake.move(speed);
@@ -72,22 +72,28 @@ void Intake::runIntakes(){ // Runs the intakes based on L1,L2,R1,R2 and, Y and i
 }
 
 void Intake::runAutoIndexer(){
-    double midLightAverage = topLight.get_value();//botLight.get_value(); //+ topLight.get_value())/2;
-    double topLightAverage = topLight.get_value();
-    if(topLightAverage <=2800){
+  if(!holdComplete){
+    double opticalAverage = (LOptical.get_hue() + ROptical.get_hue())/2;
+    if(opticalAverage >= blueHue){
+      blueBall = 1;
+      middleSpinVelocity(200);
+      indexerSpinVelocity(100);
+    }
+    if(topLight.get_value() <=2800 && blueBall == 1){
       indexerStop();
-      if(midLightAverage >= 2500){
-        middleSpin(50);}
-      else{
+      if(opticalAverage >= blueHue){
         middleStop();
-       }
-     }
-    else{
-    intakeSpin(600);
-    middleSpin(50);
-    indexerSpin(50);
+        intakeStop();
+        holdComplete =1;
+      }
+    }
+    if(blueBall == 0){
+      intakeSpinVelocity(600);
+      middleSpinVelocity(600);
+      indexerSpinVelocity(200);
+    }
+    printf("lightAverage, blueBall  %d %d\n",topLight.get_value(), blueBall);
   }
-  printf("lightAverage  %F \n",midLightAverage);
 }
 
 void Intake::iiInit(){
@@ -177,12 +183,27 @@ void Intake::goalSort(int allianceColor){
   }
 }
 
-void Intake::goalSort(int allianceColor, int time){
-  for(int i=0; i<time;i++){
-    goalSort(allianceColor);
-    pros::delay(15);
+void Intake::goalSort(int allianceColor, int time, bool state){
+  if(state){
+    for(int i=0; i<time;i++){
+      goalSort(allianceColor);
+      pros::delay(15);
+    }
+  }else{
+    for(int i=0; i<time;i++){
+      runAutoIndexer();
+      pros::delay(15);
+    }
   }
   intakeStop();
   middleStop();
   indexerStop();
+  blueBall = 0;
+  holdComplete =0;
+}
+
+void Intake::dropBall(){
+  indexerSpinVelocity(-200);
+  pros::delay(250);
+  middleSpinVelocity(600);
 }

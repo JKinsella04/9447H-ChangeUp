@@ -3,6 +3,8 @@
 
 #define REDBALL 1
 #define BLUEBALL 2
+#define SHOOTBALL 1
+#define HOLDBALL 0
 
 class Intake{
   public:
@@ -134,8 +136,15 @@ class Intake{
 
     @param int allianceColor your alliance REDBALL or BLUEBALL
     @param int time length of the timer
+    @param bool state whether you want to hold the balls or shoot them out.
     */
-    void goalSort(int allianceColor, int time);
+    void goalSort(int allianceColor, int time, bool state = SHOOTBALL);
+
+    /*
+    Runs the indexer and shortly after the middleIntake to shoot two balls out the back of the robot.
+    Recommended to run this shortly after calling goalSort() with state HOLDBALL.
+    */
+    void dropBall();
 
     /*
     Delays the calling thread until the robot completes its action.
@@ -144,5 +153,5 @@ class Intake{
 
   private:
     static int ledLevel, doubleShotDelay, redHue, blueHue, time;
-    static bool full;
+    static bool full, blueBall, holdComplete;
 };
