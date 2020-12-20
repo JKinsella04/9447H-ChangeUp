@@ -6,7 +6,7 @@ int Slew::LslewOutput =0, Slew::RslewOutput =0;
 int Slew::driveMax =0;
 int Slew::leftJoystick =0, Slew::rightJoystick =0;
 int Slew::leftSide =0, Slew::rightSide=0;
-int Slew::leftTarget =0, Slew::rightTarget =0;  
+int Slew::leftTarget =0, Slew::rightTarget =0;
 
 int Slew::tankDrive(double fwdAccel, double deccel, double revAccel){
   leftJoystick = master.get_analog(ANALOG_LEFT_Y);
@@ -34,6 +34,12 @@ int Slew::tankDrive(double fwdAccel, double deccel, double revAccel){
   // if(rightTarget == 0)RslewOutput = 0;
 
   if(master.get_digital(DIGITAL_A)){LslewOutput = 0; RslewOutput = 0;}
+  if(master.get_digital(DIGITAL_L1) && master.get_digital(DIGITAL_L2) && master.get_digital(DIGITAL_R1) && master.get_digital(DIGITAL_R2)){
+    if(goalDist.get() <= 50){
+      LslewOutput = 0;
+      RslewOutput = 0;
+    }
+  }
 
   LF.move_voltage(-LslewOutput);
   LB.move_voltage(-LslewOutput);

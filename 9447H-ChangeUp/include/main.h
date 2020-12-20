@@ -10,13 +10,13 @@
 #include "api.h"
 #include "pros/apix.h"
 #include "pros/rtos.h"
-#include "okapi/api.hpp"
+// #include "okapi/api.hpp"
 
 // Global Constants
 #define IDLE 0
 
 
-using namespace okapi;
+// using namespace okapi;
 
 #ifdef __cplusplus
 extern "C" {

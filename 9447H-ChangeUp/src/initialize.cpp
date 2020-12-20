@@ -12,13 +12,15 @@ void initialize() {
 if(isSetup){display.destroy();}
 }
 
-void competition_initialize() {
-    display.display();
+void disabled(){
+  display.display();
   while(1){
-  display.backgroundcheck();
-  while(alliance==0){display.setAlliance(); pros::delay(15);}
-  display.arcChecker();
-  display.setVars();
-  display.updateSensors();
+    display.backgroundcheck();
+    while(alliance==0){display.setAlliance(); pros::delay(15);}
+    display.arcChecker();
+    display.setVars();
+    display.updateSensors();
   pros::delay(20);}
 }
+
+void competition_initialize() {}
