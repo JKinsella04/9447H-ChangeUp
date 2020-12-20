@@ -219,55 +219,52 @@ Auton& Auton::runSkills(){
 
   pros::delay(100);
   intake.indexerStop();
-  chassis.withPD(0.4,0.001).withSlew(2).withHeading(10,1).autoSort(1).drive(3000);
-  chassis.withTurnPD(1.1,1).withTurnSlew(1).withTurnDirection(LEFT).turn(230).waitUntilSettled();
-  chassis.withPD(0.35,0.001).withSlew(1).withHeading(230).autoSort(0).withDist(40).drive(1500);
-  intake.goalSort(REDBALL, 50);
-  intake.indexerSpinVelocity(-200);
+  chassis.withPD(0.3,0.01).withSlew(2).withHeading(10,1).autoSort(1).drive(2850);
+  chassis.withTurnPD(1.1,1).withTurnSlew(1).withTurnDirection(LEFT).turn(240).waitUntilSettled();
+  chassis.withPD(0.35,0.001).withSlew(1).withHeading(240).autoSort(0).withDist(40).drive(1500);
+  intake.goalSort(REDBALL, 50, HOLDBALL);
   //Goal 2 (D)
 
-  chassis.withPD(0.2,0.001).withSlew(1).withHeading(230).autoSort(1).drive(-350);
-  chassis.withTurnPD(1.15,1).withTurnDirection(RIGHT).justPD(1).turn(330).waitUntilSettled();
-  chassis.withPD(0.15,1).withSlew(2).withHeading(330).autoSort(1).drive(2000);
-  chassis.withTurnPD(1.1,1).withTurnSlew(1).withTurnDirection(LEFT).turn(285).waitUntilSettled();
+  chassis.withPD(0.2,0.001).withSlew(1).withHeading(240).autoSort(1).drive(-250);
+  chassis.withTurnPD(1.125,1).withTurnDirection(RIGHT).justPD(1).turn(330).waitUntilSettled();
+  intake.dropBall();
+  chassis.withPD(0.175,1).withSlew(2).withHeading(330).autoSort(1).drive(2200);
+  chassis.withTurnPD(1.3,1).withTurnSlew(1).withTurnDirection(LEFT).turn(285).waitUntilSettled();
   chassis.withPD(0.2,1).withSlew(1).withHeading(285).autoSort(0).withDist(40).drive(600);
   intake.goalSort(REDBALL, 50, HOLDBALL);
-  intake.indexerSpinVelocity(-200);
+  // intake.indexerSpinVelocity(-200);
   //Goal 3 (A)
 
   chassis.withPD(0.2,0.001).withSlew(1).withHeading(270).drive(-425);
-  chassis.withTurnPD(.89,0.09).withTurnDirection(RIGHT).justPD(1).turn(90).waitUntilSettled();
+  chassis.withTurnPD(.9,0.09).withTurnDirection(RIGHT).justPD(1).turn(90).waitUntilSettled();
   intake.dropBall();
-  chassis.withPD(0.2,0.001).withSlew(1).withHeading(87).autoSort(1).drive(2400);
-  chassis.withTurnPD(.25,1).withTurnSlew(1).withTurnDirection(LEFT).justPD(1).turn(325).waitUntilSettled();
-  chassis.withPD(0.2,0.001).withSlew(1).withHeading(325).autoSort(1).withDist(40).drive(1500);
-  intake.goalSort(REDBALL, 50, HOLDBALL);
-  intake.indexerSpinVelocity(-200);
-  // intake.indexerSpinVelocity(200);
+  chassis.withPD(0.2,0.001).withSlew(1).withHeading(90).autoSort(1).drive(2350);
+  chassis.withTurnPD(.25,1).withTurnSlew(1).withTurnDirection(LEFT).justPD(1).turn(327).waitUntilSettled();
+  chassis.withPD(0.2,0.001).withSlew(1).withHeading(327).autoSort(1).withDist(40).drive(1500);
+  intake.goalSort(REDBALL, 55, HOLDBALL);
+  // intake.indexerSpinVelocity(-200);
   // Goal 4 (B)
 
   chassis.withPD(0.2,0.001).withSlew(1).withHeading(300).drive(-300);
-  chassis.withTurnPD(.9,1).withTurnSlew(1).withTurnDirection(RIGHT).justPD(1).turn(75).waitUntilSettled();
+  chassis.withTurnPD(.95,1).withTurnDirection(RIGHT).justPD(1).turn(75).waitUntilSettled();
   intake.dropBall();
   chassis.withPD(0.2,0.001).withSlew(1).withHeading(75).autoSort(1).drive(2000);
-  chassis.withTurnPD(.35,.1).withTurnSlew(1).withTurnDirection(LEFT).justPD(1).turn(315).waitUntilSettled();
+  chassis.withTurnPD(.34,.1).withTurnSlew(1).withTurnDirection(LEFT).justPD(1).turn(315).waitUntilSettled();
   chassis.withPD(1,0.001).withSlew(1).withHeading(315).autoSort(1).drive(1000);
   chassis.withTurnPD(.4,.1).withTurnSlew(1).withTurnDirection(RIGHT).justPD(1).turn(0).waitUntilSettled();
   chassis.withPD(0.2,0.001).withSlew(1).withHeading(0).withDist(50).drive(1500);
   intake.goalSort(REDBALL, 50, HOLDBALL);
-  intake.indexerSpinVelocity(-200);
   // Goal 5 (C)
 
-  chassis.withPD(0.2,0.001).withSlew(1).withHeading(0).drive(-1300);
-  chassis.withTurnPD(.4,.1).withTurnSlew(1).withTurnDirection(RIGHT).justPD(1).turn(155).waitUntilSettled();
+  chassis.withPD(0.15,0.001).withSlew(1).withHeading(0).drive(-1400);
+  chassis.withTurnPD(.6,.2).withTurnSlew(1).withTurnDirection(RIGHT).justPD(1).turn(147).waitUntilSettled();
   intake.dropBall();
-  chassis.withPD(0.4,0.001).withSlew(1).withHeading(155).autoSort(1).drive(1500);
-  /*
-  chassis.withTurnPD(1,1).withTurnSlew(1).withTurnDirection(LEFT).justPD(1).turn(45).waitUntilSettled();
-  chassis.withPD(0.4,0.001).withSlew(1).withHeading(45).withDist(50).drive(400);
-  intake.indexerSpinVelocity(200);
+  chassis.withPD(0.4,0.001).withSlew(1).withHeading(155).autoSort(1).drive(1450);
+  chassis.withTurnPD(.5,.1).withTurnDirection(LEFT).justPD(1).turn(55).waitUntilSettled();
+  chassis.withPD(0.4,0.001).withSlew(1).withHeading(45).withDist(50).drive(1200);
+  intake.goalSort(REDBALL, 50, HOLDBALL);
   //Goal 6 (F)
-
+  /*
   chassis.withPD(0.4,0.001).withSlew(1).withHeading(45).drive(-400);
   chassis.withTurnPD(1,1).withTurnSlew(1).withTurnDirection(RIGHT).justPD(1).turn(135).waitUntilSettled();
   chassis.withPD(0.133,0.001).withSlew(1).withHeading(135).autoSort(1).drive(3000);
