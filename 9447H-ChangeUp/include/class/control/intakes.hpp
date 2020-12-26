@@ -116,6 +116,13 @@ class Intake{
     void deploy();
 
     /*
+    Call when sorting a goal with only one ball in it.
+    Call with goalSort();
+    @param justOneBall_ bool 1 for enabled 0 for disabled..
+    */
+    Intake& justOneBall(bool oneBall_);
+
+    /*
     Sorts out the enemy ball based on color.
     The opposing color is determined during the auton selection before a match.
 
@@ -153,5 +160,5 @@ class Intake{
 
   private:
     static int ledLevel, doubleShotDelay, redHue, blueHue, time;
-    static bool full, blueBall, holdComplete;
+    static bool full, ball, holdComplete, oneBall;
 };

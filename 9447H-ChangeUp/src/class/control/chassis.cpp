@@ -22,6 +22,8 @@ int Chassis::output = 0;
 double Chassis::distTarget;
 bool Chassis::distSensorEnabled = false;
 
+int Chassis::tol;
+
 Chassis::Chassis() { }
 Chassis::~Chassis() {
   reset();
@@ -120,6 +122,11 @@ Chassis& Chassis::withDist(double distTarget_){
   return *this;
 }
 
+Chassis& Chassis::withTol(int tol_){
+  tol = tol_;
+  return *this;
+}
+
 Chassis& Chassis::turn(double theta_){
   isSettled = false;
   while(averageheading != theta_){
@@ -161,7 +168,7 @@ Chassis& Chassis::turn(double theta_){
       averageheading = 0;
     } //Zeroes the average so it has a zero position
     printf("L_IMU, M_IMU, R_IMU,Average, output, error %f %f %f %f %d %f \n", leftheading, middleheading, rightheading, averageheading, output, error);
-    if(averageheading >= theta-1 && averageheading <= theta+1){ //If it gets really close to the wanted angle it breaks the loop
+    if(averageheading >= theta-tol && averageheading <= theta+tol){ //If it gets really close to the wanted angle it breaks the loop
       isSettled = true;
       justPID = false;
       LF.move(0);
@@ -181,9 +188,9 @@ Chassis& Chassis::drive(double target){
   double rightvalue =REncoder.get_value();
   printf("Left, Right %f %f  \n", leftvalue, rightvalue);
   isSettled = false;
-  double averagePos = REncoder.get_value() + LEncoder.get_value()/2;
+  double averagePos = (REncoder.get_value() + LEncoder.get_value())/2;
   while(target != averagePos) {
-    double averagePos = REncoder.get_value() + LEncoder.get_value()/2;
+    double averagePos = (REncoder.get_value() + LEncoder.get_value())/2;
     double error = target - averagePos;
     double prevError = error;
     double derivative = error - prevError;
@@ -251,7 +258,7 @@ Chassis& Chassis::drive(double target){
     double rightvalue =REncoder.get_value();
     printf("Error, AveragePos, LOutput, ROutput,Left, Right goalDist %f %f %f %f %f %f %d\n", error, averagePos, LOutput, ROutput,leftvalue, rightvalue,goalDist.get());
     pros::delay(10);
-    if(averagePos < target+10 && averagePos > target-10) {
+    if(averagePos < target+tol && averagePos > target-tol) {
       LF.move(0);
       LB.move(0);
       RF.move(0);

@@ -100,6 +100,13 @@ class Chassis {
     Chassis& withDist(double distTarget_);
 
     /*
+    Sets tolerance for both drive and turn.
+
+    @param tol_ tolerance
+    */
+    Chassis& withTol(int tol_ = 10);
+
+    /*
     Turns the robot to a set angle.
 
     Use withTurnSlew & withTurnPD with this.
@@ -133,4 +140,5 @@ class Chassis {
     static bool justPID;
     static double distTarget;
     static bool distSensorEnabled;
+    static int tol;
 };

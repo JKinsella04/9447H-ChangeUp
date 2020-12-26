@@ -12,7 +12,9 @@ void initialize() {
 if(isSetup){display.destroy();}
 }
 
-void disabled(){
+void disabled(){}
+
+void competition_initialize() {
   display.display();
   while(1){
     display.backgroundcheck();
@@ -22,5 +24,3 @@ void disabled(){
     display.updateSensors();
   pros::delay(20);}
 }
-
-void competition_initialize() {}
