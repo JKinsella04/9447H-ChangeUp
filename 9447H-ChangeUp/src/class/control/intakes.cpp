@@ -72,29 +72,59 @@ void Intake::runIntakes(){ // Runs the intakes based on L1,L2,R1,R2 and, Y and i
 }
 
 void Intake::runAutoIndexer(){
-  if(!holdComplete){
-    double opticalAverage = (LOptical.get_hue() + ROptical.get_hue())/2;
-    if(opticalAverage >= blueHue){
-      ball = 1;
-      middleSpinVelocity(200);
-      indexerSpinVelocity(100);
-      if(oneBall){intakeStop(); middleStop();holdComplete=1;}
-    }
-    if(topLight.get_value() <=2800 && ball == 1){
-      indexerStop();
-      if(opticalAverage >= blueHue){
-        middleStop();
-        intakeStop();
-        holdComplete =1;
+  switch(alliance){
+    case 2:{ //Blue Alliance
+      if(!holdComplete){
+        double opticalAverage = (LOptical.get_hue() + ROptical.get_hue())/2;
+        if(opticalAverage <= redHue){
+          ball = 1;
+          middleSpinVelocity(200);
+          indexerSpinVelocity(100);
+          if(oneBall){intakeStop(); middleStop();holdComplete=1;}
+        }
+        if(topLight.get_value() <=2800 && ball == 1){
+          indexerStop();
+          if(opticalAverage <= redHue){
+            middleStop();
+            intakeStop();
+            holdComplete =1;
+          }
+        }
+        if(ball == 0){
+          intakeSpinVelocity(600);
+          middleSpinVelocity(600);
+          indexerSpinVelocity(200);
+        }
+        printf("lightAverage, blueBall  %d %d\n",topLight.get_value(), ball);
       }
-    }
-    if(ball == 0){
-      intakeSpinVelocity(600);
-      middleSpinVelocity(600);
-      indexerSpinVelocity(200);
-    }
-    printf("lightAverage, blueBall  %d %d\n",topLight.get_value(), ball);
+    break;}
+    default:{ //Red Alliance and Skills
+      if(!holdComplete){
+        double opticalAverage = (LOptical.get_hue() + ROptical.get_hue())/2;
+        if(opticalAverage >= blueHue){
+          ball = 1;
+          middleSpinVelocity(200);
+          indexerSpinVelocity(100);
+          if(oneBall){intakeStop(); middleStop();holdComplete=1;}
+        }
+        if(topLight.get_value() <=2800 && ball == 1){
+          indexerStop();
+          if(opticalAverage >= blueHue){
+            middleStop();
+            intakeStop();
+            holdComplete =1;
+          }
+        }
+        if(ball == 0){
+          intakeSpinVelocity(600);
+          middleSpinVelocity(600);
+          indexerSpinVelocity(200);
+        }
+        printf("lightAverage, blueBall  %d %d\n",topLight.get_value(), ball);
+      }
+    break;}
   }
+
 }
 
 void Intake::iiInit(){

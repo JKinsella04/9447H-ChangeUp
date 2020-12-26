@@ -95,7 +95,8 @@ class Intake{
     void runIntakes();
 
     /*
-    Automatically stops certain intakes based off light sensor values.
+    Automatically stops certain intakes based off light sensor and optical sensor values.
+    Do not call manually this member function is called when running goalSort(bool state = HOLDBALL) 
     */
     void runAutoIndexer();
 

@@ -139,7 +139,7 @@ Chassis& Chassis::turn(double theta_){
       if(direction_turn ==LEFT){ averageheading=360;}
       else{averageheading = 0;}
     }
-    double error = abs(theta - averageheading);
+    double error = fabs(theta - averageheading);
     double prevError = error;
     double derivative = error - prevError;
     power = error*kP_turn + derivative*kD_turn;
