@@ -11,9 +11,9 @@ This is the offical code for 9447H. This code is for the VRC 2020-2021 Change Up
 
 ## Using this Code
 
-To edit the Auton Builder, edit the function `Auton::run` in [auton.cpp](https://github.com/PSASchool/9447H-ChangeUp/blob/master/9447H-ChangeUp/src/class/control/auton.cpp).
+To edit the Auton Builder, edit the member function `Auton::run` in [auton.cpp](https://github.com/PSASchool/9447H-ChangeUp/blob/master/9447H-ChangeUp/src/class/control/auton.cpp).
 
-To find out what functions do look at the header files in [/include/class/control](https://github.com/PSASchool/9447H-ChangeUp/tree/master/9447H-ChangeUp/include/class).
+To find out what member functions do look at the header files in [/include/class/control](https://github.com/PSASchool/9447H-ChangeUp/tree/master/9447H-ChangeUp/include/class).
 
 All motor & sensor declarations/definitions are in [globals.h](https://github.com/PSASchool/9447H-ChangeUp/blob/master/9447H-ChangeUp/include/globals.h) and [globals.cpp](https://github.com/PSASchool/9447H-ChangeUp/blob/master/9447H-ChangeUp/src/globals.cpp).
 
@@ -22,4 +22,4 @@ All motor & sensor declarations/definitions are in [globals.h](https://github.co
 The Auton Builder was built specifically for Change Up but the idea can be implemented in any season.
 
 ## Engineering Notebook
-Our notebook can be found [here](https://jkinsella04.github.io/OperationPheasant/intro.html).
+Our notebook can be found [here](https://psaschool.github.io/OperationPheasant/intro.html).
