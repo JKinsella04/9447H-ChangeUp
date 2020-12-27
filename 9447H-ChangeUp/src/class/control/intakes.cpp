@@ -80,9 +80,9 @@ void Intake::runAutoIndexer(){
           ball = 1;
           middleSpinVelocity(200);
           indexerSpinVelocity(100);
-          if(oneBall){intakeStop(); middleStop();holdComplete=1;}
+          if(oneBall==1){intakeStop(); middleStop();holdComplete=1; break;}
         }
-        if(topLight.get_value() <=2800 && ball == 1){
+        if(topLight.get_value() <=2800 && ball){
           indexerStop();
           if(opticalAverage <= redHue){
             middleStop();
@@ -97,6 +97,9 @@ void Intake::runAutoIndexer(){
         }
         printf("lightAverage, blueBall  %d %d\n",topLight.get_value(), ball);
       }
+    // intakeStop();
+    // middleStop();
+    // indexerStop();
     break;}
     default:{ //Red Alliance and Skills
       if(!holdComplete){
@@ -105,7 +108,7 @@ void Intake::runAutoIndexer(){
           ball = 1;
           middleSpinVelocity(200);
           indexerSpinVelocity(100);
-          if(oneBall){intakeStop(); middleStop();holdComplete=1;}
+          if(oneBall==1){intakeStop(); middleStop();holdComplete=1; break;}
         }
         if(topLight.get_value() <=2800 && ball == 1){
           indexerStop();
@@ -120,8 +123,11 @@ void Intake::runAutoIndexer(){
           middleSpinVelocity(600);
           indexerSpinVelocity(200);
         }
-        printf("lightAverage, blueBall  %d %d\n",topLight.get_value(), ball);
+        printf("opticalAverage, holdComplete  %d %b\n", opticalAverage, holdComplete);
       }
+    // intakeStop();
+    // middleStop();
+    // indexerStop();
     break;}
   }
 
@@ -220,7 +226,7 @@ void Intake::goalSort(int allianceColor){
 }
 
 void Intake::goalSort(int allianceColor, int time, bool state){
-  if(state){
+  if(state==1){
     for(int i=0; i<time;i++){
       goalSort(allianceColor);
       pros::delay(15);

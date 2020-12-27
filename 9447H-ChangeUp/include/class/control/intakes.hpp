@@ -3,8 +3,8 @@
 
 #define REDBALL 1
 #define BLUEBALL 2
-#define SHOOTBALL 1
 #define HOLDBALL 0
+#define SHOOTBALL 1
 
 class Intake{
   public:
@@ -96,7 +96,7 @@ class Intake{
 
     /*
     Automatically stops certain intakes based off light sensor and optical sensor values.
-    Do not call manually this member function is called when running goalSort(bool state = HOLDBALL) 
+    Do not call manually this member function is called when running goalSort(bool state = HOLDBALL)
     */
     void runAutoIndexer();
 
