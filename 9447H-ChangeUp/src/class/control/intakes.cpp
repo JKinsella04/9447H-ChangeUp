@@ -123,7 +123,7 @@ void Intake::runAutoIndexer(){
           middleSpinVelocity(600);
           indexerSpinVelocity(200);
         }
-        printf("opticalAverage, holdComplete  %d %b\n", opticalAverage, holdComplete);
+        // printf("opticalAverage, holdComplete  %d %b\n", opticalAverage, holdComplete);
       }
     // intakeStop();
     // middleStop();
@@ -252,4 +252,26 @@ void Intake::dropBall(){
   indexerSpinVelocity(-200);
   pros::delay(450);
   middleSpinVelocity(600);
+}
+
+void Intake::goalSort(){
+  full=0;
+  indexerSpinVelocity(200);
+  middleSpinVelocity(600);
+  pros::delay(600);
+  indexerSpinVelocity(100);
+  middleSpinVelocity(300);
+  while(!full){
+    int opticalAverage = (LOptical.get_hue() + ROptical.get_hue())/2;
+    intakeSpinVelocity(600);
+    if(topLight.get_value() <= 2700)indexerStop();
+    switch(alliance){
+      case 1:{ //Red Alliance + Skills
+        if(opticalAverage >= blueHue){ middleStop(); intakeStop(); full=1;}
+      }
+      case 2:{ //Blue Alliance
+        if(opticalAverage <= redHue){ middleStop(); intakeStop(); full=1; break;}
+      }
+    }
+  }
 }

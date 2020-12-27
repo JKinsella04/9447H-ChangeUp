@@ -137,7 +137,7 @@ class Intake{
 
     @param allianceColor Color of user's alliance.
     */
-    void goalSort(int allianceColor = alliance);
+    void goalSort(int allianceColor);
 
     /*
     Runs the goalSort for an amount of time.
@@ -153,6 +153,12 @@ class Intake{
     Recommended to run this shortly after calling goalSort() with state HOLDBALL.
     */
     void dropBall();
+
+    /*
+    Scores balls then after short delay begins chekcing to stop a ball at the lightSensor and at the optical sensor.
+    Meant for 15 sec auton.
+    */
+    void goalSort();
 
     /*
     Delays the calling thread until the robot completes its action.
