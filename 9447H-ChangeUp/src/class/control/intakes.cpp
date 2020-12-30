@@ -106,9 +106,8 @@ void Intake::runAutoIndexer(){
         double opticalAverage = (LOptical.get_hue() + ROptical.get_hue())/2;
         if(opticalAverage >= blueHue){
           ball = 1;
-          middleSpinVelocity(200);
-          indexerSpinVelocity(100);
           if(oneBall==1){intakeStop(); middleStop();holdComplete=1; break;}
+          else{middleSpinVelocity(200); indexerSpinVelocity(100);}
         }
         if(topLight.get_value() <=2800 && ball == 1){
           indexerStop();
