@@ -17,7 +17,9 @@ int Chassis::direction_turn;
 
 double Chassis::rate_drive, Chassis::rate_turn, Chassis::correction_rate;
 
-int Chassis::output = 0;
+double Chassis::output = 0;
+
+int Chassis::slew_a = 200, Chassis::slew_x = 0;
 
 double Chassis::distTarget;
 bool Chassis::distSensorEnabled = false;
@@ -167,7 +169,7 @@ Chassis& Chassis::turn(double theta_){
     if(leftheading > 355|| rightheading > 355 || middleheading > 355){
       averageheading = 0;
     } //Zeroes the average so it has a zero position
-    printf("L_IMU, M_IMU, R_IMU,Average, output, error %f %f %f %f %d %f \n", leftheading, middleheading, rightheading, averageheading, output, error);
+    printf("L_IMU, M_IMU, R_IMU,Average, output, error %f %f %f %f %f %f \n", leftheading, middleheading, rightheading, averageheading, output, error);
     if(averageheading >= theta-tol && averageheading <= theta+tol){ //If it gets really close to the wanted angle it breaks the loop
       isSettled = true;
       justPID = false;
@@ -195,11 +197,20 @@ Chassis& Chassis::drive(double target){
     double prevError = error;
     double derivative = error - prevError;
     double power = error*kP_drive + derivative*kD_drive;
-    if(output < power && !justPID) {
-      output += rate_drive;
+    // if(output < power && !justPID) {
+    //   output += rate_drive;
+    // }else{
+    //   output = power;
+    // }
+    if(output < power && !justPID){
+      if(target>0)output = fabs(((-2*slew_a)/pow(M_E, (2.2*slew_x)/slew_a)+1)+slew_a);
+      else{output = ((-2*slew_a)/pow(M_E, (2.2*slew_x)/slew_a)+1)+slew_a;}
     }else{
       output = power;
     }
+
+    slew_x+=0.01;
+
     double LOutput = output;
     double ROutput = output;
     leftheading = L_IMU.get_heading();
@@ -256,7 +267,7 @@ Chassis& Chassis::drive(double target){
     }
     double leftvalue =LEncoder.get_value();
     double rightvalue =REncoder.get_value();
-    printf("Error, AveragePos, LOutput, ROutput,Left, Right goalDist %f %f %f %f %f %f %d\n", error, averagePos, LOutput, ROutput,leftvalue, rightvalue,goalDist.get());
+    printf("Error, AveragePos, LOutput, ROutput,Left, Right goalDist %f %f %f %f %f %f %f\n", error, averagePos, LOutput, ROutput,leftvalue, rightvalue,output);
     pros::delay(10);
     if(averagePos < target+tol && averagePos > target-tol) {
       LF.move(0);

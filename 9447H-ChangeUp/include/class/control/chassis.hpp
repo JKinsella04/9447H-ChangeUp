@@ -135,7 +135,8 @@ class Chassis {
     static double kP_drive, kD_drive, kP_turn, kD_turn;
     static double correction_rate;
     static int direction_turn;
-    static int output;
+    static double output;
+    static int slew_a, slew_x;
     static int drive_theta;
     static bool justPID;
     static double distTarget;
