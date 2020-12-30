@@ -97,7 +97,7 @@ Chassis& Chassis::autoSort(bool autoSort_enabled_){
 }
 
 Chassis& Chassis::withSlew(double rate_){
-  rate_drive = rate_;
+  slew_a = rate_;
   return *this;
 }
 
