@@ -69,7 +69,7 @@ void Intake::runIntakes(){ // Runs the intakes based on L1,L2,R1,R2 and, Y and i
   // else if(master.get_digital(DIGITAL_Y) ==1){intakeSpin(-600); middleSpin(-600); indexerSpin(-600);}
   // else if(master.get_digital(DIGITAL_R1) !=1 && master.get_digital(DIGITAL_R2) !=1 && master.get_digital(DIGITAL_Y) !=1 && master.get_digital(DIGITAL_L1) !=1){indexerStop(); middleStop();}
   // if(master.get_digital(DIGITAL_L1) !=1 && master.get_digital(DIGITAL_L2) !=1 && master.get_digital(DIGITAL_R1) !=1 && master.get_digital(DIGITAL_R2) !=1 && master.get_digital(DIGITAL_Y) !=1){intakeStop(); indexerStop(); middleStop();}
-  if(master.get_digital(DIGITAL_Y)){intakeSpin(-600); middleSpin(-600); indexerSpin(-200);}
+  if(master.get_digital(DIGITAL_R1)){intakeSpin(-600); middleSpin(-600); indexerSpin(-200);}
   else {
     if(goalDist.get() <= 30 && goalDist.get() != 0){
       goalSort(alliance);

@@ -48,38 +48,3 @@ int Slew::tankDrive(double fwdAccel, double deccel, double revAccel){
 
   return 0;
 }
-
-void Slew::arcadeControl(int fwdAccel, int deccel, int revAccel){
-  leftSide = master.get_analog(ANALOG_LEFT_Y) + master.get_analog(ANALOG_LEFT_X);
-  rightSide = master.get_analog(ANALOG_LEFT_Y) - master.get_analog(ANALOG_LEFT_X);
-
-  if(abs(master.get_analog(ANALOG_LEFT_X)) > 10 ){driveMax =9000;}else{driveMax=12000;}
-
-  leftTarget = 0;
-
-  if(abs(leftSide) <5 ) leftSide = 0;
-  if(abs(rightSide) <5 ) rightSide = 0;
-
-  leftTarget = leftJoystick*driveMax; //1.58
-  if(LslewOutput < leftTarget){if(leftTarget == 0 && LslewOutput !=0){LslewOutput +=deccel;} else{LslewOutput +=fwdAccel;}}
-  if(LslewOutput > leftTarget){if(leftTarget == 0 && LslewOutput !=0){LslewOutput -=deccel;} else{LslewOutput -=revAccel;}}
-  // if(leftTarget == 0)LslewOutput = 0;
-
-  rightTarget = rightJoystick*driveMax; //1.58
-  if(RslewOutput < rightTarget){if(rightTarget == 0 && RslewOutput !=0){RslewOutput +=deccel;} else{RslewOutput +=fwdAccel;}}
-  if(RslewOutput > rightTarget){if(rightTarget == 0 && RslewOutput !=0){RslewOutput -=deccel;} else{RslewOutput -=revAccel;}}
-  // printf("left, LOutput, leftError  %F %F %F \n", rightJoystick, LslewOutput, RslewOutput);
-
-  if(RslewOutput > 12000)RslewOutput =12000;
-  if(LslewOutput > 12000)LslewOutput =12000;
-
-  if(LslewOutput == 0) LF.set_brake_mode(MOTOR_BRAKE_COAST); LB.set_brake_mode(MOTOR_BRAKE_COAST);
-  if(RslewOutput == 0) RF.set_brake_mode(MOTOR_BRAKE_COAST); RB.set_brake_mode(MOTOR_BRAKE_COAST);
-
-  LF.move_voltage(-LslewOutput);
-  LB.move_voltage(-LslewOutput);
-  RF.move_voltage(RslewOutput);
-  RB.move_voltage(RslewOutput);
-
-  driveMax = 12000;
-}
