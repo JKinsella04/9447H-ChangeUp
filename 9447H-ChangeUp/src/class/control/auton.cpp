@@ -218,7 +218,7 @@ Auton& Auton::runSkills(){
 
   pros::delay(100);
   intake.indexerStop();
-  chassis.withPD(0.25,0.01).withSlew(150).withHeading(10,3).autoSort(1).withTol(400).drive(1700);
+  chassis.withPD(0.2,0.01).withSlew(150).withHeading(10,3).autoSort(1).withTol(400).drive(1700);
   chassis.withTurnPD(1.2,1).withTurnSlew(1).withTurnDirection(LEFT).withTol(1).turn(237).waitUntilSettled();
   chassis.withPD(0.35,0.001).withSlew(150).withHeading(237).autoSort(0).withDist(40).withTol(50).drive(850);
   intake.middleSpinVelocity(-600);
@@ -249,20 +249,20 @@ Auton& Auton::runSkills(){
   // Goal 4 (B)
 
   chassis.withPD(0.2,0.001).withSlew(50).withHeading(300).withTol(10).drive(-100);
-  chassis.withTurnPD(.95,1).withTurnDirection(RIGHT).justPD(1).withTol(2).turn(81).waitUntilSettled();
+  chassis.withTurnPD(.925,1).withTurnDirection(RIGHT).justPD(1).withTol(1).turn(81).waitUntilSettled();
   intake.dropBall();
   chassis.withPD(0.3,0.001).withSlew(150).withHeading(81).autoSort(1).withTol(10).drive(1050);
   chassis.withTurnPD(.4,.1).withTurnSlew(1).withTurnDirection(LEFT).justPD(1).withTol(1).turn(310).waitUntilSettled();
-  chassis.withPD(1,0.001).withSlew(150).withHeading(310).autoSort(1).withTol(50).drive(600);
+  chassis.withPD(1,0.001).withSlew(150).withHeading(310).autoSort(1).withTol(50).drive(650);
   chassis.withTurnPD(.4,.1).withTurnSlew(1).withTurnDirection(RIGHT).justPD(1).withTol(1).turn(0).waitUntilSettled();
-  chassis.withPD(0.2,0.001).withSlew(75).withHeading(0).withDist(50).withTol(10).drive(1000);
+  chassis.withPD(0.2,0.001).withSlew(75).withHeading(0,2).withDist(50).withTol(10).drive(1000);
   intake.goalSort(REDBALL, 50, HOLDBALL);
   // Goal 5 (C)
 
   chassis.withPD(0.25,0.001).withSlew(50).withHeading(0).withTol(10).drive(-715);
-  chassis.withTurnPD(1.225,.1).withTurnSlew(1).withTurnDirection(RIGHT).justPD(1).withTol(1).turn(150).waitUntilSettled();
+  chassis.withTurnPD(1.2,.1).withTurnSlew(1).withTurnDirection(RIGHT).justPD(1).withTol(1).turn(150).waitUntilSettled();
   intake.dropBall();
-  chassis.withPD(0.4,0.001).withSlew(200).withHeading(150,1).autoSort(1).withTol(10).drive(1000);
+  chassis.withPD(0.4,0.001).withSlew(200).withHeading(150,1).autoSort(1).withTol(10).drive(1100);
   chassis.withTurnPD(1,.1).withTurnDirection(LEFT).justPD(1).withTol(1).turn(55).waitUntilSettled();
   chassis.withPD(0.4,0.001).withSlew(100).withHeading(55).withDist(50).withTol(10).drive(1200);
   intake.justOneBall(1).goalSort(REDBALL, 50, HOLDBALL);

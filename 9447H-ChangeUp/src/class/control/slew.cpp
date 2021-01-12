@@ -15,10 +15,9 @@ int Slew::tankDrive(double fwdAccel, double deccel, double revAccel){
   double averageJoystick = leftJoystick/rightJoystick;
   printf("leftTarget, LslewOutput, actualPower, %d %d %f\n", leftTarget, LslewOutput, LF.get_actual_velocity());
 
-  if(leftJoystick/rightJoystick < 0 || leftJoystick/rightJoystick >=2){driveMax =9000/127;}else{driveMax=12000/127;}
-  if(rightJoystick/leftJoystick < 0 || rightJoystick/leftJoystick >=2){driveMax =9000/127;}else{driveMax=12000/127;}
+  if(leftJoystick/rightJoystick < 0 || leftJoystick/rightJoystick >=2 || rightJoystick/leftJoystick < 0 || rightJoystick/leftJoystick >=2){driveMax =9000/127;}else{driveMax=12000/127;}
 
-  leftTarget = 0;
+  // leftTarget = 0;
 
   if(abs(leftJoystick) <5){ leftJoystick = 0;}
   if(abs(rightJoystick) <5){ rightJoystick = 0;}

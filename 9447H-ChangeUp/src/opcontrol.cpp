@@ -11,6 +11,8 @@ static Intake intake;
 
 void opcontrol() {
   while (true) {
+    printf("Left, Right: %d %d\n", LEncoder.get_value(), REncoder.get_value());
+
     slew.tankDrive(1000, 500, 900);
     intake.runIntakes();
     pros::delay(15);
