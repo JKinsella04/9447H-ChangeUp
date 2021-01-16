@@ -1,7 +1,7 @@
 #include "globals.hpp"
 #include "class/control/intakes.hpp"
 
-int Intake::ledLevel = 75, Intake::doubleShotDelay = 100, Intake::redHue = 10, Intake::blueHue = 200;
+int Intake::ledLevel = 75, Intake::doubleShotDelay = 100, Intake::redHue = 20, Intake::blueHue = 200;
 bool Intake::full=0, Intake::ball=0, Intake::holdComplete=0, Intake::oneBall=0;
 
 void Intake::intakeSpin(int speed){
@@ -255,10 +255,20 @@ void Intake::goalSort(int allianceColor, int time, bool state){
   holdComplete =0;
 }
 
-void Intake::dropBall(){
-  indexerSpinVelocity(-200);
-  pros::delay(450);
-  middleSpinVelocity(600);
+void Intake::dropBall(int drop_Mode){
+  switch(drop_Mode){
+    case REVERSE:{
+      intakeSpinVelocity(-600);
+      middleSpinVelocity(-600);
+      indexerSpinVelocity(-200);
+      pros::delay(300);
+    }
+    case EJECT:{
+      indexerSpinVelocity(-200);
+      pros::delay(450);
+      middleSpinVelocity(600);
+      break;}
+  }
 }
 
 void Intake::goalSort(){

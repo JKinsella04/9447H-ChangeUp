@@ -5,6 +5,8 @@
 #define BLUEBALL 2
 #define HOLDBALL 0
 #define SHOOTBALL 1
+#define REVERSE 2
+#define EJECT 3
 
 class Intake{
   public:
@@ -151,8 +153,10 @@ class Intake{
     /*
     Runs the indexer and shortly after the middleIntake to shoot two balls out the back of the robot.
     Recommended to run this shortly after calling goalSort() with state HOLDBALL.
+
+    @param drop_Mode Accepts either EJECT or REVERSE. Determines how the ball(s) leaves the robot. 
     */
-    void dropBall();
+    void dropBall(int drop_Mode = EJECT);
 
     /*
     Scores balls then after short delay begins chekcing to stop a ball at the lightSensor and at the optical sensor.
