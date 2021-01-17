@@ -28,8 +28,10 @@
    M_IMU.reset();
    R_IMU.reset();
    // pros::delay(2000);
-   REncoder.reset();
-   LEncoder.reset();
+   // REncoder.reset();
+   // LEncoder.reset();
+   LOdometer.reset_position();
+   ROdometer.reset_position();
     // pros::delay(1000);
    while(prog < 100){
     prog ++;
@@ -294,8 +296,8 @@ return *this;
    int LimuPos = L_IMU.get_heading();
    int MimuPos = M_IMU.get_heading();
    int RimuPos = R_IMU.get_heading();
-   int Lencoder = LEncoder.get_value();
-   int Rencoder = REncoder.get_value();
+   int Lencoder = LOdometer.get_position();
+   int Rencoder = ROdometer.get_position(); //REncoder.get_value();
 
    std::string Ltext = std::to_string(LimuPos);
    lv_label_set_text(lIMU, Ltext.c_str());
@@ -489,8 +491,10 @@ return *this;
       //Reset Vision Sensor
     }
     if(lv_btn_get_state(btnOdom)== LV_BTN_STATE_PR) {
-      REncoder.reset();
-      LEncoder.reset();
+      // REncoder.reset();
+      // LEncoder.reset();
+      ROdometer.reset_position();
+      LOdometer.reset_position();
     }
     if(lv_btn_get_state(btnChassis)== LV_BTN_STATE_PR) {
       LF.tare_position();

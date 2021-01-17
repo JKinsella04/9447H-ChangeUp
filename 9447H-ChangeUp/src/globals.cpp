@@ -40,8 +40,10 @@ R_IMU  Right facing inertial sensor.
 pros::Imu M_IMU(6), L_IMU(9), R_IMU(5);
 
 //Free Spinning Wheel Encoders
-pros::ADIEncoder LEncoder('E', 'F', true),
-                 REncoder('A', 'B', false);
+// pros::ADIEncoder LEncoder('E', 'F', true),
+//                  REncoder('A', 'B', false);
+pros::Rotation LOdometer(8),
+               ROdometer(13);
 //Line Sensors
 pros::ADIAnalogIn topLight('H');
 

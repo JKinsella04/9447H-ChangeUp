@@ -18,7 +18,10 @@ extern pros::Distance goalDist;
 extern pros::Imu M_IMU, L_IMU, R_IMU;
 
 //Motor Encoders
-extern pros::ADIEncoder LEncoder, REncoder;
+// extern pros::ADIEncoder LEncoder, REncoder;
+extern pros::Rotation LOdometer, ROdometer;
+
+// Line Sesnor
 extern pros::ADIAnalogIn topLight;
 
 //Global Variables

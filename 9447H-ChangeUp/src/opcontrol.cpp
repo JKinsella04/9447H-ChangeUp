@@ -11,7 +11,7 @@ static Intake intake;
 
 void opcontrol() {
   while (true) {
-    printf("Left, Right: %d %d\n", LEncoder.get_value(), REncoder.get_value());
+    printf("Left, Right: %d %d\n", LOdometer.get_position(), ROdometer.get_position());
 
     slew.tankDrive(1000, 500, 900);
     intake.runIntakes();

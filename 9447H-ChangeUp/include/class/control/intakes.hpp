@@ -154,7 +154,7 @@ class Intake{
     Runs the indexer and shortly after the middleIntake to shoot two balls out the back of the robot.
     Recommended to run this shortly after calling goalSort() with state HOLDBALL.
 
-    @param drop_Mode Accepts either EJECT or REVERSE. Determines how the ball(s) leaves the robot. 
+    @param drop_Mode Accepts either EJECT or REVERSE. Determines how the ball(s) leaves the robot.
     */
     void dropBall(int drop_Mode = EJECT);
 
@@ -165,9 +165,11 @@ class Intake{
     void goalSort();
 
     /*
-    Delays the calling thread until the robot completes its action.
+    Cycles through LED brightness to get the wanted resting value for the Optical sensors.
+
+    @param resting_value Value you want the optical sensors to rest at when not detecting anything.
     */
-    void waitUntilSettled();
+    void calibrate(int resting_value);
 
   private:
     static int ledLevel, doubleShotDelay, redHue, blueHue, time;

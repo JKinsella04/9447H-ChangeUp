@@ -43,14 +43,18 @@ void Chassis::reset() {
   L_IMU.reset();
   M_IMU.reset();
   R_IMU.reset();
-  LEncoder.reset();
-  REncoder.reset();
+  // LEncoder.reset();
+  // REncoder.reset();
+  LOdometer.reset();
+  ROdometer.reset();
   pros::delay(3000);
 }
 
 void Chassis::odomReset() {
-  REncoder.reset();
-  LEncoder.reset();
+  // LEncoder.reset();
+  // REncoder.reset();
+  LOdometer.reset();
+  ROdometer.reset();
   pros::delay(100);
 }
 
@@ -186,22 +190,18 @@ return *this;
 
 Chassis& Chassis::drive(double target){
   odomReset();
-  double leftvalue =LEncoder.get_value();
-  double rightvalue =REncoder.get_value();
+  double leftvalue = LOdometer.get_position(); //LEncoder.get_value();
+  double rightvalue =ROdometer.get_position();  //REncoder.get_value();
   printf("Left, Right %f %f  \n", leftvalue, rightvalue);
   isSettled = false;
-  double averagePos = (REncoder.get_value() + LEncoder.get_value())/2;
-  while(target != averagePos) {
-    double averagePos = (REncoder.get_value() + LEncoder.get_value())/2;
+  // double averagePos = (REncoder.get_value() + LEncoder.get_value())/2;
+  while(1 == 1) {
+    double averagePos = (ROdometer.get_position() + LOdometer.get_position())/2;//(REncoder.get_value() + LEncoder.get_value())/2;
     double error = target - averagePos;
     double prevError = error;
     double derivative = error - prevError;
     double power = error*kP_drive + derivative*kD_drive;
-    // if(output < power && !justPID) {
-    //   output += rate_drive;
-    // }else{
-    //   output = power;
-    // }
+
     if(output < power && !justPID){
       if(target>0)output = fabs(((-2*slew_a)/pow(M_E, (2.2*slew_x)/slew_a)+1)+slew_a);
       else{output = ((-2*slew_a)/pow(M_E, (2.2*slew_x)/slew_a)+1)+slew_a;}
@@ -265,8 +265,8 @@ Chassis& Chassis::drive(double target){
         default:{intake.autoSort(alliance);}
       }
     }
-    double leftvalue =LEncoder.get_value();
-    double rightvalue =REncoder.get_value();
+    double leftvalue = LOdometer.get_position(); //LEncoder.get_value();
+    double rightvalue = ROdometer.get_position(); //REncoder.get_value();
     printf("Error, AveragePos, LOutput, ROutput,Left, Right goalDist %f %f %f %f %f %f %f\n", error, averagePos, LOutput, ROutput,leftvalue, rightvalue,output);
     pros::delay(10);
     if(averagePos < target+tol && averagePos > target-tol) {

@@ -292,3 +292,8 @@ void Intake::goalSort(){
     }
   }
 }
+
+void Intake::calibrate(int resting_value){
+  for(int i=0; LOptical.get_hue() < resting_value+5 && LOptical.get_hue() > resting_value-5; i++){LOptical.set_led_pwm(i);}
+  for(int i=0; ROptical.get_hue() < resting_value+5 && ROptical.get_hue() > resting_value-5; i++){ROptical.set_led_pwm(i);}
+}
