@@ -75,11 +75,11 @@ Auton& Auton::run(){
     case 2: {
       switch (secondPos) {
         case 1: {
-          chassis.withPD(0.6,0.001).withSlew(150).withHeading(0,1).withTol(10).drive(1100);
+          chassis.withPD(0.225,0.001).withSlew(150).withHeading(0,1).withTol(10).drive(1250);
           pros::delay(200);
           chassis.withTurnPD(1.56,1).withTurnSlew(1).withTurnDirection(LEFT).withTol(1).turn(280).waitUntilSettled();
           // chassis.withPD(0.22,0.001).withSlew(1).withHeading(270).drive(900);
-          chassis.withPD(.5,0.001).withSlew(125).withHeading(280,1).autoSort(1).withDist(50).withTol(10).drive(1000);
+          chassis.withPD(.5,0.001).withSlew(125).withHeading(280,1).autoSort(1).withDist(45).withTol(10).drive(1000);
           intake.justOneBall(1).goalSort(alliance, 70, HOLDBALL);
           // intake.middleSpinVelocity(600);
           // intake.indexerSpinVelocity(200);
@@ -144,16 +144,18 @@ Auton& Auton::run(){
         case 3: {
           intake.indexerStop();
           intake.middleStop();
-          chassis.withPD(.3,0.001).withSlew(100).withHeading(283,1).withTol(10).drive(-600);
+          chassis.withPD(.3,0.001).withSlew(100).withHeading(283,1).withTol(10).drive(-800);
           pros::delay(200);
           chassis.withTurnPD(1.125,.1).justPD(1).withTurnDirection(LEFT).withTol(1).turn(143).waitUntilSettled();
           intake.dropBall();
-          chassis.withPD(0.25,0.001).withSlew(200).withHeading(143,1).autoSort(1).withTol(10).drive(2550);
+          chassis.withPD(0.175,0.001).withSlew(200).withHeading(143,1).autoSort(1).withTol(10).drive(3000);
           chassis.withTurnPD(1.25,.1).withTurnDirection(RIGHT).justPD(1).withTol(1).turn(190).waitUntilSettled();
           // pros::delay(200);
-          chassis.withPD(1,0.001).withSlew(115).withHeading(185,1).autoSort(1).withDist(50).withTol(50).drive(1000);
+          chassis.withPD(.2,0.001).withSlew(125).withHeading(280,1).autoSort(1).withDist(45).withTol(10).drive(1200);
           intake.justOneBall(1).goalSort(alliance, 70, HOLDBALL);
-          chassis.withPD(1,0.001).withSlew(100).withHeading(185,1).withTol(10).drive(-500);
+          chassis.withPD(.3,0.001).withSlew(150).withHeading(185,1).withTol(10).drive(-2200);
+          intake.dropBall(REVERSE);
+          chassis.withTurnPD(1,.1).justPD(1).withTurnDirection(LEFT).withTol(1).turn(135).waitUntilSettled();
           currentPos = 3; break;
         }//robot's mvmt from 1 to 3
         case 4: {currentPos = 4;}//robot's mvmt from 1 to 4
@@ -218,7 +220,7 @@ Auton& Auton::runSkills(){
 
   pros::delay(100);
   intake.indexerStop();
-  chassis.withPD(0.4,0.01).withSlew(150).withHeading(10,3).autoSort(1).withTol(10).drive(1950);
+  chassis.withPD(0.2,0.0001).withSlew(150).withHeading(10,3).autoSort(1).withTol(10).drive(2350);
   chassis.withTurnPD(1.25,1).withTurnSlew(1).withTurnDirection(LEFT).withTol(1).turn(240).waitUntilSettled();
   chassis.withPD(0.35,0.001).withSlew(150).withHeading(240).autoSort(0).withDist(40).withTol(50).drive(1200);
   intake.middleSpinVelocity(-600);

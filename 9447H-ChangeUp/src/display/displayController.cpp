@@ -32,6 +32,7 @@
    // LEncoder.reset();
    LOdometer.reset_position();
    ROdometer.reset_position();
+   ROdometer.set_reversed(1);
     // pros::delay(1000);
    while(prog < 100){
     prog ++;

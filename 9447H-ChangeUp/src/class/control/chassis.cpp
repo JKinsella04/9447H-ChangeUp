@@ -47,6 +47,7 @@ void Chassis::reset() {
   // REncoder.reset();
   LOdometer.reset();
   ROdometer.reset();
+  ROdometer.set_reversed(1);
   pros::delay(3000);
 }
 
@@ -196,7 +197,9 @@ Chassis& Chassis::drive(double target){
   isSettled = false;
   // double averagePos = (REncoder.get_value() + LEncoder.get_value())/2;
   while(1 == 1) {
-    double averagePos = (ROdometer.get_position() + LOdometer.get_position())/2;//(REncoder.get_value() + LEncoder.get_value())/2;
+    leftvalue = (LOdometer.get_position())/100; //LEncoder.get_value();
+    rightvalue =(ROdometer.get_position())/100;  //REncoder.get_value();
+    double averagePos = (leftvalue+rightvalue)/2;//(REncoder.get_value() + LEncoder.get_value())/2;
     double error = target - averagePos;
     double prevError = error;
     double derivative = error - prevError;
