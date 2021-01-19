@@ -54,8 +54,8 @@ void Chassis::reset() {
 void Chassis::odomReset() {
   // LEncoder.reset();
   // REncoder.reset();
-  LOdometer.reset();
-  ROdometer.reset();
+  LOdometer.reset_position();
+  ROdometer.reset_position();
   pros::delay(100);
 }
 

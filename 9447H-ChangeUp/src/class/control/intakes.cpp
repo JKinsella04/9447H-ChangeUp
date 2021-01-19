@@ -258,10 +258,9 @@ void Intake::goalSort(int allianceColor, int time, bool state){
 void Intake::dropBall(int drop_Mode){
   switch(drop_Mode){
     case REVERSE:{
-      intakeSpinVelocity(-600);
-      middleSpinVelocity(-600);
-      indexerSpinVelocity(-200);
-      pros::delay(300);
+      intakeSpinVelocity(-100);
+      middleSpinVelocity(-200);
+      indexerSpinVelocity(-100);
     }
     case EJECT:{
       indexerSpinVelocity(-200);
