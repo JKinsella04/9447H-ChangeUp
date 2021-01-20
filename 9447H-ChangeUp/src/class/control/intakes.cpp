@@ -60,23 +60,23 @@ void Intake::middleStop(){
 }
 
 void Intake::runIntakes(){ // Runs the intakes based on L1,L2,R1,R2 and, Y and if they are pressed.
-  if(master.get_digital(DIGITAL_L1) ==1 && master.get_digital(DIGITAL_R1)!=1)autoSort(alliance);//runAutoIndexer();
-  else if(master.get_digital(DIGITAL_L1) ==1 && master.get_digital(DIGITAL_R1)==1)goalSort(alliance);
-  else if(master.get_digital(DIGITAL_L2) ==1)intakeSpin(-600);
-  else if(master.get_digital(DIGITAL_L1) !=1 && master.get_digital(DIGITAL_L2) !=1 && master.get_digital(DIGITAL_Y) !=1){ intakeStop();}
-  if(master.get_digital(DIGITAL_R2) ==1){indexerSpin(-400); middleSpin(400);if(master.get_digital(DIGITAL_L2) ==1){intakeSpin(600);}}
-  else if(master.get_digital(DIGITAL_R1) ==1 && master.get_digital(DIGITAL_L1) !=1){indexerSpin(600); middleSpin(600); if(master.get_digital(DIGITAL_L2) ==1){intakeSpin(600);}}
-  else if(master.get_digital(DIGITAL_Y) ==1){intakeSpin(-600); middleSpin(-600); indexerSpin(-600);}
-  else if(master.get_digital(DIGITAL_R1) !=1 && master.get_digital(DIGITAL_R2) !=1 && master.get_digital(DIGITAL_Y) !=1 && master.get_digital(DIGITAL_L1) !=1){indexerStop(); middleStop();}
-  if(master.get_digital(DIGITAL_L1) !=1 && master.get_digital(DIGITAL_L2) !=1 && master.get_digital(DIGITAL_R1) !=1 && master.get_digital(DIGITAL_R2) !=1 && master.get_digital(DIGITAL_Y) !=1){intakeStop(); indexerStop(); middleStop();}
-  // if(master.get_digital(DIGITAL_R1)){intakeSpin(-600); middleSpin(-600); indexerSpin(-200);}
-  // else {
-  //   if(goalDist.get() <= 30 && goalDist.get() != 0){
-  //     goalSort(alliance);
-  //   }else {
-  //     autoSort(alliance);
-  //   }
-  // }
+  // if(master.get_digital(DIGITAL_L1) ==1 && master.get_digital(DIGITAL_R1)!=1)autoSort(alliance);//runAutoIndexer();
+  // else if(master.get_digital(DIGITAL_L1) ==1 && master.get_digital(DIGITAL_R1)==1)goalSort(alliance);
+  // else if(master.get_digital(DIGITAL_L2) ==1)intakeSpin(-600);
+  // else if(master.get_digital(DIGITAL_L1) !=1 && master.get_digital(DIGITAL_L2) !=1 && master.get_digital(DIGITAL_Y) !=1){ intakeStop();}
+  // if(master.get_digital(DIGITAL_R2) ==1){indexerSpin(-400); middleSpin(400);if(master.get_digital(DIGITAL_L2) ==1){intakeSpin(600);}}
+  // else if(master.get_digital(DIGITAL_R1) ==1 && master.get_digital(DIGITAL_L1) !=1){indexerSpin(600); middleSpin(600); if(master.get_digital(DIGITAL_L2) ==1){intakeSpin(600);}}
+  // else if(master.get_digital(DIGITAL_Y) ==1){intakeSpin(-600); middleSpin(-600); indexerSpin(-600);}
+  // else if(master.get_digital(DIGITAL_R1) !=1 && master.get_digital(DIGITAL_R2) !=1 && master.get_digital(DIGITAL_Y) !=1 && master.get_digital(DIGITAL_L1) !=1){indexerStop(); middleStop();}
+  // if(master.get_digital(DIGITAL_L1) !=1 && master.get_digital(DIGITAL_L2) !=1 && master.get_digital(DIGITAL_R1) !=1 && master.get_digital(DIGITAL_R2) !=1 && master.get_digital(DIGITAL_Y) !=1){intakeStop(); indexerStop(); middleStop();}
+  if(master.get_digital(DIGITAL_R2)){intakeSpin(-600); middleSpin(-600); indexerSpin(-200);}
+  else {
+    if(master.get_digital(DIGITAL_R1)){
+      goalSort(alliance);
+    }else {
+      autoSort(alliance);
+    }
+  }
 }
 
 void Intake::runAutoIndexer(){
@@ -187,7 +187,7 @@ void Intake::autoSort(int allianceColor){
       if(currentHue <= redHue && full==1){ //Sees RED Ball //If there is a ball at the top already it will stop this ball at the Optical Sensor
         middleStop();
       }else{middleSpinVelocity(300);}
-      if(currentHue >= blueHue){middleSpinVelocity(600); if(topLight.get_value() >=2800){indexerSpinVelocity(-200);}pros::delay(50);} //If there is a blue ball it will send it out back.
+      if(currentHue >= blueHue){middleSpinVelocity(600); if(topLight.get_value() >=2800){indexerSpinVelocity(-200);}pros::delay(5);} //If there is a blue ball it will send it out back.
       break;
     }
     case BLUEBALL:{
@@ -203,7 +203,7 @@ void Intake::autoSort(int allianceColor){
       if(currentHue >= blueHue && full==1){ //Sees BLUE Ball //If there is a ball at the top already it will stop this ball at the Optical Sensor
         middleStop();
       }else{middleSpinVelocity(300);}
-      if(currentHue <= redHue){middleSpinVelocity(600); if(topLight.get_value() >=2800){indexerSpinVelocity(-200);}pros::delay(50);} //If there is a RED ball it will send it out back.
+      if(currentHue <= redHue){middleSpinVelocity(600); if(topLight.get_value() >=2800){indexerSpinVelocity(-200);}pros::delay(5);} //If there is a RED ball it will send it out back.
       break;
     }
   }
@@ -217,7 +217,7 @@ void Intake::goalSort(int allianceColor){
       middleSpin(600);
       double currentHue = (LOptical.get_hue() + ROptical.get_hue())/2;
       printf("currentHue %F\n", currentHue); //debug code
-      if(currentHue >= blueHue){indexerSpin(-200);pros::delay(250);} //If there is a blue ball it will send it out back.
+      if(currentHue >= blueHue){indexerSpin(-200);pros::delay(400);} //If there is a blue ball it will send it out back.
       break;
     }
     case BLUEBALL:{
@@ -226,7 +226,7 @@ void Intake::goalSort(int allianceColor){
       middleSpin(600);
       double currentHue = (LOptical.get_hue() + ROptical.get_hue())/2;
       printf("currentHue %F\n", currentHue); //debug code
-      if(currentHue <= redHue){indexerSpin(-200);pros::delay(250);} //If there is a red ball it will send it out back.
+      if(currentHue <= redHue){indexerSpin(-200);pros::delay(400);} //If there is a red ball it will send it out back.
       break;
     }
   }
