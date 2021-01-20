@@ -172,6 +172,6 @@ class Intake{
     void calibrate(int resting_value);
 
   private:
-    static int ledLevel, doubleShotDelay, redHue, blueHue, time;
+    static int ledLevel, doubleShotDelay, redHue, blueHue, time, ballsLeft;
     static bool full, ball, holdComplete, oneBall;
 };
