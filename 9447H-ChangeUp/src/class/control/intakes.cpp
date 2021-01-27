@@ -71,7 +71,8 @@ void Intake::runIntakes(){ // Runs the intakes based on L1,L2,R1,R2 and, Y and i
   // if(master.get_digital(DIGITAL_L1) !=1 && master.get_digital(DIGITAL_L2) !=1 && master.get_digital(DIGITAL_R1) !=1 && master.get_digital(DIGITAL_R2) !=1 && master.get_digital(DIGITAL_Y) !=1){intakeStop(); indexerStop(); middleStop();}
   printf("ballsLeft %d\n", ballsLeft);
   if(ballsLeft < 0)ballsLeft=0;
-  if(master.get_digital_new_press(DIGITAL_L1)){ballsLeft++;}
+  if(partner.get_digital_new_press(DIGITAL_L1)){ballsLeft++;}
+  else if(partner.get_digital(DIGITAL_R1)){ballsLeft=0;}
   if(master.get_digital(DIGITAL_R2)){intakeSpin(-600); middleSpin(-600); indexerSpin(-200);}
   else {
     if(master.get_digital(DIGITAL_R1)){
@@ -181,7 +182,7 @@ void Intake::autoSort(int allianceColor){
       full=0;
       intakeSpinVelocity(600);
       indexerSpinVelocity(100);
-      if(topLight.get_value() <=2700){
+      if(topLight.get_value() <=2700 && topLight.get_value() >=1000){
         full=1;
         indexerStop();
       }
@@ -197,7 +198,7 @@ void Intake::autoSort(int allianceColor){
       full=0;
       intakeSpinVelocity(600);
       indexerSpinVelocity(100);
-      if(topLight.get_value() <=2700){
+      if(topLight.get_value() <=2700 && topLight.get_value() >=1000){
         full=1;
         indexerStop();
       }

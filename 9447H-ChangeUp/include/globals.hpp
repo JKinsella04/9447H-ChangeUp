@@ -1,6 +1,7 @@
 #include "main.h"
 //Controller Definition
 extern pros::Controller master;
+extern pros::Controller partner;
 
 //Motor Declarations
 extern pros::Motor leftIntake;
