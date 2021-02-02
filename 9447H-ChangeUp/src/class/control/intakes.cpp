@@ -69,18 +69,22 @@ void Intake::runIntakes(){ // Runs the intakes based on L1,L2,R1,R2 and, Y and i
   // else if(master.get_digital(DIGITAL_Y) ==1){intakeSpin(-600); middleSpin(-600); indexerSpin(-600);}
   // else if(master.get_digital(DIGITAL_R1) !=1 && master.get_digital(DIGITAL_R2) !=1 && master.get_digital(DIGITAL_Y) !=1 && master.get_digital(DIGITAL_L1) !=1){indexerStop(); middleStop();}
   // if(master.get_digital(DIGITAL_L1) !=1 && master.get_digital(DIGITAL_L2) !=1 && master.get_digital(DIGITAL_R1) !=1 && master.get_digital(DIGITAL_R2) !=1 && master.get_digital(DIGITAL_Y) !=1){intakeStop(); indexerStop(); middleStop();}
+
   printf("ballsLeft %d\n", ballsLeft);
+  partner.print(2, 0, "Balls Left: %d", ballsLeft);
   if(ballsLeft < 0)ballsLeft=0;
   if(partner.get_digital_new_press(DIGITAL_L1)){ballsLeft++;}
-  else if(partner.get_digital(DIGITAL_R1)){ballsLeft=0;}
-  if(master.get_digital(DIGITAL_R2)){intakeSpin(-600); middleSpin(-600); indexerSpin(-200);}
-  else {
-    if(master.get_digital(DIGITAL_R1)){
-      goalSort(alliance);
-    }else {
-      autoSort(alliance);
+  else if(partner.get_digital(DIGITAL_R1)){ballsLeft=0; partner.clear_line(2);}
+  if(partner.get_digital(DIGITAL_R2) == 0){
+    if(master.get_digital(DIGITAL_R2)){intakeSpin(-600); middleSpin(-600); indexerSpin(-200);}
+    else {
+      if(master.get_digital(DIGITAL_R1)){
+        goalSort(alliance);
+      }else {
+        autoSort(alliance);
+      }
     }
-  }
+  }else{intakeSpin(-600);}
 }
 
 void Intake::runAutoIndexer(){
@@ -217,20 +221,22 @@ void Intake::goalSort(int allianceColor){
   switch (allianceColor){
     case REDBALL:{
       if(ballsLeft > 0)intakeSpin(200);
+      if(ballsLeft == 0)intakeSpin(-600);
       indexerSpin(200);
       middleSpin(600);
       double currentHue = (LOptical.get_hue() + ROptical.get_hue())/2;
       printf("currentHue %F\n", currentHue); //debug code
-      if(currentHue >= blueHue){ballsLeft-=1; if(ballsLeft==0){intakeStop();} indexerSpin(-200);pros::delay(400);} //If there is a blue ball it will send it out back.
+      if(currentHue >= blueHue){ballsLeft-=1; if(ballsLeft==0){intakeSpin(-600);} indexerSpin(-200);pros::delay(400);} //If there is a blue ball it will send it out back.
       break;
     }
     case BLUEBALL:{
       if(ballsLeft > 0)intakeSpin(200);
+      if(ballsLeft == 0)intakeSpin(-600);
       indexerSpin(200);
       middleSpin(600);
       double currentHue = (LOptical.get_hue() + ROptical.get_hue())/2;
       printf("currentHue %F\n", currentHue); //debug code
-      if(currentHue <= redHue){ballsLeft-=1; if(ballsLeft==0){intakeStop();} indexerSpin(-200);pros::delay(400);} //If there is a red ball it will send it out back.
+      if(currentHue <= redHue){ballsLeft-=1; if(ballsLeft==0){intakeSpin(-600);} indexerSpin(-200);pros::delay(400);} //If there is a red ball it will send it out back.
       break;
     }
   }

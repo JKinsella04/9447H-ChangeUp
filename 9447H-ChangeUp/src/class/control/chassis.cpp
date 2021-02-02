@@ -291,6 +291,7 @@ Chassis& Chassis::drive(double target){
     }
     if(distSensorEnabled){
       if(goalDist.get() < distTarget && goalDist.get() != 0){
+        distSensorEnabled=false;
         LF.move(0);
         LB.move(0);
         RF.move(0);
@@ -304,7 +305,6 @@ Chassis& Chassis::drive(double target){
         autoSort_enabled = false;
         }
         isSettled = true;
-        distSensorEnabled=false;
         break;
       }
     }
