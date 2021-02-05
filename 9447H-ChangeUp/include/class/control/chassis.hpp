@@ -127,6 +127,12 @@ class Chassis {
     */
     Chassis& drive(double target);
 
+    /*
+    drive until you reach certain distance.
+
+    @param dist target distance.
+    */
+    Chassis& driveDistAway(double dist);
   private:
     static bool isSettled, autoSort_enabled;
 

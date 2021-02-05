@@ -311,3 +311,23 @@ Chassis& Chassis::drive(double target){
   }
 return *this;
 }
+
+Chassis& Chassis::driveDistAway(double dist){
+  isSettled = 0;
+  while(!isSettled){
+    LF.move_velocity(50);
+    LB.move_velocity(50);
+    RF.move_velocity(-50);
+    RB.move_velocity(-50);
+    if(goalDist.get() >= dist-5){
+      LF.move(0);
+      LB.move(0);
+      RF.move(0);
+      RB.move(0);
+      break;
+      isSettled = 1;
+    }
+
+  }
+  return *this;
+}

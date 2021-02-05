@@ -36,7 +36,7 @@ void opcontrol() {
   while (true) {
     printf("Left, Right: %d %d\n", LOdometer.get_position(), ROdometer.get_position());
 
-    slew.tankDrive(1100, 500, 900);
+    slew.tankDrive(1000, 500, 900);
     intake.runIntakes();
     pros::delay(15);
   }
