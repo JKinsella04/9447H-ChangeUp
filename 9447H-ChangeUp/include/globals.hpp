@@ -15,7 +15,7 @@ extern pros::Motor indexer;
 //Sensor Declarations
 extern pros::Optical ROptical, LOptical;
 
-extern pros::Distance goalDist;
+extern pros::Distance goalDist, ballIndexer;
 
 extern pros::Imu M_IMU, L_IMU, R_IMU;
 

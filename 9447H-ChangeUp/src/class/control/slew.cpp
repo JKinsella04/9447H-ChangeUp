@@ -32,14 +32,6 @@ int Slew::tankDrive(double fwdAccel, double deccel, double revAccel){
   if(RslewOutput > rightTarget){if(rightTarget == 0 && RslewOutput !=0){RslewOutput -=deccel;} else{RslewOutput -=revAccel;}}
   // if(rightTarget == 0)RslewOutput = 0;
 
-  if(master.get_digital(DIGITAL_A)){LslewOutput = 0; RslewOutput = 0;}
-  if(master.get_digital(DIGITAL_L1) && master.get_digital(DIGITAL_L2) && master.get_digital(DIGITAL_R1) && master.get_digital(DIGITAL_R2)){
-    if(goalDist.get() <= 50){
-      LslewOutput = 0;
-      RslewOutput = 0;
-    }
-  }
-
   LF.move_voltage(-LslewOutput);
   LB.move_voltage(-LslewOutput);
   RF.move_voltage(RslewOutput);

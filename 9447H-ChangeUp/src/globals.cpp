@@ -30,7 +30,7 @@ pros::Optical ROptical(2), LOptical(12);
 /*
 Distance Sensor
 */
-pros::Distance goalDist(4);
+pros::Distance goalDist(4), ballIndexer(17);
 
 /*
 Inertial sensor

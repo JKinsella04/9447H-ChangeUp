@@ -35,8 +35,8 @@ void competition_initialize() {
 void opcontrol() {
   while (true) {
     printf("Left, Right: %d %d\n", LOdometer.get_position(), ROdometer.get_position());
-
-    slew.tankDrive(1000, 500, 900);
+    printf("LOptical, ROptical: %d %d\n", LOptical.get_proximity(), ROptical.get_proximity());
+    slew.tankDrive(900, 500, 900);
     intake.runIntakes();
     pros::delay(15);
   }
