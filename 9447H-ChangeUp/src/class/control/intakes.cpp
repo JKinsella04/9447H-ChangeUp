@@ -219,7 +219,7 @@ void Intake::goalSort(int allianceColor){
       if(ballsLeft == 0)intakeSpin(-600);
       indexerSpin(200);
       middleSpin(600);
-      if(LOptical.get_proximity() >= 254)currentHue = (LOptical.get_hue() + ROptical.get_hue())/2;
+      if(LOptical.get_proximity() >= 50)currentHue = (LOptical.get_hue() + ROptical.get_hue())/2;
       printf("currentHue %F\n", currentHue); //debug code
       if(currentHue >= blueHue){ballsLeft-=1; partner.rumble("."); if(ballsLeft==0){intakeSpin(-600);} indexerSpin(-200);pros::delay(400);} //If there is a blue ball it will send it out back.
       break;
@@ -229,7 +229,7 @@ void Intake::goalSort(int allianceColor){
       if(ballsLeft == 0)intakeSpin(-600);
       indexerSpin(200);
       middleSpin(600);
-      if(LOptical.get_proximity() >= 254)currentHue = (LOptical.get_hue() + ROptical.get_hue())/2;
+      if(LOptical.get_proximity() >= 50)currentHue = (LOptical.get_hue() + ROptical.get_hue())/2;
       printf("currentHue %F\n", currentHue); //debug code
       if(currentHue <= redHue){ballsLeft-=1; partner.rumble("."); if(ballsLeft==0){intakeSpin(-600);} indexerSpin(-200);pros::delay(400);} //If there is a red ball it will send it out back.
       break;
