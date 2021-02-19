@@ -165,9 +165,9 @@ void Intake::iiLock(){
 
 void Intake::deploy(){
   iiInit();
-  indexerSpin(50,-600);
-  intakeSpin(-3,-600);
-  pros::delay(500);
+  intakeSpinVelocity(-600);
+  indexerSpinVelocity(200);
+  pros::delay(325);
 }
 
 Intake& Intake::justOneBall(bool oneBall_){

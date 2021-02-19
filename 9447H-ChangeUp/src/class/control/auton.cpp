@@ -29,10 +29,7 @@ Auton& Auton::run(){
           currentPos = 2; break;}
         case 3: {
           chassis.setState(HOLD);
-          // intake.iinit();
-          intake.indexerSpinVelocity(200);
-          pros::delay(200);
-          intake.indexerStop();
+          intake.deploy();
           currentPos = 3; break; }//robot's mvmt from 1 to 3
         case 4: {currentPos = 4; }//robot's mvmt from 1 to 4
         case 5: {currentPos = 5; }//robot's mvmt from 1 to 5
@@ -50,10 +47,7 @@ Auton& Auton::run(){
           currentPos = 1; break;}//robot's mvmt from -1 to 1 //
         case 2: {
           chassis.setState(HOLD);
-          // intake.iinit();
-          intake.indexerSpinVelocity(200);
-          pros::delay(200);
-          intake.indexerStop();
+          intake.deploy();
           currentPos = 2; break; }//robot's mvmt from -1 to 2
         case 3: {currentPos = 3; }//robot's mvmt from -1 to 3
         case 4: {currentPos = 4; }//robot's mvmt from -1 to 4
@@ -231,9 +225,7 @@ pros::delay(20);} //while
 
 Auton& Auton::runSkills(){
   chassis.setState(HOLD);
-  intake.iiInit();
-  intake.intakeSpin(600);
-  intake.indexerSpinVelocity(200);
+  intake.deploy();
   //Goal 1 (G)
 
   pros::delay(100);
