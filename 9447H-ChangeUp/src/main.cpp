@@ -33,7 +33,7 @@ void competition_initialize() {
 }
 
 void opcontrol() {
-  intake.deploy();
+  // intake.deploy();
   while (true) {
     printf("Left, Right: %d %d\n", LOdometer.get_position(), ROdometer.get_position());
     printf("LOptical, ROptical: %d %d\n", LOptical.get_proximity(), ROptical.get_proximity());

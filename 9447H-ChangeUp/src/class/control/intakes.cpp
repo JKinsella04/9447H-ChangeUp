@@ -74,7 +74,9 @@ void Intake::runIntakes(){ // Runs the intakes from inputs of R1,R2,L1,L2 on bot
     if(master.get_digital(DIGITAL_R2) || partner.get_digital(DIGITAL_A)){intakeSpin(-600); middleSpin(-600); indexerSpin(-200);}
     else {
       if(master.get_digital(DIGITAL_R1)){
-        goalSort(alliance);
+        if(goalDist.get() < 50 && goalDist.get() != 0 )goalSort(alliance);
+        if(ballsLeft >=1)intakeSpinVelocity(600);
+        else{intakeSpinVelocity(-600);}
       }else {
         autoSort(alliance);
       }
@@ -165,9 +167,10 @@ void Intake::iiLock(){
 
 void Intake::deploy(){
   iiInit();
-  intakeSpinVelocity(-600);
   indexerSpinVelocity(200);
-  pros::delay(325);
+  intakeSpinVelocity(-600);
+  pros::delay(100);
+  intakeSpinVelocity(600);
 }
 
 Intake& Intake::justOneBall(bool oneBall_){

@@ -29,7 +29,11 @@ Auton& Auton::run(){
           currentPos = 2; break;}
         case 3: {
           chassis.setState(HOLD);
+          // intake.iinit();
           intake.deploy();
+          // intake.indexerSpinVelocity(200);
+          // pros::delay(200);
+          // intake.indexerStop();
           currentPos = 3; break; }//robot's mvmt from 1 to 3
         case 4: {currentPos = 4; }//robot's mvmt from 1 to 4
         case 5: {currentPos = 5; }//robot's mvmt from 1 to 5
@@ -47,7 +51,11 @@ Auton& Auton::run(){
           currentPos = 1; break;}//robot's mvmt from -1 to 1 //
         case 2: {
           chassis.setState(HOLD);
+          // intake.iinit();
           intake.deploy();
+          // intake.indexerSpinVelocity(200);
+          // pros::delay(200);
+          // intake.indexerStop();
           currentPos = 2; break; }//robot's mvmt from -1 to 2
         case 3: {currentPos = 3; }//robot's mvmt from -1 to 3
         case 4: {currentPos = 4; }//robot's mvmt from -1 to 4
@@ -88,6 +96,9 @@ Auton& Auton::run(){
         chassis.withTurnPD(1.56,1).withTurnSlew(1).withTurnDirection(RIGHT).withTol(1).turn(80).waitUntilSettled();
         chassis.withPD(.5,0.001).withSlew(125).withHeading(80,1).autoSort(1).withDist(40).withTol(10).drive(1200);
         intake.justOneBall(1).goalSort(alliance, 70, HOLDBALL);
+        intake.indexerStop();
+        intake.middleStop();
+        chassis.driveDistAway(500);
         currentPos = 3; break;}
         case 4: {currentPos = 4;}//robot's mvmt from 2 to 4
         case 5: {currentPos = 5;}//robot's mvmt from 2 to 5
@@ -173,9 +184,6 @@ Auton& Auton::run(){
     case 3: {
       switch (thirdPos) {
         case 1: {
-          intake.indexerStop();
-          intake.middleStop();
-          chassis.driveDistAway(500);
           // chassis.withPD(.3,0.001).withSlew(75).withHeading(283,1).withTol(10).drive(-475);
           pros::delay(200);
           chassis.withTurnPD(1.13,.1).justPD(1).withTurnDirection(RIGHT).withTol(1).turn(217).waitUntilSettled();
@@ -226,6 +234,9 @@ pros::delay(20);} //while
 Auton& Auton::runSkills(){
   chassis.setState(HOLD);
   intake.deploy();
+  // intake.iiInit();
+  // intake.intakeSpin(600);
+  // intake.indexerSpinVelocity(200);
   //Goal 1 (G)
 
   pros::delay(100);
