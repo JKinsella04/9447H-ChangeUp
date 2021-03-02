@@ -17,6 +17,11 @@ class Auton {
     */
     Auton& runSkills();
 
+    /*
+    Function meant to perform any tests during auton phase. 
+    */
+    Auton& runTests();
+
   private:
 
 };

@@ -241,7 +241,7 @@ Auton& Auton::runSkills(){
 
   pros::delay(100);
   intake.indexerStop();
-  chassis.withPD(0.3,0.0001).withSlew(140).withHeading(10,3).autoSort(1).withTol(10).drive(2400);
+  chassis.withPD(0.3,1).withSlew(140).withHeading(10,3).autoSort(1).withTol(10).drive(2400);
   chassis.withTurnPD(1.3,1).withTurnSlew(1).withTurnDirection(LEFT).withTol(1).turn(245).waitUntilSettled();
   chassis.withPD(0.35,0.001).withSlew(150).withHeading(245).autoSort(0).withDist(35).withTol(50).drive(1200);
   intake.middleSpinVelocity(-600);
@@ -338,5 +338,11 @@ Auton& Auton::runSkills(){
   //Goal 9 (E)
 */
 
+  return *this;
+}
+
+Auton& Auton::runTests(){
+  // chassis.withPD(.3,1).withSlew(150).withHeading(0,1).withTol(10).drive(1500);
+  chassis.withPD(.3,0).withSlew(200).withHeading(0,1).withTol(10).drive(3000);
   return *this;
 }

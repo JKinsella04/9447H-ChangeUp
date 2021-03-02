@@ -149,4 +149,5 @@ class Chassis {
     static double distTarget;
     static bool distSensorEnabled;
     static int tol;
+    static double prevError; 
 };
