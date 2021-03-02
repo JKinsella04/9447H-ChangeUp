@@ -26,6 +26,8 @@ bool Chassis::distSensorEnabled = false;
 
 int Chassis::tol;
 
+double Chassis::prevError = 0;
+
 Chassis::Chassis() { }
 Chassis::~Chassis() {
   reset();
@@ -201,8 +203,8 @@ Chassis& Chassis::drive(double target){
     rightvalue =(ROdometer.get_position())/100;  //REncoder.get_value();
     double averagePos = (leftvalue+rightvalue)/2;//(REncoder.get_value() + LEncoder.get_value())/2;
     double error = target - averagePos;
-    double prevError = error;
     double derivative = error - prevError;
+    prevError = error;
     double power = error*kP_drive + derivative*kD_drive;
 
     if(output < power && !justPID){
