@@ -3,7 +3,7 @@
 
 int Intake::ledLevel = 75, Intake::doubleShotDelay = 100, Intake::redHue = 20, Intake::blueHue = 200, Intake::ballsLeft = 0;
 bool Intake::full=0, Intake::ball=0, Intake::holdComplete=0, Intake::oneBall=0;
-double Intake::currentHue = 40, Intake::opticalAverage = 40; //greenish value robot never checks for this color so it is a "safe" value.
+double Intake::currentHue = 40, Intake::opticalAverage = 0; //greenish value robot never checks for this color so it is a "safe" value.
 
 void Intake::intakeSpin(int speed){
   leftIntake.move(speed);
@@ -114,15 +114,15 @@ void Intake::runAutoIndexer(){
     // middleStop();
     // indexerStop();
     break;}
-    default:{ //Red Alliance and Skills
+    case 3:{ //Red Alliance and Skills
       if(!holdComplete){
-        if(LOptical.get_proximity() >= 254) opticalAverage = (LOptical.get_hue() + ROptical.get_hue())/2;
+        if(LOptical.get_proximity() >= 254) {opticalAverage = (LOptical.get_hue() + ROptical.get_hue())/2;}
         if(opticalAverage >= blueHue){
           ball = 1;
           if(oneBall==1){intakeStop(); middleStop();holdComplete=1; break;}
           else{middleSpinVelocity(200); indexerSpinVelocity(100);}
         }
-        if(ballIndexer.get() <=50 && ballIndexer.get() !=0 && ball == 1){
+        if(ball == 1 && ballIndexer.get() <=50 && ballIndexer.get() !=0){
           indexerStop();
           if(opticalAverage >= blueHue){
             middleStop();
@@ -239,16 +239,21 @@ void Intake::goalSort(int allianceColor){
 }
 
 void Intake::goalSort(int allianceColor, int time, bool state){
+  ball = 0;
+  holdComplete =0;
   if(state==1){
     for(int i=0; i<time;i++){
       goalSort(allianceColor);
       pros::delay(15);
     }
   }else{
+    intakeSpinVelocity(600);
     indexerSpinVelocity(200);
     middleSpinVelocity(600);
-    pros::delay(100);
+    // pros::delay(200);
     for(int i=0; i<time;i++){
+      // middleSpinVelocity(600);
+      // indexerSpinVelocity(200);
       runAutoIndexer();
       pros::delay(15);
     }
@@ -257,8 +262,6 @@ void Intake::goalSort(int allianceColor, int time, bool state){
   middleStop();
   indexerStop();
   oneBall = 0;
-  ball = 0;
-  holdComplete =0;
 }
 
 void Intake::dropBall(int drop_Mode){
