@@ -168,8 +168,6 @@ void Intake::iiLock(){
 void Intake::deploy(){
   iiInit();
   indexerSpinVelocity(200);
-  intakeSpinVelocity(-600);
-  pros::delay(100);
   intakeSpinVelocity(600);
 }
 
