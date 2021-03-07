@@ -174,6 +174,6 @@ class Intake{
 
   private:
     static int ledLevel, doubleShotDelay, redHue, blueHue, time, ballsLeft;
-    static bool full, ball, holdComplete, oneBall;
-    static double currentHue, opticalAverage;
+    static bool full, ball, holdComplete, oneBall, notRunning, runAutoIndex;
+    static double currentHue, opticalAverage, avgColor;
 };

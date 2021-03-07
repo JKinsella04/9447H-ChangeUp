@@ -23,9 +23,6 @@ extern pros::Imu M_IMU, L_IMU, R_IMU;
 // extern pros::ADIEncoder LEncoder, REncoder;
 extern pros::Rotation LOdometer, ROdometer;
 
-// Line Sesnor
-extern pros::ADIAnalogIn topLight;
-
 //Global Variables
 extern int currentPos, startPos, firstPos, secondPos, thirdPos, alliance;
 extern bool *isSetup;

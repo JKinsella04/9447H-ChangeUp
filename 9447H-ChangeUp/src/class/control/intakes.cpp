@@ -2,8 +2,8 @@
 #include "class/control/intakes.hpp"
 
 int Intake::ledLevel = 75, Intake::doubleShotDelay = 100, Intake::redHue = 20, Intake::blueHue = 200, Intake::ballsLeft = 0;
-bool Intake::full=0, Intake::ball=0, Intake::holdComplete=0, Intake::oneBall=0;
-double Intake::currentHue = 40, Intake::opticalAverage = 0; //greenish value robot never checks for this color so it is a "safe" value.
+bool Intake::full=0, Intake::ball=0, Intake::holdComplete=0, Intake::oneBall=0, Intake::notRunning = 1, Intake::runAutoIndex = 0;
+double Intake::currentHue = 40, Intake::opticalAverage = 0, Intake::avgColor = 0; //greenish value robot never checks for this color so it is a "safe" value.
 
 void Intake::intakeSpin(int speed){
   leftIntake.move(speed);
@@ -65,82 +65,58 @@ void Intake::runIntakes(){ // Runs the intakes from inputs of R1,R2,L1,L2 on bot
   partner.print(2, 0, "Balls Left: %d", ballsLeft);
   if(LOptical.get_proximity() < 254){currentHue=40; opticalAverage = 40;}
   if(ballsLeft < 0)ballsLeft=0;
-  if(partner.get_digital(DIGITAL_R2)){runAutoIndexer();}
-  else if(partner.get_digital(DIGITAL_L2)){justOneBall(1);runAutoIndexer();}
-  else{holdComplete=0; oneBall=0; ball=0;}
+  if(partner.get_digital(DIGITAL_UP)){justOneBall(1); runAutoIndex = 1;}
+  if(partner.get_digital(DIGITAL_LEFT)){justOneBall(0); runAutoIndex = 1;}
   if(partner.get_digital_new_press(DIGITAL_L1)){ballsLeft++;}
-  else if(partner.get_digital(DIGITAL_R1)){ballsLeft=0; partner.clear_line(2);}
-  if(partner.get_digital(DIGITAL_R2) == 0){
-    if(master.get_digital(DIGITAL_R2) || partner.get_digital(DIGITAL_A)){intakeSpin(-600); middleSpin(-600); indexerSpin(-200);}
+  else if(partner.get_digital_new_press(DIGITAL_R1)){ballsLeft=0; runAutoIndex = 0; notRunning = 1; partner.clear();}
+  if(master.get_digital(DIGITAL_R2) || partner.get_digital(DIGITAL_A)){intakeSpin(-600); middleSpin(-600); indexerSpin(-200);}
     else {
       if(master.get_digital(DIGITAL_R1)){
-        if(goalDist.get() < 50 && goalDist.get() != 0 )goalSort(alliance);
+        if(goalDist.get() < 50 && goalDist.get() != 0 ){
+          if(runAutoIndex == 1){runAutoIndexer();}
+          else{goalSort(alliance); notRunning = 1;}
+        }
         if(ballsLeft >=1)intakeSpinVelocity(600);
         else{intakeSpinVelocity(-600);}
       }else {
         autoSort(alliance);
       }
     }
-  }
 }
 
 void Intake::runAutoIndexer(){
   switch(alliance){
     case 2:{ //Blue Alliance
-      if(!holdComplete){
-        double opticalAverage = (LOptical.get_hue() + ROptical.get_hue())/2;
-        if(opticalAverage <= redHue){
-          ball = 1;
-          middleSpinVelocity(200);
-          indexerSpinVelocity(100);
-          if(oneBall==1){intakeStop(); middleStop();holdComplete=1; break;}
-        }
-        if(ballIndexer.get() <= 50 && ballIndexer.get() !=0 && ball){
-          indexerStop();
-          if(opticalAverage <= redHue){
-            middleStop();
-            intakeStop();
-            holdComplete =1;
-          }
-        }
-        if(ball == 0){
-          intakeSpinVelocity(600);
-          middleSpinVelocity(600);
-          indexerSpinVelocity(200);
-        }
-        printf("lightAverage, blueBall  %d %d\n",topLight.get_value(), ball);
+      printf("notRunning: %d, avgColor: %f, ballsleft: %d\n",notRunning, avgColor, ballsLeft);
+      if(ballsLeft < 0) ballsLeft = 0;
+      if(notRunning){
+      indexerSpinVelocity(200);
+      middleSpinVelocity(300);
+      intakeSpinVelocity(600);
+      notRunning = 0;
+      pros::delay(500);
       }
-    // intakeStop();
-    // middleStop();
-    // indexerStop();
+      if(LOptical.get_proximity() >= 50){ avgColor = (LOptical.get_hue() + ROptical.get_hue())/2; }else{avgColor = 0;}
+      if(avgColor <= redHue){ballsLeft-=1; if(oneBall == 0){indexerStop();}}
+      if(ballsLeft == 0){middleStop(); intakeSpinVelocity(-600);}
+      break;
     break;}
-    case 3:{ //Red Alliance and Skills
-      if(!holdComplete){
-        if(LOptical.get_proximity() >= 254) {opticalAverage = (LOptical.get_hue() + ROptical.get_hue())/2;}
-        if(opticalAverage >= blueHue){
-          ball = 1;
-          if(oneBall==1){intakeStop(); middleStop();holdComplete=1; break;}
-          else{middleSpinVelocity(200); indexerSpinVelocity(100);}
-        }
-        if(ball == 1 && ballIndexer.get() <=50 && ballIndexer.get() !=0){
-          indexerStop();
-          if(opticalAverage >= blueHue){
-            middleStop();
-            intakeStop();
-            holdComplete =1;
-          }
-        }
-        if(ball == 0){
-          intakeSpinVelocity(600);
-          middleSpinVelocity(600);
-          indexerSpinVelocity(200);
-        }
-        // printf("opticalAverage, holdComplete  %d %b\n", opticalAverage, holdComplete);
+
+    default:{ //Red Alliance + Skills
+      printf("notRunning: %d, avgColor: %f, ballsleft: %d\n",notRunning, avgColor, ballsLeft);
+      if(ballsLeft < 0) ballsLeft = 0;
+      if(notRunning){
+      indexerSpinVelocity(200);
+      middleSpinVelocity(300);
+      intakeSpinVelocity(600);
+      notRunning = 0;
+      pros::delay(500);
       }
-    // intakeStop();
-    // middleStop();
-    // indexerStop();
-    break;}
+      if(LOptical.get_proximity() >= 50){ avgColor = (LOptical.get_hue() + ROptical.get_hue())/2; }else{avgColor = 0;}
+      if(avgColor >= blueHue){ballsLeft-=1; if(oneBall == 0){indexerStop();}}
+      if(ballsLeft == 0){ middleStop(); intakeSpinVelocity(-600);}
+      break;
+    }
   }
 
 }
@@ -173,6 +149,8 @@ void Intake::deploy(){
 
 Intake& Intake::justOneBall(bool oneBall_){
   oneBall = oneBall_;
+  if(oneBall == 0) ballsLeft = 2;
+  if(oneBall == 1) ballsLeft = 1;
   return *this;
 }
 
@@ -239,21 +217,13 @@ void Intake::goalSort(int allianceColor){
 }
 
 void Intake::goalSort(int allianceColor, int time, bool state){
-  ball = 0;
-  holdComplete =0;
   if(state==1){
     for(int i=0; i<time;i++){
       goalSort(allianceColor);
       pros::delay(15);
     }
   }else{
-    intakeSpinVelocity(600);
-    indexerSpinVelocity(200);
-    middleSpinVelocity(600);
-    // pros::delay(200);
     for(int i=0; i<time;i++){
-      // middleSpinVelocity(600);
-      // indexerSpinVelocity(200);
       runAutoIndexer();
       pros::delay(15);
     }
@@ -262,6 +232,8 @@ void Intake::goalSort(int allianceColor, int time, bool state){
   middleStop();
   indexerStop();
   oneBall = 0;
+  ballsLeft = 0;
+  notRunning = 1;
 }
 
 void Intake::dropBall(int drop_Mode){
@@ -274,6 +246,7 @@ void Intake::dropBall(int drop_Mode){
     case EJECT:{
       indexerSpinVelocity(-200);
       pros::delay(450);
+      intakeSpinVelocity(600);
       middleSpinVelocity(600);
       break;}
   }
