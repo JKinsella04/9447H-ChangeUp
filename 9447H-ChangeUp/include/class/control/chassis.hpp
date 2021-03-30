@@ -108,6 +108,14 @@ class Chassis {
     Chassis& withTol(int tol_ = 10);
 
     /*
+    Calculate whether to turn right or left. Is called Automatically in Chassis::turn();
+
+    @param current_Pos current heading
+    @param target_Pos wanted heading
+    */
+    void calcDir(int current_Pos, int target_Pos);
+
+    /*
     Turns the robot to a set angle.
 
     Use withTurnSlew & withTurnPD with this.
@@ -149,5 +157,6 @@ class Chassis {
     static double distTarget;
     static bool distSensorEnabled;
     static int tol;
-    static double prevError; 
+    static double prevError;
+    static int heading_diff;
 };

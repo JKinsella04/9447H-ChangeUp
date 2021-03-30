@@ -136,6 +136,22 @@ Chassis& Chassis::withTol(int tol_){
   return *this;
 }
 
+void Chassis::calcDir(int current_Pos, int target_Pos){
+  heading_diff = current_Pos - target_Pos;
+  if(currentPos == 0){
+    if(abs(heading_diff) < 180) {direction_turn = RIGHT;}
+    else{direction_turn = LEFT;}
+    }
+  else if(heading_diff < 0){
+    direction_turn = LEFT;
+    if(abs(heading_diff) > 180) direction_turn = RIGHT;
+  }
+  else if(heading_diff > 0){
+    direction_turn = RIGHT;
+    if(abs(heading_diff) > 180) direction_turn = LEFT;
+  }
+}
+
 Chassis& Chassis::turn(double theta_){
   isSettled = false;
   while(averageheading != theta_){
@@ -148,6 +164,7 @@ Chassis& Chassis::turn(double theta_){
       if(direction_turn ==LEFT){ averageheading=360;}
       else{averageheading = 0;}
     }
+    calcDir(averageheading, theta_);
     double error = fabs(theta - averageheading);
     double prevError = error;
     double derivative = error - prevError;
