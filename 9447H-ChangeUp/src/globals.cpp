@@ -7,18 +7,18 @@ pros::Controller partner(CONTROLLER_PARTNER);
 //Motor Definitions
 
 //Intakes
-pros::Motor leftIntake(15, MOTOR_GEARSET_6, 0, MOTOR_ENCODER_ROTATIONS); //1
-pros::Motor middleIntake(1, MOTOR_GEARSET_6, 0, MOTOR_ENCODER_ROTATIONS); //1
-pros::Motor rightIntake(14, MOTOR_GEARSET_6, 1, MOTOR_ENCODER_ROTATIONS); //16
+pros::Motor leftIntake(4, MOTOR_GEARSET_6, 0, MOTOR_ENCODER_ROTATIONS); //1
+pros::Motor middleIntake(16, MOTOR_GEARSET_6, 1, MOTOR_ENCODER_ROTATIONS); //1
+pros::Motor rightIntake(15, MOTOR_GEARSET_6, 1, MOTOR_ENCODER_ROTATIONS); //16
 
 //Indexer Motors
-pros::Motor indexer(20, MOTOR_GEARSET_6, 0, MOTOR_ENCODER_ROTATIONS); //1
+pros::Motor indexer(1, MOTOR_GEARSET_6, 0, MOTOR_ENCODER_ROTATIONS); //1
 
 //Drive Base
-pros::Motor LF(16, MOTOR_GEARSET_6, 0, MOTOR_ENCODER_COUNTS), //19,9,13,
-            LB(10, MOTOR_GEARSET_6, 0, MOTOR_ENCODER_COUNTS),
-            RF(3, MOTOR_GEARSET_6, 1, MOTOR_ENCODER_COUNTS),
-            RB(7, MOTOR_GEARSET_6, 0, MOTOR_ENCODER_COUNTS);
+pros::Motor LF(13, MOTOR_GEARSET_6, 0, MOTOR_ENCODER_COUNTS), //19,9,13,
+            LB(9, MOTOR_GEARSET_6, 1, MOTOR_ENCODER_COUNTS),
+            RF(17, MOTOR_GEARSET_6, 1, MOTOR_ENCODER_COUNTS),
+            RB(6, MOTOR_GEARSET_6, 0, MOTOR_ENCODER_COUNTS);
 
 /*
 Optical Sensors

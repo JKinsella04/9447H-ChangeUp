@@ -61,27 +61,33 @@ void Intake::middleStop(){
 }
 
 void Intake::runIntakes(){ // Runs the intakes from inputs of R1,R2,L1,L2 on both partner and master controller..
-  printf("ballsLeft %d\n", ballsLeft);
-  partner.print(2, 0, "Balls Left: %d", ballsLeft);
-  if(LOptical.get_proximity() < 254){currentHue=40; opticalAverage = 40;}
-  if(ballsLeft < 0)ballsLeft=0;
-  if(partner.get_digital(DIGITAL_UP)){justOneBall(1); runAutoIndex = 1;}
-  if(partner.get_digital(DIGITAL_LEFT)){justOneBall(0); runAutoIndex = 1;}
-  if(partner.get_digital_new_press(DIGITAL_L1)){ballsLeft++;}
-  else if(partner.get_digital_new_press(DIGITAL_R1)){ballsLeft=0; runAutoIndex = 0; notRunning = 1; partner.clear();}
-  if(master.get_digital(DIGITAL_R2) || partner.get_digital(DIGITAL_A)){intakeSpin(-600); middleSpin(-600); indexerSpin(-200);}
-    else {
-      if(master.get_digital(DIGITAL_R1)){
-        if(goalDist.get() < 50 && goalDist.get() != 0 ){
-          if(runAutoIndex == 1){runAutoIndexer();}
-          else{goalSort(alliance); notRunning = 1;}
-        }
-        if(ballsLeft >=1)intakeSpinVelocity(600);
-        else{intakeSpinVelocity(-600);}
-      }else {
-        autoSort(alliance);
-      }
-    }
+  if(master.get_digital(DIGITAL_R1)) {intakeSpinVelocity(600); middleSpinVelocity(600); indexerSpinVelocity(600);}
+  else if(master.get_digital(DIGITAL_R2)) {intakeSpinVelocity(-600); middleSpinVelocity(-600); indexerSpinVelocity(-600);}
+  else if (master.get_digital(DIGITAL_L1)){ indexerSpinVelocity(600); middleStop(); intakeStop();}
+  else if (master.get_digital(DIGITAL_L2)){ intakeSpinVelocity(600); middleSpinVelocity(600); indexerStop(); }
+  else { intakeStop(); middleStop(); indexerStop();}
+
+  // printf("ballsLeft %d\n", ballsLeft);
+  // partner.print(2, 0, "Balls Left: %d", ballsLeft);
+  // if(LOptical.get_proximity() < 254){currentHue=40; opticalAverage = 40;}
+  // if(ballsLeft < 0)ballsLeft=0;
+  // if(partner.get_digital(DIGITAL_UP)){justOneBall(1); runAutoIndex = 1;}
+  // if(partner.get_digital(DIGITAL_LEFT)){justOneBall(0); runAutoIndex = 1;}
+  // if(partner.get_digital_new_press(DIGITAL_L1)){ballsLeft++;}
+  // else if(partner.get_digital_new_press(DIGITAL_R1)){ballsLeft=0; runAutoIndex = 0; notRunning = 1; partner.clear();}
+  // if(master.get_digital(DIGITAL_R2) || partner.get_digital(DIGITAL_A)){intakeSpin(-600); middleSpin(-600); indexerSpin(-200);}
+  //   else {
+  //     if(master.get_digital(DIGITAL_R1)){
+  //       if(goalDist.get() < 50 && goalDist.get() != 0 ){
+  //         if(runAutoIndex == 1){runAutoIndexer();}
+  //         else{goalSort(alliance); notRunning = 1;}
+  //       }
+  //       if(ballsLeft >=1)intakeSpinVelocity(600);
+  //       else{intakeSpinVelocity(-600);}
+  //     }else {
+  //       autoSort(alliance);
+  //     }
+  //   }
 }
 
 void Intake::runAutoIndexer(){

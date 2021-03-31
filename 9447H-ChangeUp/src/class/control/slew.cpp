@@ -32,8 +32,8 @@ int Slew::tankDrive(double fwdAccel, double deccel, double revAccel){
   if(RslewOutput > rightTarget){if(rightTarget == 0 && RslewOutput !=0){RslewOutput -=deccel;} else{RslewOutput -=revAccel;}}
   // if(rightTarget == 0)RslewOutput = 0;
 
-  LF.move_voltage(-LslewOutput);
-  LB.move_voltage(-LslewOutput);
+  LF.move_voltage(LslewOutput);
+  LB.move_voltage(LslewOutput);
   RF.move_voltage(RslewOutput);
   RB.move_voltage(RslewOutput);
 

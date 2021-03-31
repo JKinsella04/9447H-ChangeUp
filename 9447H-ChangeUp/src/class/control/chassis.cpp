@@ -24,7 +24,7 @@ int Chassis::slew_a = 200, Chassis::slew_x = 0;
 double Chassis::distTarget;
 bool Chassis::distSensorEnabled = false;
 
-int Chassis::tol;
+int Chassis::tol, Chassis::heading_diff;
 
 double Chassis::prevError = 0;
 
