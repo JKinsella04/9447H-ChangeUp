@@ -13,7 +13,7 @@ extern pros::Motor indexer;
 
 
 //Sensor Declarations
-extern pros::Optical ROptical, LOptical;
+extern pros::Optical topOptical, botOptical;
 
 extern pros::Distance goalDist, ballIndexer;
 

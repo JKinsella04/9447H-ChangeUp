@@ -6,13 +6,12 @@
 #define BLUEBALL 2
 #define HOLDBALL 0
 #define SHOOTBALL 1
-#define REVERSE 2
-#define EJECT 3
+
 
 class Intake{
   public:
     /*
-    Spins intakes at given RPM with the range of -127,127.
+    Spins intakes at given RPM with the range of -12,000-12,000.
 
     @param speed RPM
     */
@@ -39,7 +38,7 @@ class Intake{
     void intakeStop();
 
     /*
-    Spins indexer at given RPM with the range of -127,127.
+    Spins indexer at given RPM with the range of -12,000-12,000.
 
     @param speed RPM
     */
@@ -66,7 +65,7 @@ class Intake{
     void indexerStop();
 
     /*
-    Spins middle intake at given RPM with the range of -127,127.
+    Spins middle intake at given RPM with the range of -12,000-12,000.
 
     @param speed RPM
     */
@@ -96,12 +95,6 @@ class Intake{
     Runs the intakes for driver control.
     */
     void runIntakes();
-
-    /*
-    Automatically stops certain intakes based off light sensor and optical sensor values.
-    Do not call manually this member function is called when running goalSort(bool state = HOLDBALL)
-    */
-    void runAutoIndexer();
 
     /*
     Initializes both the intakes and the indexers.
@@ -157,13 +150,7 @@ class Intake{
 
     @param drop_Mode Accepts either EJECT or REVERSE. Determines how the ball(s) leaves the robot.
     */
-    void dropBall(int drop_Mode = EJECT);
-
-    /*
-    Scores balls then after short delay begins chekcing to stop a ball at the lightSensor and at the optical sensor.
-    Meant for 15 sec auton.
-    */
-    void goalSort();
+    void dropBall();
 
     /*
     Cycles through LED brightness to get the wanted resting value for the Optical sensors.
@@ -173,7 +160,6 @@ class Intake{
     void calibrate(int resting_value);
 
   private:
-    static int ledLevel, doubleShotDelay, redHue, blueHue, time, ballsLeft;
-    static bool full, ball, holdComplete, oneBall, notRunning, runAutoIndex;
-    static double currentHue, opticalAverage, avgColor;
+    static int ledLevel, redHue, blueHue, time, ballsLeft;
+    static bool oneBall;
 };

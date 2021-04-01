@@ -25,7 +25,7 @@ Optical Sensors
 ROptical Optical Sensor on the right of the robot.
 LOptical Optical Sensor on the left of the robot.
 */
-pros::Optical ROptical(2), LOptical(12);
+pros::Optical topOptical(2), botOptical(12);
 
 /*
 Distance Sensor

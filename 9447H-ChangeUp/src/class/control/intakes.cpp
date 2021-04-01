@@ -1,13 +1,12 @@
 #include "globals.hpp"
 #include "class/control/intakes.hpp"
 
-int Intake::ledLevel = 75, Intake::doubleShotDelay = 100, Intake::redHue = 20, Intake::blueHue = 200, Intake::ballsLeft = 0;
-bool Intake::full=0, Intake::ball=0, Intake::holdComplete=0, Intake::oneBall=0, Intake::notRunning = 1, Intake::runAutoIndex = 0;
-double Intake::currentHue = 40, Intake::opticalAverage = 0, Intake::avgColor = 0; //greenish value robot never checks for this color so it is a "safe" value.
+int Intake::ledLevel = 75, Intake::redHue = 20, Intake::blueHue = 200, Intake::ballsLeft = 0;
+bool Intake::oneBall=0;
 
 void Intake::intakeSpin(int speed){
-  leftIntake.move(speed);
-  rightIntake.move(speed);
+  leftIntake.move_voltage(speed);
+  rightIntake.move_voltage(speed);
 }
 
 void Intake::intakeSpin(double ecount, int speed){
@@ -27,7 +26,7 @@ void Intake::intakeStop(){
 }
 
 void Intake::indexerSpin(int speed){
-  indexer.move(speed);
+  indexer.move_voltage(speed);
 }
 
 void Intake::indexerSpin(int ecount, int speed){
@@ -45,7 +44,7 @@ void Intake::indexerStop(){
 }
 
 void Intake::middleSpin(int speed){
-  middleIntake.move(speed);
+  middleIntake.move_voltage(speed);
 }
 
 void Intake::middleSpin(int ecount, int speed){
@@ -61,75 +60,18 @@ void Intake::middleStop(){
 }
 
 void Intake::runIntakes(){ // Runs the intakes from inputs of R1,R2,L1,L2 on both partner and master controller..
-  if(master.get_digital(DIGITAL_R1)) {intakeSpinVelocity(600); middleSpinVelocity(600); indexerSpinVelocity(600);}
-  else if(master.get_digital(DIGITAL_R2)) {intakeSpinVelocity(-600); middleSpinVelocity(-600); indexerSpinVelocity(-600);}
-  else if (master.get_digital(DIGITAL_L1)){ indexerSpinVelocity(600); middleStop(); intakeStop();}
-  else if (master.get_digital(DIGITAL_L2)){ intakeSpinVelocity(600); middleSpinVelocity(600); indexerStop(); }
+  if(master.get_digital(DIGITAL_R1)) {intakeSpin(12000); middleSpin(12000); indexerSpin(12000);}
+  else if(master.get_digital(DIGITAL_R2)) {intakeSpin(-12000); middleSpin(-12000); indexerSpin(-12000);}
+  else if (master.get_digital(DIGITAL_L1)){ indexerSpin(12000); middleStop(); intakeStop();}
+  else if (master.get_digital(DIGITAL_L2)){ intakeSpin(12000); middleSpin(12000); indexerStop(); }
   else { intakeStop(); middleStop(); indexerStop();}
-
-  // printf("ballsLeft %d\n", ballsLeft);
-  // partner.print(2, 0, "Balls Left: %d", ballsLeft);
-  // if(LOptical.get_proximity() < 254){currentHue=40; opticalAverage = 40;}
-  // if(ballsLeft < 0)ballsLeft=0;
-  // if(partner.get_digital(DIGITAL_UP)){justOneBall(1); runAutoIndex = 1;}
-  // if(partner.get_digital(DIGITAL_LEFT)){justOneBall(0); runAutoIndex = 1;}
-  // if(partner.get_digital_new_press(DIGITAL_L1)){ballsLeft++;}
-  // else if(partner.get_digital_new_press(DIGITAL_R1)){ballsLeft=0; runAutoIndex = 0; notRunning = 1; partner.clear();}
-  // if(master.get_digital(DIGITAL_R2) || partner.get_digital(DIGITAL_A)){intakeSpin(-600); middleSpin(-600); indexerSpin(-200);}
-  //   else {
-  //     if(master.get_digital(DIGITAL_R1)){
-  //       if(goalDist.get() < 50 && goalDist.get() != 0 ){
-  //         if(runAutoIndex == 1){runAutoIndexer();}
-  //         else{goalSort(alliance); notRunning = 1;}
-  //       }
-  //       if(ballsLeft >=1)intakeSpinVelocity(600);
-  //       else{intakeSpinVelocity(-600);}
-  //     }else {
-  //       autoSort(alliance);
-  //     }
-  //   }
-}
-
-void Intake::runAutoIndexer(){
-  switch(alliance){
-    case 2:{ //Blue Alliance
-      printf("notRunning: %d, avgColor: %f, ballsleft: %d\n",notRunning, avgColor, ballsLeft);
-      if(ballsLeft < 0) ballsLeft = 0;
-      if(notRunning){
-      indexerSpinVelocity(200);
-      middleSpinVelocity(300);
-      intakeSpinVelocity(600);
-      notRunning = 0;
-      pros::delay(500);
-      }
-      if(LOptical.get_proximity() >= 50){ avgColor = (LOptical.get_hue() + ROptical.get_hue())/2; }else{avgColor = 0;}
-      if(avgColor <= redHue){ballsLeft-=1; if(oneBall == 0){indexerStop();}}
-      if(ballsLeft == 0){middleStop(); intakeSpinVelocity(-600);}
-      break;
-    break;}
-
-    default:{ //Red Alliance + Skills
-      printf("notRunning: %d, avgColor: %f, ballsleft: %d\n",notRunning, avgColor, ballsLeft);
-      if(ballsLeft < 0) ballsLeft = 0;
-      if(notRunning){
-      indexerSpinVelocity(200);
-      middleSpinVelocity(300);
-      intakeSpinVelocity(600);
-      notRunning = 0;
-      pros::delay(500);
-      }
-      if(LOptical.get_proximity() >= 50){ avgColor = (LOptical.get_hue() + ROptical.get_hue())/2; }else{avgColor = 0;}
-      if(avgColor >= blueHue){ballsLeft-=1; if(oneBall == 0){indexerStop();}}
-      if(ballsLeft == 0){ middleStop(); intakeSpinVelocity(-600);}
-      break;
-    }
-  }
-
+  if(master.get_digital_new_press(DIGITAL_A)) oneBall= 1;
+  else if(master.get_digital_new_press(DIGITAL_X)) oneBall = 0;
 }
 
 void Intake::iiInit(){
-  LOptical.set_led_pwm(ledLevel);
-  ROptical.set_led_pwm(ledLevel);
+  topOptical.set_led_pwm(ledLevel);
+  botOptical.set_led_pwm(ledLevel);
   leftIntake.set_brake_mode(MOTOR_BRAKE_COAST);
   middleIntake.set_brake_mode(MOTOR_BRAKE_COAST);
   rightIntake.set_brake_mode(MOTOR_BRAKE_COAST);
@@ -149,8 +91,8 @@ void Intake::iiLock(){
 
 void Intake::deploy(){
   iiInit();
-  indexerSpinVelocity(200);
-  intakeSpinVelocity(600);
+  indexerSpin(12000);
+  intakeSpin(12000);
 }
 
 Intake& Intake::justOneBall(bool oneBall_){
@@ -163,35 +105,33 @@ Intake& Intake::justOneBall(bool oneBall_){
 void Intake::autoSort(int allianceColor){
   switch (allianceColor){
     case REDBALL:{
-      full=0;
-      intakeSpinVelocity(600);
-      indexerSpinVelocity(100);
-      if(ballIndexer.get() <=50 && ballIndexer.get() !=0){
-        full=1;
-        indexerStop();
-      }
-      if(LOptical.get_proximity() >= 254)currentHue = (LOptical.get_hue() + ROptical.get_hue())/2;
-      printf("currentHue %F\n", currentHue); //debug code
-      if(currentHue <= redHue && full==1){ //Sees RED Ball //If there is a ball at the top already it will stop this ball at the Optical Sensor
-        middleStop();
-      }else{middleSpinVelocity(300);}
-      if(currentHue >= blueHue){middleSpinVelocity(600); if(ballIndexer.get() >= 50 || ballIndexer.get() == 0){indexerSpinVelocity(-200);}pros::delay(15);} //If there is a blue ball it will send it out back.
+      intakeSpin(12000);
+      middleSpin(12000);
+      indexerSpin(12000);
+
+      if(topOptical.get_hue() <= redHue) indexerStop(); //Indexing
+      if(botOptical.get_hue() <= redHue) middleStop();
+
+      printf("TopOptical: %F BotOptical: %F\n", topOptical.get_hue(), botOptical.get_hue()); //debug code
+
+      if(botOptical.get_hue() >= blueHue)middleSpin(-12000); intakeSpin(-12000); //If blue ball reverse middle rollers and intakes.
+
+      pros::delay(15);
       break;
     }
     case BLUEBALL:{
-      full=0;
-      intakeSpinVelocity(600);
-      indexerSpinVelocity(100);
-      if(ballIndexer.get() <=50 && ballIndexer.get() !=0){
-        full=1;
-        indexerStop();
-      }
-      if(LOptical.get_proximity() >= 254)currentHue = (LOptical.get_hue() + ROptical.get_hue())/2;
-      printf("currentHue %F\n", currentHue); //debug code
-      if(currentHue >= blueHue && full==1){ //Sees BLUE Ball //If there is a ball at the top already it will stop this ball at the Optical Sensor
-        middleStop();
-      }else{middleSpinVelocity(300);}
-      if(currentHue <= redHue){middleSpinVelocity(600); if(ballIndexer.get() >=50 || ballIndexer.get() ==0){indexerSpinVelocity(-200);}pros::delay(15);} //If there is a RED ball it will send it out back.
+      intakeSpin(12000);
+      middleSpin(12000);
+      indexerSpin(12000);
+
+      if(topOptical.get_hue() >= blueHue) indexerStop(); //Indexing
+      if(botOptical.get_hue() >= blueHue) middleStop();
+
+      printf("TopOptical: %F BotOptical: %F\n", topOptical.get_hue(), botOptical.get_hue()); //debug code
+
+      if(botOptical.get_hue() >= blueHue)middleSpin(-12000); intakeSpin(-12000); //If blue ball reverse middle rollers and intakes.
+
+      pros::delay(15);
       break;
     }
   }
@@ -200,23 +140,27 @@ void Intake::autoSort(int allianceColor){
 void Intake::goalSort(int allianceColor){
   switch (allianceColor){
     case REDBALL:{
-      if(ballsLeft > 0)intakeSpin(200);
-      if(ballsLeft == 0)intakeSpin(-600);
-      indexerSpin(200);
-      middleSpin(600);
-      if(LOptical.get_proximity() >= 50)currentHue = (LOptical.get_hue() + ROptical.get_hue())/2;
-      printf("currentHue %F\n", currentHue); //debug code
-      if(currentHue >= blueHue){ballsLeft-=1; partner.rumble("."); if(ballsLeft==0){intakeSpin(-600);} indexerSpin(-200);pros::delay(400);} //If there is a blue ball it will send it out back.
+      if(ballsLeft > 0)intakeSpin(12000);
+      if(ballsLeft == 0)intakeSpin(-12000);
+      indexerSpin(12000);
+      if(!oneBall)middleSpin(12000);
+      if(topOptical.get_hue() >= blueHue){indexerStop(); break; ballsLeft-=1;}
+      if(ballsLeft == 1){ //Only stop balls at the bottom if only needs to take one ball or if the top is already stopped.
+        if(botOptical.get_hue() >= blueHue){middleStop(); intakeSpin(-12000); ballsLeft -=1; break;}
+      }
+      printf("TopOptical: %F BotOptical: %F\n", topOptical.get_hue(), botOptical.get_hue()); //debug code
       break;
     }
     case BLUEBALL:{
-      if(ballsLeft > 0)intakeSpin(200);
-      if(ballsLeft == 0)intakeSpin(-600);
-      indexerSpin(200);
-      middleSpin(600);
-      if(LOptical.get_proximity() >= 50)currentHue = (LOptical.get_hue() + ROptical.get_hue())/2;
-      printf("currentHue %F\n", currentHue); //debug code
-      if(currentHue <= redHue){ballsLeft-=1; partner.rumble("."); if(ballsLeft==0){intakeSpin(-600);} indexerSpin(-200);pros::delay(400);} //If there is a red ball it will send it out back.
+      if(ballsLeft > 0)intakeSpin(12000);
+      if(ballsLeft == 0)intakeSpin(-12000);
+      indexerSpin(12000);
+      if(!oneBall)middleSpin(12000);
+      if(topOptical.get_hue() <= redHue){indexerStop(); break; ballsLeft-=1;}
+      if(ballsLeft == 1){ //Only stop balls at the bottom if only needs to take one ball or if the top is already stopped.
+        if(botOptical.get_hue() >= redHue){middleStop(); intakeSpin(-12000); ballsLeft -=1; break;}
+      }
+      printf("TopOptical: %F BotOptical: %F\n", topOptical.get_hue(), botOptical.get_hue()); //debug code
       break;
     }
   }
@@ -228,59 +172,21 @@ void Intake::goalSort(int allianceColor, int time, bool state){
       goalSort(allianceColor);
       pros::delay(15);
     }
-  }else{
-    for(int i=0; i<time;i++){
-      runAutoIndexer();
-      pros::delay(15);
-    }
   }
   intakeStop();
   middleStop();
   indexerStop();
   oneBall = 0;
   ballsLeft = 0;
-  notRunning = 1;
 }
 
-void Intake::dropBall(int drop_Mode){
-  switch(drop_Mode){
-    case REVERSE:{
-      intakeSpinVelocity(-100);
-      middleSpinVelocity(-200);
-      indexerSpinVelocity(-100);
-    }
-    case EJECT:{
-      indexerSpinVelocity(-200);
-      pros::delay(450);
-      intakeSpinVelocity(600);
-      middleSpinVelocity(600);
-      break;}
-  }
-}
-
-void Intake::goalSort(){
-  full=0;
-  indexerSpinVelocity(200);
-  middleSpinVelocity(600);
-  pros::delay(600);
-  indexerSpinVelocity(100);
-  middleSpinVelocity(300);
-  while(!full){
-    int opticalAverage = (LOptical.get_hue() + ROptical.get_hue())/2;
-    intakeSpinVelocity(600);
-    if(ballIndexer.get() <=50 && ballIndexer.get() !=0)indexerStop();
-    switch(alliance){
-      case 1:{ //Red Alliance + Skills
-        if(opticalAverage >= blueHue){ middleStop(); intakeStop(); full=1;}
-      }
-      case 2:{ //Blue Alliance
-        if(opticalAverage <= redHue){ middleStop(); intakeStop(); full=1; break;}
-      }
-    }
-  }
+void Intake::dropBall(){
+  intakeSpin(-12000);
+  middleSpin(-12000);
+  indexerSpin(-12000);
 }
 
 void Intake::calibrate(int resting_value){
-  for(int i=0; LOptical.get_hue() < resting_value+5 && LOptical.get_hue() > resting_value-5; i++){LOptical.set_led_pwm(i);}
-  for(int i=0; ROptical.get_hue() < resting_value+5 && ROptical.get_hue() > resting_value-5; i++){ROptical.set_led_pwm(i);}
+  for(int i=0; botOptical.get_hue() < resting_value+5 && botOptical.get_hue() > resting_value-5; i++){botOptical.set_led_pwm(i);}
+  for(int i=0; topOptical.get_hue() < resting_value+5 && topOptical.get_hue() > resting_value-5; i++){topOptical.set_led_pwm(i);}
 }

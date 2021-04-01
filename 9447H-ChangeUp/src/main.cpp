@@ -26,17 +26,15 @@ void competition_initialize() {
   while(1){
     display.backgroundcheck();
     while(alliance==0){display.setAlliance(); pros::delay(15);}
-    display.arcChecker();
-    display.setVars();
-    display.updateSensors();
+      display.arcChecker();
+      display.setVars();
+      display.updateSensors();
   pros::delay(20);}
 }
 
 void opcontrol() {
-  // intake.deploy();
   while (true) {
     printf("Left, Right: %d %d\n", LOdometer.get_position(), ROdometer.get_position());
-    printf("LOptical, ROptical: %d %d\n", LOptical.get_proximity(), ROptical.get_proximity());
     slew.tankDrive(900, 500, 900);
     intake.runIntakes();
     pros::delay(15);
