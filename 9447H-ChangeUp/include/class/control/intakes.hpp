@@ -11,7 +11,7 @@
 class Intake{
   public:
     /*
-    Spins intakes at given RPM with the range of -12,000-12,000.
+    Spins intakes at given voltage with the range of -12,000-12,000.
 
     @param speed RPM
     */
@@ -26,7 +26,7 @@ class Intake{
     void intakeSpin(double ecount, int speed);
 
     /*
-    Spins intakes at given RPM to the max of the gearset of the motor
+    Spins intakes at given rpm to the max of the gearset of the motor
 
     @param velocity RPM
     */
@@ -38,7 +38,7 @@ class Intake{
     void intakeStop();
 
     /*
-    Spins indexer at given RPM with the range of -12,000-12,000.
+    Spins indexer at given voltage with the range of -12,000-12,000.
 
     @param speed RPM
     */
@@ -65,7 +65,7 @@ class Intake{
     void indexerStop();
 
     /*
-    Spins middle intake at given RPM with the range of -12,000-12,000.
+    Spins middle intake at given voltage with the range of -12,000-12,000.
 
     @param speed RPM
     */

@@ -21,8 +21,8 @@ void Intake::intakeSpinVelocity(int velocity){
 }
 
 void Intake::intakeStop(){
-  leftIntake.move(0);
-  rightIntake.move(0);
+  leftIntake.move_voltage(0);
+  rightIntake.move_voltage(0);
 }
 
 void Intake::indexerSpin(int speed){
@@ -40,7 +40,7 @@ void Intake::indexerSpinVelocity(int velocity){
 }
 
 void Intake::indexerStop(){
-  indexer.move(0);
+  indexer.move_voltage(0);
 }
 
 void Intake::middleSpin(int speed){
@@ -56,16 +56,17 @@ void Intake::middleSpinVelocity(int velocity){
 }
 
 void Intake::middleStop(){
-  middleIntake.move(0);
+  middleIntake.move_voltage(0);
 }
 
 void Intake::runIntakes(){ // Runs the intakes from inputs of R1,R2,L1,L2 on both partner and master controller..
-  if(master.get_digital(DIGITAL_R1)) {intakeSpin(12000); middleSpin(12000); indexerSpin(12000);}
+  autoSort(alliance);
+  if(master.get_digital(DIGITAL_R1)) {goalSort(alliance);}
   else if(master.get_digital(DIGITAL_R2)) {intakeSpin(-12000); middleSpin(-12000); indexerSpin(-12000);}
   else if (master.get_digital(DIGITAL_L1)){ indexerSpin(12000); middleStop(); intakeStop();}
   else if (master.get_digital(DIGITAL_L2)){ intakeSpin(12000); middleSpin(12000); indexerStop(); }
   else { intakeStop(); middleStop(); indexerStop();}
-  if(master.get_digital_new_press(DIGITAL_A)) oneBall= 1;
+  if(master.get_digital_new_press(DIGITAL_A)) oneBall = 1;
   else if(master.get_digital_new_press(DIGITAL_X)) oneBall = 0;
 }
 
@@ -97,8 +98,8 @@ void Intake::deploy(){
 
 Intake& Intake::justOneBall(bool oneBall_){
   oneBall = oneBall_;
-  if(oneBall == 0) ballsLeft = 2;
-  if(oneBall == 1) ballsLeft = 1;
+  if(!oneBall){ ballsLeft = 2;}
+  else{ballsLeft = 1;}
   return *this;
 }
 
@@ -143,11 +144,14 @@ void Intake::goalSort(int allianceColor){
       if(ballsLeft > 0)intakeSpin(12000);
       if(ballsLeft == 0)intakeSpin(-12000);
       indexerSpin(12000);
-      if(!oneBall)middleSpin(12000);
+      if(!oneBall){middleSpin(12000);}
+      else{middleStop();}
+
       if(topOptical.get_hue() >= blueHue){indexerStop(); break; ballsLeft-=1;}
       if(ballsLeft == 1){ //Only stop balls at the bottom if only needs to take one ball or if the top is already stopped.
         if(botOptical.get_hue() >= blueHue){middleStop(); intakeSpin(-12000); ballsLeft -=1; break;}
       }
+
       printf("TopOptical: %F BotOptical: %F\n", topOptical.get_hue(), botOptical.get_hue()); //debug code
       break;
     }
@@ -156,10 +160,12 @@ void Intake::goalSort(int allianceColor){
       if(ballsLeft == 0)intakeSpin(-12000);
       indexerSpin(12000);
       if(!oneBall)middleSpin(12000);
+
       if(topOptical.get_hue() <= redHue){indexerStop(); break; ballsLeft-=1;}
       if(ballsLeft == 1){ //Only stop balls at the bottom if only needs to take one ball or if the top is already stopped.
         if(botOptical.get_hue() >= redHue){middleStop(); intakeSpin(-12000); ballsLeft -=1; break;}
       }
+
       printf("TopOptical: %F BotOptical: %F\n", topOptical.get_hue(), botOptical.get_hue()); //debug code
       break;
     }
