@@ -161,5 +161,5 @@ class Intake{
 
   private:
     static int ledLevel, redHue, blueHue, time, ballsLeft;
-    static bool oneBall;
+    static bool oneBall, pos1, pos2, stopped, ball;
 };

@@ -139,16 +139,16 @@ Chassis& Chassis::withTol(int tol_){
 void Chassis::calcDir(int current_Pos, int target_Pos){
   heading_diff = current_Pos - target_Pos;
   if(currentPos == 0){
-    if(abs(heading_diff) < 180) {direction_turn = RIGHT;}
-    else{direction_turn = LEFT;}
+    if(abs(heading_diff) > 180) {direction_turn = LEFT;}
+    else{direction_turn = RIGHT;}
     }
-  else if(heading_diff < 0){
-    direction_turn = LEFT;
-    if(abs(heading_diff) > 180) direction_turn = RIGHT;
-  }
-  else if(heading_diff > 0){
+  if(heading_diff < 0){
     direction_turn = RIGHT;
     if(abs(heading_diff) > 180) direction_turn = LEFT;
+  }
+  if(heading_diff > 0){
+    direction_turn = LEFT;
+    if(abs(heading_diff) > 180) direction_turn = RIGHT;
   }
 }
 
@@ -176,14 +176,14 @@ Chassis& Chassis::turn(double theta_){
     }
     switch (direction_turn){
       case LEFT: {
-        LF.move_velocity(output);
-        LB.move_velocity(output);
+        LF.move_velocity(-output);
+        LB.move_velocity(-output);
         RF.move_velocity(output);
         RB.move_velocity(output);
         break;}
       case RIGHT: {
-        LF.move_velocity(-output);
-        LB.move_velocity(-output);
+        LF.move_velocity(output);
+        LB.move_velocity(output);
         RF.move_velocity(-output);
         RB.move_velocity(-output);
         break;}

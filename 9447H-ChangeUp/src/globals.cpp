@@ -25,12 +25,12 @@ Optical Sensors
 ROptical Optical Sensor on the right of the robot.
 LOptical Optical Sensor on the left of the robot.
 */
-pros::Optical topOptical(2), botOptical(12);
+pros::Optical topOptical(2), botOptical(10);
 
 /*
 Distance Sensor
 */
-pros::Distance goalDist(4), ballIndexer(17);
+pros::Distance goalDist(3), ballIndexer(7);
 
 /*
 Inertial sensor
@@ -38,7 +38,7 @@ L_IMU  Left facing inertial sensor.
 M_IMU  Front facing inertial sensor.
 R_IMU  Right facing inertial sensor.
 */
-pros::Imu M_IMU(6), L_IMU(9), R_IMU(5);
+pros::Imu M_IMU(8), L_IMU(11), R_IMU(20);
 
 //Free Spinning Wheel Encoders
 // pros::ADIEncoder LEncoder('E', 'F', true),

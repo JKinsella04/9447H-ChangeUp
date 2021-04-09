@@ -337,24 +337,25 @@ Auton& Auton::runSkills(){
 }
 
 Auton& Auton::runTests(){
+  chassis.withTurnPD(2.5,0.1).justPD(1).withTol(1).turn(270).waitUntilSettled();
   // chassis.withPD(.3,1).withSlew(150).withHeading(0,1).withTol(10).drive(1500);
   // chassis.withPD(.3,0).withSlew(200).withHeading(0,1).withTol(10).drive(3000);
   // intake.justOneBall(0).goalSort(REDBALL, 1000, HOLDBALL);
   // intake.indexerSpin(200);
   // pros::delay(200);
-  chassis.withPD(0.2,2).withSlew(200).withHeading(0).autoSort(1).withTol(10).drive(2300);
-  chassis.withPD(0.2,2).withSlew(200).withHeading(0).autoSort(1).withTol(10).drive(-350);
-  chassis.withTurnPD(.5,0.1).withTurnDirection(RIGHT).justPD(1).withTol(1).turn(45).waitUntilSettled();
-  chassis.withPD(0.2,2).withSlew(200).withHeading(45).withDist(50).withTol(10).drive(1000);
-  intake.goalSort(REDBALL, 70);
-
-  chassis.driveDistAway(250);
-  chassis.withTurnPD(.5,0.1).withTurnDirection(RIGHT).justPD(1).withTol(1).turn(90).waitUntilSettled();
-  chassis.withPD(0.2,2).withSlew(200).withHeading(90).withTol(10).drive(2500);
-  chassis.withTurnPD(.5,0.1).withTurnDirection(LEFT).justPD(1).withTol(1).turn(45).waitUntilSettled();
-  chassis.withPD(0.2,2).withSlew(200).withHeading(45).withDist(45).withTol(50).drive(2500);
-  intake.goalSort(REDBALL, 150);
-  chassis.driveDistAway(200);
+  // chassis.withPD(0.2,2).withSlew(200).withHeading(0).autoSort(1).withTol(10).drive(2300);
+  // chassis.withPD(0.2,2).withSlew(200).withHeading(0).autoSort(1).withTol(10).drive(-350);
+  // chassis.withTurnPD(.5,0.1).withTurnDirection(RIGHT).justPD(1).withTol(1).turn(45).waitUntilSettled();
+  // chassis.withPD(0.2,2).withSlew(200).withHeading(45).withDist(50).withTol(10).drive(1000);
+  // intake.goalSort(REDBALL, 70);
+  //
+  // chassis.driveDistAway(250);
+  // chassis.withTurnPD(.5,0.1).withTurnDirection(RIGHT).justPD(1).withTol(1).turn(90).waitUntilSettled();
+  // chassis.withPD(0.2,2).withSlew(200).withHeading(90).withTol(10).drive(2500);
+  // chassis.withTurnPD(.5,0.1).withTurnDirection(LEFT).justPD(1).withTol(1).turn(45).waitUntilSettled();
+  // chassis.withPD(0.2,2).withSlew(200).withHeading(45).withDist(45).withTol(50).drive(2500);
+  // intake.goalSort(REDBALL, 150);
+  // chassis.driveDistAway(200);
 
   // intake.goalSort(REDBALL, 100, SHOOTBALL);
   // chassis.driveDistAway(500);
