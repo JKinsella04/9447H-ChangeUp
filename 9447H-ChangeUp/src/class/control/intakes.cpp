@@ -60,13 +60,19 @@ void Intake::middleStop(){
 }
 
 void Intake::runIntakes(){ // Runs the intakes from inputs of R1,R2,L1,L2 on both partner and master controller..
-  if(master.get_digital_new_press(DIGITAL_L1)) ballsLeft++;
-  if(master.get_digital_new_press(DIGITAL_L2)) ballsLeft = 0;
-  if(master.get_digital(DIGITAL_R2)) {
-    goalSort(alliance); // if(goalDist.get() <= 60 && goalDist.get() != 0{
-  }
-  else{
-    autoSort(alliance);
+  // if(master.get_digital_new_press(DIGITAL_L1)) ballsLeft++;
+  // if(master.get_digital_new_press(DIGITAL_L2)) ballsLeft = 0;
+  if(DIGITAL_L1){
+    autoSort();
+  } else if(master.get_digital(DIGITAL_R1)) {
+    middleSpin(12000); indexerSpin(12000);
+    if(DIGITAL_R2) intakeSpin(12000);
+    // goalSort(alliance); // if(goalDist.get() <= 60 && goalDist.get() != 0{
+  } else{
+    intakeStop();
+    middleStop();
+    indexerStop();
+    // autoSort(alliance);
     stopped = 1;
     ball = 0;
   }
