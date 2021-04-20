@@ -17,9 +17,9 @@ int Chassis::direction_turn;
 
 double Chassis::rate_drive, Chassis::rate_turn, Chassis::correction_rate;
 
-double Chassis::output = 0;
+double Chassis::output = 1;
 
-int Chassis::slew_a = 200, Chassis::slew_x = 0;
+int Chassis::slew_a = 600, Chassis::slew_x = 0;
 
 double Chassis::distTarget;
 bool Chassis::distSensorEnabled = false;
@@ -225,13 +225,15 @@ Chassis& Chassis::drive(double target){
     double power = error*kP_drive + derivative*kD_drive;
 
     if(output < power && !justPID){
-      if(target>0)output = fabs(((-2*slew_a)/pow(M_E, (2.2*slew_x)/slew_a)+1)+slew_a);
-      else{output = ((-2*slew_a)/pow(M_E, (2.2*slew_x)/slew_a)+1)+slew_a;}
+      // if(target>0)output = fabs(((-2*slew_a)/pow(M_E, (2.2*slew_x)/slew_a)+1)+slew_a);
+      // else{output = ((-2*slew_a)/pow(M_E, (2.2*slew_x)/slew_a)+1)+slew_a;}
+      if(target > 0){output += 5;}
+      else{output = output -= 5;}
     }else{
       output = power;
     }
 
-    slew_x+=0.01;
+    slew_x += 0.001;
 
     double LOutput = output;
     double ROutput = output;
@@ -279,8 +281,8 @@ Chassis& Chassis::drive(double target){
     }
     RF.move_velocity(ROutput);
     RB.move_velocity(ROutput);
-    LF.move_velocity(-LOutput);
-    LB.move_velocity(-LOutput);
+    LF.move_velocity(LOutput);
+    LB.move_velocity(LOutput);
     if(autoSort_enabled){
       switch(alliance){
         case 3:{intake.autoSort(REDBALL);} //If skills autosort as if Red Alliance.

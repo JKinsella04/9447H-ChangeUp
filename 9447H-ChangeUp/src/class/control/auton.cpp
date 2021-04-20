@@ -337,8 +337,8 @@ Auton& Auton::runSkills(){
 }
 
 Auton& Auton::runTests(){
-  chassis.withTurnPD(2.5,0.1).justPD(1).withTol(1).turn(270).waitUntilSettled();
-  // chassis.withPD(.3,1).withSlew(150).withHeading(0,1).withTol(10).drive(1500);
+  chassis.withPD(.35,.0001).withSlew(600).withHeading(0,1).withTol(10).drive(4500);
+  // chassis.withTurnPD(2.5,0.1).justPD(1).withTol(1).turn(270).waitUntilSettled();
   // chassis.withPD(.3,0).withSlew(200).withHeading(0,1).withTol(10).drive(3000);
   // intake.justOneBall(0).goalSort(REDBALL, 1000, HOLDBALL);
   // intake.indexerSpin(200);

@@ -41,6 +41,29 @@ void opcontrol() {
   }
 }
 void autonomous() {
+  std::shared_ptr<ChassisController> myChassis =
+  ChassisControllerBuilder()
+    .withMotors({1, 2}, {-3, -4})
+    // Green gearset, 4 in wheel diam, 11.5 in wheel track
+    .withDimensions(AbstractMotor::gearset::blue, {{3.25_in, 11.5_in}, imev5GreenTPR})
+    .build();
+
+std::shared_ptr<AsyncMotionProfileController> profileController =
+  AsyncMotionProfileControllerBuilder()
+    .withLimits({
+      1.0, // Maximum linear velocity of the Chassis in m/s
+      2.0, // Maximum linear acceleration of the Chassis in m/s/s
+      10.0 // Maximum linear jerk of the Chassis in m/s/s/s
+    })
+    .withOutput(myChassis)
+    .buildMotionProfileController();
+    
+  profileController->generatePath({
+  {0_ft, 0_ft, 0_deg},  // Profile starting position, this will normally be (0, 0, 0)
+  {3_ft, 0_ft, 0_deg}}, // The next point in the profile, 3 feet forward
+  "A" // Profile name
+  );
+  profileController->setTarget("A");
   // printf("startPos, firstPos, secondPos, thirdPos %d %d %d %d \n", startPos, firstPos, secondPos, thirdPos);
   // if(alliance == 3){auton.runSkills();} //If Skills was selected it will run skills else it will build the auton.
   // else{auton.run();}
