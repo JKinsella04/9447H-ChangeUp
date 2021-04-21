@@ -28,6 +28,8 @@ int Chassis::tol, Chassis::heading_diff;
 
 double Chassis::prevError = 0;
 
+bool Chassis::oneSide;
+
 Chassis::Chassis() { }
 Chassis::~Chassis() {
   reset();
@@ -152,6 +154,11 @@ void Chassis::calcDir(int current_Pos, int target_Pos){
   }
 }
 
+Chassis& Chassis::justOneSide(bool oneSide_){
+  oneSide = oneSide_;
+  return *this;
+}
+
 Chassis& Chassis::turn(double theta_){
   isSettled = false;
   while(averageheading != theta_){
@@ -176,16 +183,16 @@ Chassis& Chassis::turn(double theta_){
     }
     switch (direction_turn){
       case LEFT: {
-        LF.move_velocity(-output);
-        LB.move_velocity(-output);
         RF.move_velocity(output);
         RB.move_velocity(output);
+        LF.move_velocity(-output);
+        LB.move_velocity(-output);
         break;}
       case RIGHT: {
-        LF.move_velocity(output);
-        LB.move_velocity(output);
         RF.move_velocity(-output);
         RB.move_velocity(-output);
+        LF.move_velocity(output);
+        LB.move_velocity(output);
         break;}
     }
     double tpower = LF.get_target_velocity(); //Speed sent to motors
@@ -249,31 +256,31 @@ Chassis& Chassis::drive(double target){
       switch (drive_theta){
         case 0: {
           if(abs(headDifference) < 180){
-            LOutput -=correction_rate;
-            ROutput +=correction_rate;
+            LOutput -= LOutput * slew_a;
+            ROutput += ROutput * slew_a;;
           }else{
-            LOutput +=correction_rate;
-            ROutput -=correction_rate;
+            LOutput += LOutput * slew_a;
+            ROutput -= ROutput * slew_a;;
           }
           break;
         }
         default:{
           // if(headDifference < drive_theta){
           if(averageheading < drive_theta && averageheading!=0){
-            LOutput +=correction_rate;
-            ROutput -=correction_rate;
+            LOutput += LOutput * slew_a;
+            ROutput -= ROutput * slew_a;;
           }
           // else if(headDifference > drive_theta){
           else if(averageheading > drive_theta && averageheading!=0){
-            LOutput -=correction_rate;
-            ROutput +=correction_rate;
+            LOutput -= LOutput * slew_a;
+            ROutput += ROutput * slew_a;;
           }
           if(headDifference >180 && averageheading ==0){
-            LOutput -=correction_rate;
-            ROutput +=correction_rate;
+            LOutput -= LOutput * slew_a;
+            ROutput += ROutput * slew_a;;
           }else if(headDifference <180 && averageheading ==0){
-            LOutput +=correction_rate;
-            ROutput -=correction_rate;
+            LOutput += LOutput * slew_a;
+            ROutput -= ROutput * slew_a;;
           }
           break;
         }

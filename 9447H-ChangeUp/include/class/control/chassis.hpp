@@ -116,6 +116,13 @@ class Chassis {
     void calcDir(int current_Pos, int target_Pos);
 
     /*
+    Turn with just the left wheels.
+
+    @param oneSide_ bool 1 for only left side 0 for both.
+    */
+    Chassis& justOneSide(bool oneSide_);
+
+    /*
     Turns the robot to a set angle.
 
     Use withTurnSlew & withTurnPD with this.
@@ -159,4 +166,5 @@ class Chassis {
     static int tol;
     static double prevError;
     static int heading_diff;
+    static bool oneSide;
 };

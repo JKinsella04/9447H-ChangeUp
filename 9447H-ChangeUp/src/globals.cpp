@@ -8,7 +8,7 @@ pros::Controller partner(CONTROLLER_PARTNER);
 
 //Intakes
 pros::Motor leftIntake(4, MOTOR_GEARSET_6, 0, MOTOR_ENCODER_ROTATIONS); //1
-pros::Motor middleIntake(19, MOTOR_GEARSET_6, 1, MOTOR_ENCODER_ROTATIONS); //16
+pros::Motor middleIntake(16, MOTOR_GEARSET_6, 1, MOTOR_ENCODER_ROTATIONS); //16
 pros::Motor rightIntake(15, MOTOR_GEARSET_6, 1, MOTOR_ENCODER_ROTATIONS); //16
 
 //Indexer Motors
@@ -44,7 +44,7 @@ pros::Imu M_IMU(8), L_IMU(11), R_IMU(20);
 // pros::ADIEncoder LEncoder('E', 'F', true),
 //                  REncoder('A', 'B', false);
 pros::Rotation LOdometer(12),
-               ROdometer(16);
+               ROdometer(14);
 //Line Sensors
 pros::ADIAnalogIn topLight('H');
 
