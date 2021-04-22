@@ -62,11 +62,11 @@ void Intake::middleStop(){
 void Intake::runIntakes(){ // Runs the intakes from inputs of R1,R2,L1,L2 on both partner and master controller..
   // if(master.get_digital_new_press(DIGITAL_L1)) ballsLeft++;
   // if(master.get_digital_new_press(DIGITAL_L2)) ballsLeft = 0;
+  if(master.get_digital(DIGITAL_R2)) intakeSpin(12000);
   if(master.get_digital(DIGITAL_L1)){
     autoSort();
   } else if(master.get_digital(DIGITAL_R1)) {
     middleSpin(12000); indexerSpin(12000);
-    if(master.get_digital(DIGITAL_R2)) intakeSpin(12000);
     // goalSort(alliance); // if(goalDist.get() <= 60 && goalDist.get() != 0{
   } else if(master.get_digital(DIGITAL_L2)){
     intakeSpin(-12000); middleSpin(-12000); indexerSpin(-12000);
@@ -108,7 +108,12 @@ void Intake::iiLock(){
 void Intake::deploy(){
   iiInit();
   indexerSpin(12000);
+  middleSpin(12000);
   intakeSpin(12000);
+  pros::delay(100);
+  indexerStop();
+  middleStop();
+  intakeStop();
 }
 
 Intake& Intake::justOneBall(bool oneBall_){
@@ -121,12 +126,7 @@ Intake& Intake::justOneBall(bool oneBall_){
 void Intake::autoSort(int allianceColor){
   switch (allianceColor){
     case REDBALL:{
-      if( botOptical.get_proximity() >= 200 && botOptical.get_hue() >= blueHue) {
-        intakeSpin(-12000); middleSpin(-3500); indexerSpin(-3500);
-      } else {
-        intakeSpin(8000);
-      }
-
+      intakeSpin(8000);
       if( ballIndexer.get() <= 100 && ballIndexer.get() != 0 ){ middleStop(); indexerStop(); pos1 = 1; }
       else { middleSpin(3500); indexerSpin(3500); pos1 = 0; }
       if(pos1 && botOptical.get_hue() <= redHue) {
@@ -140,16 +140,15 @@ void Intake::autoSort(int allianceColor){
       break;
     }
     case BLUEBALL:{
-      intakeSpin(12000);
-      middleSpin(12000);
-      indexerSpin(12000);
-
-      if(topOptical.get_hue() >= blueHue) indexerStop(); //Indexing
-      if(botOptical.get_hue() >= blueHue) middleStop();
+      intakeSpin(8000);
+      if( ballIndexer.get() <= 100 && ballIndexer.get() != 0 ){ middleStop(); indexerStop(); pos1 = 1; }
+      else { middleSpin(3500); indexerSpin(3500); pos1 = 0; }
+      if(pos1 && botOptical.get_hue() <= redHue) {
+        indexerSpin(6000); middleSpin(6000);
+        if( topOptical.get_hue() <= redHue ) { indexerStop(); middleStop(); }
+      }
 
       printf("TopOptical: %F BotOptical: %F\n", topOptical.get_hue(), botOptical.get_hue()); //debug code
-
-      if(botOptical.get_hue() >= blueHue)middleSpin(-12000); intakeSpin(-12000); //If blue ball reverse middle rollers and intakes.
 
       pros::delay(15);
       break;
