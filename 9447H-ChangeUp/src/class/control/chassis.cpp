@@ -19,7 +19,7 @@ double Chassis::rate_drive, Chassis::rate_turn, Chassis::correction_rate;
 
 double Chassis::output = 1;
 
-int Chassis::slew_a = 600, Chassis::slew_x = 0;
+int Chassis::slew_a = 600, Chassis::slew_x = 1;
 
 double Chassis::distTarget;
 bool Chassis::distSensorEnabled = false;
@@ -232,10 +232,10 @@ Chassis& Chassis::drive(double target){
     double power = error*kP_drive + derivative*kD_drive;
 
     if(output < power && !justPID){
-      // if(target>0)output = fabs(((-2*slew_a)/pow(M_E, (2.2*slew_x)/slew_a)+1)+slew_a);
-      // else{output = ((-2*slew_a)/pow(M_E, (2.2*slew_x)/slew_a)+1)+slew_a;}
-      if(target > 0){output += 5;}
-      else{output = output -= 5;}
+      if(target>0)output = fabs(((-2*slew_a)/pow(M_E, (2.2*slew_x)/slew_a)+1)+slew_a);
+      else{output = ((-2*slew_a)/pow(M_E, (2.2*slew_x)/slew_a)+1)+slew_a;}
+      // if(target > 0){output += 5;}
+      // else{output = output -= 5;}
     }else{
       output = power;
     }
@@ -256,31 +256,31 @@ Chassis& Chassis::drive(double target){
       switch (drive_theta){
         case 0: {
           if(abs(headDifference) < 180){
-            LOutput -= LOutput * slew_a;
-            ROutput += ROutput * slew_a;;
+            LOutput -= LOutput * correction_rate;
+            ROutput += ROutput * correction_rate;
           }else{
-            LOutput += LOutput * slew_a;
-            ROutput -= ROutput * slew_a;;
+            LOutput += LOutput * correction_rate;
+            ROutput -= ROutput * correction_rate;
           }
           break;
         }
         default:{
           // if(headDifference < drive_theta){
           if(averageheading < drive_theta && averageheading!=0){
-            LOutput += LOutput * slew_a;
-            ROutput -= ROutput * slew_a;;
+            LOutput += LOutput * correction_rate;
+            ROutput -= ROutput * correction_rate;
           }
           // else if(headDifference > drive_theta){
           else if(averageheading > drive_theta && averageheading!=0){
-            LOutput -= LOutput * slew_a;
-            ROutput += ROutput * slew_a;;
+            LOutput -= LOutput * correction_rate;
+            ROutput += ROutput * correction_rate;
           }
           if(headDifference >180 && averageheading ==0){
-            LOutput -= LOutput * slew_a;
-            ROutput += ROutput * slew_a;;
+            LOutput -= LOutput * correction_rate;
+            ROutput += ROutput * correction_rate;
           }else if(headDifference <180 && averageheading ==0){
-            LOutput += LOutput * slew_a;
-            ROutput -= ROutput * slew_a;;
+            LOutput += LOutput * correction_rate;
+            ROutput -= ROutput * correction_rate;
           }
           break;
         }
@@ -343,10 +343,10 @@ return *this;
 Chassis& Chassis::driveDistAway(double dist){
   isSettled = 0;
   while(!isSettled){
-    LF.move_velocity(50);
-    LB.move_velocity(50);
-    RF.move_velocity(-50);
-    RB.move_velocity(-50);
+    LF.move_velocity(-150);
+    LB.move_velocity(-150);
+    RF.move_velocity(-150);
+    RB.move_velocity(-150);
     if(goalDist.get() >= dist-5){
       LF.move(0);
       LB.move(0);

@@ -60,24 +60,45 @@ void Intake::middleStop(){
 }
 
 void Intake::runIntakes(){ // Runs the intakes from inputs of R1,R2,L1,L2 on both partner and master controller..
+  if(master.get_digital(DIGITAL_L1)){
+    intakeSpin(12000);
+  }else if(master.get_digital(DIGITAL_L2)){
+    intakeSpin(-12000);
+  }else{
+    intakeStop();
+  }
+  if(master.get_digital(DIGITAL_R1)){
+    indexerSpin(12000);
+    middleSpin(12000);
+  }else if(master.get_digital(DIGITAL_R2)){
+      indexerSpin(-12000);
+      middleSpin(-12000);
+  } else{
+    indexerStop();
+    middleStop();
+  }
+
   // if(master.get_digital_new_press(DIGITAL_L1)) ballsLeft++;
   // if(master.get_digital_new_press(DIGITAL_L2)) ballsLeft = 0;
-  if(master.get_digital(DIGITAL_R2)) intakeSpin(12000);
-  if(master.get_digital(DIGITAL_L1)){
-    autoSort();
-  } else if(master.get_digital(DIGITAL_R1)) {
-    middleSpin(12000); indexerSpin(12000);
-    // goalSort(alliance); // if(goalDist.get() <= 60 && goalDist.get() != 0{
-  } else if(master.get_digital(DIGITAL_L2)){
-    intakeSpin(-12000); middleSpin(-12000); indexerSpin(-12000);
-  }  else{
-    intakeStop();
-    middleStop();
-    indexerStop();
-    // autoSort(alliance);
-    stopped = 1;
-    ball = 0;
-  }
+  // if(master.get_digital(DIGITAL_R2)){ intakeSpin(12000);}
+  // else if(master.get_digital(DIGITAL_L1)){
+  //   autoSort();
+  // }
+  // if(master.get_digital(DIGITAL_R1)) {
+  //   middleSpin(12000); indexerSpin(12000);
+  //   // goalSort(alliance); // if(goalDist.get() <= 60 && goalDist.get() != 0{
+  // } else if(master.get_digital(DIGITAL_L2)){
+  //   intakeSpin(-12000); middleSpin(-12000); indexerSpin(-12000);
+  // }
+  // if(!master.get_digital(DIGITAL_R2) && !master.get_digital(DIGITAL_L1) && !master.get_digital(DIGITAL_L2)){
+  //   intakeStop();
+  // }if(!master.get_digital(DIGITAL_R1) && !master.get_digital(DIGITAL_L1) && !master.get_digital(DIGITAL_L2)){
+  //   middleStop();
+  //   indexerStop();
+  //   // autoSort(alliance);
+  //   stopped = 1;
+  //   ball = 0;
+  // }
   // if(master.get_digital(DIGITAL_R1)) {goalSort(alliance);}
   // else if (master.get_digital(DIGITAL_L1)){ indexerSpin(12000); middleStop(); intakeStop();}
   // else if (master.get_digital(DIGITAL_L2)){ intakeSpin(12000); middleSpin(12000); indexerStop(); }
@@ -109,7 +130,7 @@ void Intake::deploy(){
   iiInit();
   indexerSpin(12000);
   middleSpin(12000);
-  intakeSpin(12000);
+  intakeSpin(-12000);
   pros::delay(100);
   indexerStop();
   middleStop();
