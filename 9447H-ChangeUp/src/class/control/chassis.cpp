@@ -30,6 +30,8 @@ double Chassis::prevError = 0;
 
 bool Chassis::oneSide;
 
+double Chassis::turnPrevError = 0;
+
 Chassis::Chassis() { }
 Chassis::~Chassis() {
   reset();
@@ -358,4 +360,113 @@ Chassis& Chassis::driveDistAway(double dist){
 
   }
   return *this;
+}
+
+Chassis& Chassis::driveCurve(double target, double turn_kP, double turn_kD){
+  odomReset();
+  double leftvalue = LOdometer.get_position(); //LEncoder.get_value();
+  double rightvalue =ROdometer.get_position();  //REncoder.get_value();
+  printf("Left, Right %f %f  \n", leftvalue, rightvalue);
+  isSettled = false;
+  // double averagePos = (REncoder.get_value() + LEncoder.get_value())/2;
+  while(1 == 1) {
+    leftvalue = (LOdometer.get_position())/100; //LEncoder.get_value();
+    rightvalue =(ROdometer.get_position())/100;  //REncoder.get_value();
+    double averagePos = (leftvalue+rightvalue)/2;//(REncoder.get_value() + LEncoder.get_value())/2;
+    double error = target - averagePos;
+    double derivative = error - prevError;
+    prevError = error;
+    double power = error*kP_drive + derivative*kD_drive;
+
+    if(output < power && !justPID){
+      if(target>0)output = fabs(((-2*slew_a)/pow(M_E, (2.2*slew_x)/slew_a)+1)+slew_a);
+      else{output = ((-2*slew_a)/pow(M_E, (2.2*slew_x)/slew_a)+1)+slew_a;}
+      // if(target > 0){output += 5;}
+      // else{output = output -= 5;}
+    }else{
+      output = power;
+    }
+
+    slew_x += 0.001;
+    double LOutput = output;
+    double ROutput = output;
+    leftheading = L_IMU.get_heading();
+    middleheading = M_IMU.get_heading();
+    rightheading = R_IMU.get_heading();
+    averageheading = (leftheading + middleheading + rightheading)/3;
+    if(leftheading > 355 || rightheading > 355 || middleheading > 355){
+      averageheading=0;
+    }
+    if( averageheading >= fabs(drive_theta + 5)){ //Corrects the robot if it is straying from the wanted angle.
+      calcDir(averageheading, drive_theta);
+      double turnError = drive_theta - averageheading;
+      double derivative = turnError - turnPrevError;
+      turnPrevError = error;
+      power = error*turn_kP + derivative*turn_kD;
+      switch(direction_turn){
+        case LEFT:{
+            LOutput += power;
+            ROutput -= power;
+            break;
+        }
+        case RIGHT:{
+            LOutput -= power;
+            ROutput += power;
+            break;
+        }
+      }
+    }
+
+    RF.move_velocity(ROutput);
+    RB.move_velocity(ROutput);
+    LF.move_velocity(LOutput);
+    LB.move_velocity(LOutput);
+    if(autoSort_enabled){
+      switch(alliance){
+        case 3:{intake.autoSort(REDBALL);} //If skills autosort as if Red Alliance.
+        default:{intake.autoSort(alliance);}
+      }
+    }
+    double leftvalue = LOdometer.get_position(); //LEncoder.get_value();
+    double rightvalue = ROdometer.get_position(); //REncoder.get_value();
+    printf("Error, AveragePos, LOutput, ROutput,Left, Right goalDist %f %f %f %f %f %f %f\n", error, averagePos, LOutput, ROutput,leftvalue, rightvalue,output);
+    pros::delay(10);
+    if(averagePos < target+tol && averagePos > target-tol) {
+      LF.move(0);
+      LB.move(0);
+      RF.move(0);
+      RB.move(0);
+      odomReset();
+      justPID = false;
+      if(autoSort_enabled){
+      intake.intakeStop();
+      intake.middleStop();
+      intake.indexerStop();
+      autoSort_enabled = false;
+      distSensorEnabled=false;
+      }
+      isSettled = true;
+      break;
+    }
+    if(distSensorEnabled){
+      if(goalDist.get() < distTarget && goalDist.get() != 0){
+        distSensorEnabled=false;
+        LF.move(0);
+        LB.move(0);
+        RF.move(0);
+        RB.move(0);
+        odomReset();
+        justPID = false;
+        if(autoSort_enabled){
+        intake.intakeStop();
+        intake.middleStop();
+        intake.indexerStop();
+        autoSort_enabled = false;
+        }
+        isSettled = true;
+        break;
+      }
+    }
+  }
+return *this;
 }

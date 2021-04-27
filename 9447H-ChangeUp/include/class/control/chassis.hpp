@@ -148,6 +148,9 @@ class Chassis {
     @param dist target distance.
     */
     Chassis& driveDistAway(double dist);
+
+    Chassis& driveCurve(double target, double turn_kP, double turn_kD);
+
   private:
     static bool isSettled, autoSort_enabled;
 
@@ -167,4 +170,5 @@ class Chassis {
     static double prevError;
     static int heading_diff;
     static bool oneSide;
+    static double turnPrevError;
 };

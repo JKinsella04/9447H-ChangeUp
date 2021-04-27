@@ -345,6 +345,8 @@ Auton& Auton::runSkills(){
 }
 
 Auton& Auton::runTests(){
+  chassis.withTurnPD(4,2).justPD(1).withTol(1).turn(280).waitUntilSettled();
+  chassis.withPD(.3,1).withSlew(175).withHeading(145,.25).withTol(10).driveCurve(-850, .3, .001);
   // motionProfile.calculate(10, 1);
   // motionProfile.drive();
   // intake.deploy();
