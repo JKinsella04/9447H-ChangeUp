@@ -320,7 +320,7 @@ Chassis& Chassis::drive(double target){
       break;
     }
     if(distSensorEnabled){
-      if(goalDist.get() < distTarget && goalDist.get() != 0){
+      if(ballIndexer.get() < distTarget &&  ballIndexer.get() != 0){
         distSensorEnabled=false;
         LF.move(0);
         LB.move(0);
@@ -337,6 +337,23 @@ Chassis& Chassis::drive(double target){
         isSettled = true;
         break;
       }
+      else if(goalDist.get() < distTarget && goalDist.get() != 0){
+          distSensorEnabled=false;
+          LF.move(0);
+          LB.move(0);
+          RF.move(0);
+          RB.move(0);
+          odomReset();
+          justPID = false;
+          if(autoSort_enabled){
+          intake.intakeStop();
+          intake.middleStop();
+          intake.indexerStop();
+          autoSort_enabled = false;
+          }
+          isSettled = true;
+          break;
+        }
     }
   }
 return *this;
@@ -397,7 +414,8 @@ Chassis& Chassis::driveCurve(double target, double turn_kP, double turn_kD){
     if(leftheading > 355 || rightheading > 355 || middleheading > 355){
       averageheading=0;
     }
-    if( averageheading >= fabs(drive_theta + 5)){ //Corrects the robot if it is straying from the wanted angle.
+    double heading_error = drive_theta - averageheading;
+    if(fabs(heading_error) >= 3){ //Corrects the robot if it is straying from the wanted angle.
       calcDir(averageheading, drive_theta);
       double turnError = drive_theta - averageheading;
       double derivative = turnError - turnPrevError;

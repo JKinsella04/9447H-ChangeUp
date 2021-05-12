@@ -9,7 +9,7 @@ pros::Controller partner(CONTROLLER_PARTNER);
 //Intakes
 pros::Motor leftIntake(4, MOTOR_GEARSET_6, 0, MOTOR_ENCODER_ROTATIONS); //1
 pros::Motor middleIntake(16, MOTOR_GEARSET_6, 1, MOTOR_ENCODER_ROTATIONS); //16
-pros::Motor rightIntake(15, MOTOR_GEARSET_6, 1, MOTOR_ENCODER_ROTATIONS); //16
+pros::Motor rightIntake(18, MOTOR_GEARSET_6, 1, MOTOR_ENCODER_ROTATIONS); //16
 
 //Indexer Motors
 pros::Motor indexer(1, MOTOR_GEARSET_6, 0, MOTOR_ENCODER_ROTATIONS); //1
@@ -30,7 +30,7 @@ pros::Optical topOptical(2), botOptical(10);
 /*
 Distance Sensor
 */
-pros::Distance goalDist(3), ballIndexer(7);
+pros::Distance goalDist(3), ballIndexer(5);
 
 /*
 Inertial sensor

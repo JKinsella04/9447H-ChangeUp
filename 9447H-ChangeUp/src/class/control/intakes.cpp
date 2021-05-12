@@ -62,6 +62,10 @@ void Intake::middleStop(){
 void Intake::runIntakes(){ // Runs the intakes from inputs of R1,R2,L1,L2 on both partner and master controller..
   if(master.get_digital(DIGITAL_L1)){
     intakeSpin(12000);
+    if(!master.get_digital(DIGITAL_R1) && !master.get_digital(DIGITAL_R2)){
+    middleSpinVelocity(500);
+    indexerSpin(500);
+    }
   }else if(master.get_digital(DIGITAL_L2)){
     intakeSpin(-12000);
   }else{
@@ -73,7 +77,8 @@ void Intake::runIntakes(){ // Runs the intakes from inputs of R1,R2,L1,L2 on bot
   }else if(master.get_digital(DIGITAL_R2)){
       indexerSpin(-12000);
       middleSpin(-12000);
-  } else{
+  }
+  if( !master.get_digital(DIGITAL_R1) && !master.get_digital(DIGITAL_L1) && !master.get_digital(DIGITAL_R2)){
     indexerStop();
     middleStop();
   }
