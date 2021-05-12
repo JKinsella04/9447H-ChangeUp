@@ -12,12 +12,17 @@ Auton auton;
 static Intake intake;
 static Slew slew;
 
+/*
+Task Creation for Driver Control
+*/
+
 
 void initialize() {
   display.setup();
   intake.iiInit();
   if(isSetup){display.destroy();}
 }
+
 
 void disabled(){}
 
@@ -33,10 +38,14 @@ void competition_initialize() {
 }
 
 void opcontrol() {
+  pros::Task intakeTask(Intake::runIntakes);
+  intake.intakeLock();
   while (true) {
     printf("Left, Right: %d %d\n", LOdometer.get_position(), ROdometer.get_position());
     slew.tankDrive(900, 500, 900);
-    intake.runIntakes();
+    // intake.runIntakes();
+    // intakeTask.set_priority(TASK_PRIORITY_DEFAULT+1);
+    // intakeTask.
     pros::delay(15);
   }
 }

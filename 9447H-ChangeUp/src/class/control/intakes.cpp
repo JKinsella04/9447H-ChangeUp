@@ -25,6 +25,16 @@ void Intake::intakeStop(){
   rightIntake.move_voltage(0);
 }
 
+void Intake::rollerSpin(int speed){
+  indexer.move_voltage(speed);
+  middleIntake.move_voltage(speed);
+}
+
+void Intake::rollerStop(){
+  indexer.move_voltage(0);
+  middleIntake.move_voltage(0);
+}
+
 void Intake::indexerSpin(int speed){
   indexer.move_voltage(speed);
 }
@@ -60,11 +70,16 @@ void Intake::middleStop(){
 }
 
 void Intake::runIntakes(){ // Runs the intakes from inputs of R1,R2,L1,L2 on both partner and master controller..
+  // if(master.get_digital(DIGITAL_L2)){
+  //   ball
+  // }
+
+  while(1){
   if(master.get_digital(DIGITAL_L1)){
-    intakeSpin(12000);
+    // intakeSpin(12000);
+    autoSort();
     if(!master.get_digital(DIGITAL_R1) && !master.get_digital(DIGITAL_R2)){
-    middleSpinVelocity(500);
-    indexerSpin(500);
+    rollerSpin(500);
     }
   }else if(master.get_digital(DIGITAL_L2)){
     intakeSpin(-12000);
@@ -72,73 +87,56 @@ void Intake::runIntakes(){ // Runs the intakes from inputs of R1,R2,L1,L2 on bot
     intakeStop();
   }
   if(master.get_digital(DIGITAL_R1)){
-    indexerSpin(12000);
-    middleSpin(12000);
+    rollerSpin(12000);
   }else if(master.get_digital(DIGITAL_R2)){
-      indexerSpin(-12000);
-      middleSpin(-12000);
+    rollerSpin(-12000);
   }
   if( !master.get_digital(DIGITAL_R1) && !master.get_digital(DIGITAL_L1) && !master.get_digital(DIGITAL_R2)){
-    indexerStop();
-    middleStop();
+    rollerStop();
   }
-
-  // if(master.get_digital_new_press(DIGITAL_L1)) ballsLeft++;
-  // if(master.get_digital_new_press(DIGITAL_L2)) ballsLeft = 0;
-  // if(master.get_digital(DIGITAL_R2)){ intakeSpin(12000);}
-  // else if(master.get_digital(DIGITAL_L1)){
+}
+  // while(1){
+  // if(master.get_digital(DIGITAL_L1)){
   //   autoSort();
+  // }else if(master.get_digital(DIGITAL_R1)){
+  //   // intakeSpin(12000);
+  //   // rollerSpin(12000);
+  //   // pros::delay(150);
+  //   goalSort(alliance);
   // }
-  // if(master.get_digital(DIGITAL_R1)) {
-  //   middleSpin(12000); indexerSpin(12000);
-  //   // goalSort(alliance); // if(goalDist.get() <= 60 && goalDist.get() != 0{
-  // } else if(master.get_digital(DIGITAL_L2)){
-  //   intakeSpin(-12000); middleSpin(-12000); indexerSpin(-12000);
-  // }
-  // if(!master.get_digital(DIGITAL_R2) && !master.get_digital(DIGITAL_L1) && !master.get_digital(DIGITAL_L2)){
+  // else{
   //   intakeStop();
-  // }if(!master.get_digital(DIGITAL_R1) && !master.get_digital(DIGITAL_L1) && !master.get_digital(DIGITAL_L2)){
-  //   middleStop();
-  //   indexerStop();
-  //   // autoSort(alliance);
+  //   rollerStop();
   //   stopped = 1;
   //   ball = 0;
   // }
-  // if(master.get_digital(DIGITAL_R1)) {goalSort(alliance);}
-  // else if (master.get_digital(DIGITAL_L1)){ indexerSpin(12000); middleStop(); intakeStop();}
-  // else if (master.get_digital(DIGITAL_L2)){ intakeSpin(12000); middleSpin(12000); indexerStop(); }
-  // else { intakeStop(); middleStop(); indexerStop();}
-
+  // pros::delay(5);
+  // }
 }
 
 void Intake::iiInit(){
   topOptical.set_led_pwm(ledLevel);
   botOptical.set_led_pwm(ledLevel);
-  // leftIntake.set_brake_mode(MOTOR_BRAKE_BRAKE);
-  // middleIntake.set_brake_mode(MOTOR_BRAKE_BRAKE);
-  // rightIntake.set_brake_mode(MOTOR_BRAKE_BRAKE);
-  // indexer.set_brake_mode(MOTOR_BRAKE_BRAKE);
   leftIntake.tare_position();
   rightIntake.tare_position();
   middleIntake.tare_position();
   indexer.tare_position();
+  intakeLock();
 }
 
-void Intake::iiLock(){
-  leftIntake.set_brake_mode(MOTOR_BRAKE_HOLD);
-  middleIntake.set_brake_mode(MOTOR_BRAKE_HOLD);
-  rightIntake.set_brake_mode(MOTOR_BRAKE_HOLD);
-  indexer.set_brake_mode(MOTOR_BRAKE_HOLD);
+void Intake::intakeLock(){
+  leftIntake.set_brake_mode(MOTOR_BRAKE_BRAKE);
+  middleIntake.set_brake_mode(MOTOR_BRAKE_BRAKE);
+  rightIntake.set_brake_mode(MOTOR_BRAKE_BRAKE);
+  indexer.set_brake_mode(MOTOR_BRAKE_BRAKE);
 }
 
 void Intake::deploy(){
   iiInit();
-  indexerSpin(12000);
-  middleSpin(12000);
+  rollerSpin(12000);
   intakeSpin(-12000);
   pros::delay(100);
-  indexerStop();
-  middleStop();
+  rollerStop();
   intakeStop();
 }
 
@@ -152,30 +150,28 @@ Intake& Intake::justOneBall(bool oneBall_){
 void Intake::autoSort(int allianceColor){
   switch (allianceColor){
     case REDBALL:{
-      intakeSpin(8000);
-      if( ballIndexer.get() <= 100 && ballIndexer.get() != 0 ){ middleStop(); indexerStop(); pos1 = 1; }
-      else { middleSpin(3500); indexerSpin(3500); pos1 = 0; }
-      if(pos1 && botOptical.get_hue() <= redHue) {
-        indexerSpin(6000); middleSpin(6000);
-        if( topOptical.get_hue() <= redHue ) { indexerStop(); middleStop(); }
+      intakeSpin(12000);
+      rollerSpin(9000);
+      if(topOptical.get_proximity() >= 50){
+        rollerStop();
+        if(botOptical.get_proximity() >= 50){
+          intakeStop();
+        }
       }
-
       printf("TopOptical: %F BotOptical: %F\n", topOptical.get_hue(), botOptical.get_hue()); //debug code
-
       pros::delay(15);
       break;
     }
     case BLUEBALL:{
-      intakeSpin(8000);
-      if( ballIndexer.get() <= 100 && ballIndexer.get() != 0 ){ middleStop(); indexerStop(); pos1 = 1; }
-      else { middleSpin(3500); indexerSpin(3500); pos1 = 0; }
-      if(pos1 && botOptical.get_hue() <= redHue) {
-        indexerSpin(6000); middleSpin(6000);
-        if( topOptical.get_hue() <= redHue ) { indexerStop(); middleStop(); }
+      intakeSpin(12000);
+      rollerSpin(10000);
+      if(topOptical.get_proximity() >= 30){
+        rollerStop();
+        if(botOptical.get_proximity() >= 30){
+          intakeStop();
+        }
       }
-
       printf("TopOptical: %F BotOptical: %F\n", topOptical.get_hue(), botOptical.get_hue()); //debug code
-
       pros::delay(15);
       break;
     }
@@ -185,35 +181,47 @@ void Intake::autoSort(int allianceColor){
 void Intake::goalSort(int allianceColor){
   switch (allianceColor){
     case REDBALL:{
-      if(stopped){
+      // intakeSpin(12000);
+      // rollerSpin(12000);
+      // pros::delay(250);
+      if(topOptical.get_proximity() >= 30){
+        rollerStop();
+        pros::delay(500);
+      }
         intakeSpin(12000);
-        middleSpin(12000);
-        indexerSpin(12000);
-        stopped = 0;
-      }
-      if(botOptical.get_hue() >= blueHue && botOptical.get_proximity() >= 240 && botOptical.get_hue() <= 300){
-        middleSpin(8000); indexerSpin(8000);
-        ball = 1;
-      }
+        rollerSpin(12000);
 
-      if(ball) { if(topOptical.get_hue() >= blueHue && topOptical.get_proximity() >= 150 && topOptical.get_hue() <= 300) { middleStop(); indexerStop(); intakeSpin(-12000); } }
+      // if(stopped){
+      //   intakeSpin(12000);
+      //   rollerSpin(12000);
+      //   indexerSpin(12000);
+      //   stopped = 0;
+      // }
+      // if(botOptical.get_hue() >= blueHue && botOptical.get_proximity() >= 240 ){
+      //   rollerSpin(8000);
+      //   ball = 1;
+      // }
+      //
+      // if(ball) { if(topOptical.get_hue() >= blueHue && topOptical.get_proximity() >= 150) { rollerStop(); intakeSpin(-12000); } }
 
       pros::delay(1);
       break;
     }
     case BLUEBALL:{
-      if(ballsLeft > 0)intakeSpin(12000);
-      if(ballsLeft == 0)intakeSpin(-12000);
-      indexerSpin(12000);
-      if(!oneBall)middleSpin(12000);
-
-      if(topOptical.get_hue() <= redHue){indexerStop(); ballsLeft-=1;}
-      if(ballsLeft == 1){ //Only stop balls at the bottom if only needs to take one ball or if the top is already stopped.
-        if(botOptical.get_hue() >= redHue){middleStop(); intakeSpin(-12000); ballsLeft -=1;}
+      if(stopped){
+        rollerSpin(12000);
+        stopped = 0;
+      }
+      if(botOptical.get_hue() <= redHue && botOptical.get_proximity() >= 240){
+        rollerSpin(8000);
+        ball = 1;
       }
 
-      printf("TopOptical: %F BotOptical: %F\n", topOptical.get_hue(), botOptical.get_hue()); //debug code
+      if(ball) { if(topOptical.get_hue() <= redHue && topOptical.get_proximity() >= 150) { rollerStop(); intakeSpin(-12000); } }
+
+      pros::delay(1);
       break;
+
     }
   }
 }
@@ -226,16 +234,14 @@ void Intake::goalSort(int allianceColor, int time, bool state){
     }
   }
   intakeStop();
-  middleStop();
-  indexerStop();
+  rollerStop();
   oneBall = 0;
   ballsLeft = 0;
 }
 
 void Intake::dropBall(){
   intakeSpin(-12000);
-  middleSpin(-12000);
-  indexerSpin(-12000);
+  rollerSpin(-12000);
 }
 
 void Intake::calibrate(int resting_value){

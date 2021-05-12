@@ -15,7 +15,7 @@ class Intake{
 
     @param speed RPM
     */
-    void intakeSpin(int speed);
+    static void intakeSpin(int speed);
 
     /*
     Spins intakes for the given amount of encoder counts in RPM.
@@ -35,7 +35,17 @@ class Intake{
     /*
     Sets intakes to 0 RPM.
     */
-    void intakeStop();
+    static void intakeStop();
+
+    /*
+    Spins the rolelrs. For Ohio style rollers (All connected)
+    */
+    static void rollerSpin(int speed);
+
+    /*
+    Stops the rollers. For Ohio style rollers (ALL connected)
+    */
+    static void rollerStop();
 
     /*
     Spins indexer at given voltage with the range of -12,000-12,000.
@@ -94,18 +104,17 @@ class Intake{
     /*
     Runs the intakes for driver control.
     */
-    void runIntakes();
+    static void runIntakes();
 
     /*
     Initializes both the intakes and the indexers.
-    Default moode is coast. To make them hold use iiLock.
     */
     void iiInit();
 
     /*
     Sets both intakes and indexers to Hold
     */
-    void iiLock();
+    void intakeLock();
 
     /*
     Deploys the hood and intakes. Run at the beginning of driver control and pre-auton
@@ -125,7 +134,7 @@ class Intake{
 
     @param allianceColor Color of user's alliance.
     */
-    void autoSort(int allianceColor = alliance);
+    static void autoSort(int allianceColor = alliance);
 
     /*
     Sorts out the enemy ball based on color.
@@ -133,7 +142,7 @@ class Intake{
 
     @param allianceColor Color of user's alliance.
     */
-    void goalSort(int allianceColor);
+    static void goalSort(int allianceColor);
 
     /*
     Runs the goalSort for an amount of time.
