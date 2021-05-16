@@ -77,7 +77,9 @@ void Intake::runIntakes(){ // Runs the intakes from inputs of R1,R2,L1,L2 on bot
   while(1){
   if(master.get_digital(DIGITAL_L1)){
     // intakeSpin(12000);
-    autoSort();
+    if(master.get_digital(DIGITAL_R1)){
+      intakeSpin(12000);}
+      else{autoSort();}
     if(!master.get_digital(DIGITAL_R1) && !master.get_digital(DIGITAL_R2)){
     rollerSpin(500);
     }
