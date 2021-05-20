@@ -23,6 +23,8 @@ void Intake::intakeSpinVelocity(int velocity){
 void Intake::intakeStop(){
   leftIntake.move_voltage(0);
   rightIntake.move_voltage(0);
+  stopped = 1;
+  ball = 0;
 }
 
 void Intake::rollerSpin(int speed){
@@ -87,6 +89,7 @@ void Intake::runIntakes(){ // Runs the intakes from inputs of R1,R2,L1,L2 on bot
     intakeSpin(-12000);
   }else{
     intakeStop();
+    stopped = 1;
   }
   if(master.get_digital(DIGITAL_R1)){
     rollerSpin(12000);
@@ -156,9 +159,9 @@ void Intake::autoSort(int allianceColor){
       rollerSpin(9000);
       if(topOptical.get_proximity() >= 50){
         rollerStop();
-        if(botOptical.get_proximity() >= 50){
-          intakeStop();
-        }
+        // if(botOptical.get_proximity() >= 50){
+        //   intakeStop();
+        // }
       }
       printf("TopOptical: %F BotOptical: %F\n", topOptical.get_hue(), botOptical.get_hue()); //debug code
       pros::delay(15);
@@ -183,47 +186,35 @@ void Intake::autoSort(int allianceColor){
 void Intake::goalSort(int allianceColor){
   switch (allianceColor){
     case REDBALL:{
-      // intakeSpin(12000);
-      // rollerSpin(12000);
-      // pros::delay(250);
-      if(topOptical.get_proximity() >= 30){
-        rollerStop();
-        pros::delay(500);
-      }
-        intakeSpin(12000);
+      if(ball){rollerStop(); intakeSpin(-120000); break;}
+      if(stopped){
         rollerSpin(12000);
-
-      // if(stopped){
-      //   intakeSpin(12000);
-      //   rollerSpin(12000);
-      //   indexerSpin(12000);
-      //   stopped = 0;
-      // }
-      // if(botOptical.get_hue() >= blueHue && botOptical.get_proximity() >= 240 ){
-      //   rollerSpin(8000);
-      //   ball = 1;
-      // }
-      //
-      // if(ball) { if(topOptical.get_hue() >= blueHue && topOptical.get_proximity() >= 150) { rollerStop(); intakeSpin(-12000); } }
-
-      pros::delay(1);
+        pros::delay(500);
+        intakeSpin(12000);
+        rollerSpin(6000);
+        stopped = 0;
+      }
+      if(botOptical.get_hue() >=  blueHue){
+        rollerStop();
+        intakeSpin(-120000);
+        ball = 1;
+      }
+      printf("TopOptical: %F BotOptical: %F\n", topOptical.get_hue(), botOptical.get_hue()); //debug code
+      pros::delay(15);
       break;
     }
     case BLUEBALL:{
-      if(stopped){
-        rollerSpin(12000);
-        stopped = 0;
+      intakeSpin(12000);
+      rollerSpin(9000);
+      if(topOptical.get_hue() <= redHue){
+        rollerStop();
+        // if(botOptical.get_proximity() >= 50){
+        //   intakeStop();
+        // }
       }
-      if(botOptical.get_hue() <= redHue && botOptical.get_proximity() >= 240){
-        rollerSpin(8000);
-        ball = 1;
-      }
-
-      if(ball) { if(topOptical.get_hue() <= redHue && topOptical.get_proximity() >= 150) { rollerStop(); intakeSpin(-12000); } }
-
-      pros::delay(1);
+      printf("TopOptical: %F BotOptical: %F\n", topOptical.get_hue(), botOptical.get_hue()); //debug code
+      pros::delay(15);
       break;
-
     }
   }
 }

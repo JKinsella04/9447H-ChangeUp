@@ -163,7 +163,7 @@ Auton& Auton::run(){
           // chassis.withTurnPD(4,2).justPD(1).withTurnDirection(RIGHT).withTol(1).turn(215).waitUntilSettled();
           intake.dropBall();
           intake.intakeSpin(-12000);
-          chassis.withPD(1.75,1).withSlew(350).withHeading(325,.1).withTol(100).driveCurve(-3500,.1,.001);
+          chassis.withPD(1.75,1).withSlew(350).withHeading(325,.1).withTol(100).driveCurve(-3500,.2,.075);
           chassis.withTurnPD(4,2).justPD(1).withTol(1).turn(190).waitUntilSettled();
           // pros::delay(200);
           chassis.withPD(1,1).withSlew(600).withHeading(190,.1).autoSort(1).withDist(60).withTol(10).drive(1800);
@@ -197,8 +197,8 @@ Auton& Auton::run(){
           // chassis.withTurnPD(4,2).justPD(1).withTurnDirection(RIGHT).withTol(1).turn(215).waitUntilSettled();
           intake.dropBall();
           intake.intakeSpin(-12000);
-          chassis.withPD(1.75,1).withSlew(350).withHeading(35,.1).withTol(75).driveCurve(-3500,.1,.001);
-          chassis.withTurnPD(4,2).justPD(1).withTol(1).turn(180).waitUntilSettled();
+          chassis.withPD(1.75,1).withSlew(350).withHeading(35,.1).withTol(75).driveCurve(-3500,.115,.05);
+          chassis.withTurnPD(4,2).justPD(1).withTol(1).turn(175).waitUntilSettled();
           // pros::delay(200);
           chassis.withPD(1,1).withSlew(600).withHeading(180,.1).autoSort(1).withDist(60).withTol(10).drive(1800);
           intake.intakeSpin(-12000);
