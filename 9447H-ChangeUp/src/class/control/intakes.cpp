@@ -2,7 +2,7 @@
 #include "class/control/intakes.hpp"
 
 int Intake::ledLevel = 10, Intake::redHue = 20, Intake::blueHue = 200, Intake::ballsLeft = 0;
-bool Intake::oneBall = 0, Intake::pos1 = 0, Intake::pos2 = 0, Intake::stopped = 1, Intake::ball = 0;
+bool Intake::oneBall = 0, Intake::pos1 = 0, Intake::pos2 = 0, Intake::stopped = 1, Intake::ball = 0, Intake::twoBalls = 0;
 
 void Intake::intakeSpin(int speed){
   leftIntake.move_voltage(speed);
@@ -145,10 +145,8 @@ void Intake::deploy(){
   intakeStop();
 }
 
-Intake& Intake::justOneBall(bool oneBall_){
-  oneBall = oneBall_;
-  if(!oneBall){ ballsLeft = 2;}
-  else{ballsLeft = 1;}
+Intake& Intake::twoBall(bool twoBall_){
+  twoBalls = twoBall_;
   return *this;
 }
 
@@ -191,12 +189,18 @@ void Intake::goalSort(int allianceColor){
         rollerSpin(12000);
         pros::delay(500);
         intakeSpin(12000);
-        rollerSpin(6000);
+        if(twoBalls){rollerSpin(6000);}
         stopped = 0;
       }
-      if(botOptical.get_hue() >=  blueHue){
-        rollerStop();
+      if(twoBalls){
+        if(topOptical.get_hue() >= blueHue){
+          rollerStop();
+          intakeSpin(-12000);
+          ball = 1;
+        }
+      }else if(botOptical.get_hue() >=  blueHue){
         intakeSpin(-120000);
+        rollerStop();
         ball = 1;
       }
       printf("TopOptical: %F BotOptical: %F\n", topOptical.get_hue(), botOptical.get_hue()); //debug code

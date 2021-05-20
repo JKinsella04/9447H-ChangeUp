@@ -122,11 +122,11 @@ class Intake{
     void deploy();
 
     /*
-    Call when sorting a goal with only one ball in it.
+    To set how many balls (1 or 2) are being taken from goal.
     Call with goalSort();
-    @param justOneBall_ bool 1 for enabled 0 for disabled..
+    @param twoBall_ bool 1 for true 0 for false..
     */
-    Intake& justOneBall(bool oneBall_);
+    Intake& twoBall(bool twoBall_);
 
     /*
     Sorts out the enemy ball based on color.
@@ -170,5 +170,5 @@ class Intake{
 
   private:
     static int ledLevel, redHue, blueHue, time, ballsLeft;
-    static bool oneBall, pos1, pos2, stopped, ball;
+    static bool oneBall, pos1, pos2, stopped, ball, twoBalls;
 };
