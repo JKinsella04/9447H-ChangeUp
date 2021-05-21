@@ -301,7 +301,7 @@ Chassis& Chassis::drive(double target){
     double leftvalue = LOdometer.get_position(); //LEncoder.get_value();
     double rightvalue = ROdometer.get_position(); //REncoder.get_value();
     printf("Error, AveragePos, LOutput, ROutput,Left, Right goalDist %f %f %f %f %f %f %f\n", error, averagePos, LOutput, ROutput,leftvalue, rightvalue,output);
-    pros::delay(10);
+    pros::delay(2);
     if(averagePos < target+tol && averagePos > target-tol) {
       LF.move(0);
       LB.move(0);

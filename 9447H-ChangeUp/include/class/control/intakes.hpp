@@ -151,7 +151,7 @@ class Intake{
     @param int time length of the timer
     @param bool state whether you want to hold the balls or shoot them out.
     */
-    void goalSort(int allianceColor, int time, bool state = SHOOTBALL);
+    void goalSort(int allianceColor, int time);
 
     /*
     Runs the indexer and shortly after the middleIntake to shoot two balls out the back of the robot.
