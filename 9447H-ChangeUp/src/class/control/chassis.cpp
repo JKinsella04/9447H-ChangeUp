@@ -32,6 +32,10 @@ bool Chassis::oneSide;
 
 double Chassis::turnPrevError = 0;
 
+bool Chassis::halt;
+double Chassis:: m_error, m_integral, m_derivative, m_prevError, m_power, LOutput, ROutput, drive_tol = 10, turn_tol = 1,
+                 t_error, t_integral, t_derivative, t_prevError, theta, turn_kP, turn,kI, turn_kD;
+
 Chassis::Chassis() { }
 Chassis::~Chassis() {
   reset();
@@ -54,7 +58,9 @@ void Chassis::reset() {
   LOdometer.reset();
   ROdometer.reset();
   ROdometer.set_reversed(1);
-  pros::delay(3000);
+  while(L_IMU.is_calibrating() || M_IMU.is_calibrating() || R_IMU.is_calibrating()){
+    pros::delay(5);
+  }
 }
 
 void Chassis::odomReset() {
@@ -65,9 +71,9 @@ void Chassis::odomReset() {
   pros::delay(100);
 }
 
-void Chassis::waitUntilSettled() {
-  while(!isSettled) pros::delay(20);
-}
+// void Chassis::waitUntilSettled() {
+//   while(!isSettled) pros::delay(20);
+// }
 
 void Chassis::setState(int state_){
   switch (state_){
@@ -84,6 +90,25 @@ void Chassis::setState(int state_){
       RB.set_brake_mode(MOTOR_BRAKE_COAST);
       break;}
   }
+}
+
+void Chassis::stop(){
+  distSensorEnabled=false;
+  if(halt){
+    LF.move(0);
+    LB.move(0);
+    RF.move(0);
+    RB.move(0);
+  }
+  odomReset();
+  justPID = false;
+  if(autoSort_enabled){
+  intake.intakeStop();
+  intake.middleStop();
+  intake.indexerStop();
+  autoSort_enabled = false;
+  }
+  isSettled = true;
 }
 
 Chassis& Chassis::withTurnSlew(double rate_){
@@ -301,59 +326,19 @@ Chassis& Chassis::drive(double target){
     double leftvalue = LOdometer.get_position(); //LEncoder.get_value();
     double rightvalue = ROdometer.get_position(); //REncoder.get_value();
     printf("Error, AveragePos, LOutput, ROutput,Left, Right goalDist %f %f %f %f %f %f %f\n", error, averagePos, LOutput, ROutput,leftvalue, rightvalue,output);
-    pros::delay(2);
+    pros::delay(10);
     if(averagePos < target+tol && averagePos > target-tol) {
-      LF.move(0);
-      LB.move(0);
-      RF.move(0);
-      RB.move(0);
-      odomReset();
-      justPID = false;
-      if(autoSort_enabled){
-      intake.intakeStop();
-      intake.middleStop();
-      intake.indexerStop();
-      autoSort_enabled = false;
-      distSensorEnabled=false;
-      }
-      isSettled = true;
+      stop();
       break;
     }
     if(distSensorEnabled){
       if(ballIndexer.get() < distTarget &&  ballIndexer.get() != 0){
-        distSensorEnabled=false;
-        LF.move(0);
-        LB.move(0);
-        RF.move(0);
-        RB.move(0);
-        odomReset();
-        justPID = false;
-        if(autoSort_enabled){
-        intake.intakeStop();
-        intake.middleStop();
-        intake.indexerStop();
-        autoSort_enabled = false;
-        }
-        isSettled = true;
+        stop();
+        break;
+      } else if(goalDist.get() < distTarget && goalDist.get() != 0){
+        stop();
         break;
       }
-      else if(goalDist.get() < distTarget && goalDist.get() != 0){
-          distSensorEnabled=false;
-          LF.move(0);
-          LB.move(0);
-          RF.move(0);
-          RB.move(0);
-          odomReset();
-          justPID = false;
-          if(autoSort_enabled){
-          intake.intakeStop();
-          intake.middleStop();
-          intake.indexerStop();
-          autoSort_enabled = false;
-          }
-          isSettled = true;
-          break;
-        }
     }
   }
 return *this;
@@ -366,7 +351,7 @@ Chassis& Chassis::driveDistAway(double dist){
     LB.move_velocity(-150);
     RF.move_velocity(-150);
     RB.move_velocity(-150);
-    if(goalDist.get() >= dist-5){
+    if(goalDist.get() >= dist-5 || (ballIndexer.get() >= dist-5)){
       LF.move(0);
       LB.move(0);
       RF.move(0);
@@ -450,41 +435,109 @@ Chassis& Chassis::driveCurve(double target, double turn_kP, double turn_kD){
     printf("Error, AveragePos, LOutput, ROutput,Left, Right goalDist %f %f %f %f %f %f %f\n", error, averagePos, LOutput, ROutput,leftvalue, rightvalue,output);
     pros::delay(10);
     if(averagePos < target+tol && averagePos > target-tol) {
-      LF.move(0);
-      LB.move(0);
-      RF.move(0);
-      RB.move(0);
-      odomReset();
-      justPID = false;
-      if(autoSort_enabled){
-      intake.intakeStop();
-      intake.middleStop();
-      intake.indexerStop();
-      autoSort_enabled = false;
-      distSensorEnabled=false;
-      }
-      isSettled = true;
+      stop();
       break;
     }
     if(distSensorEnabled){
-      if(goalDist.get() < distTarget && goalDist.get() != 0){
-        distSensorEnabled=false;
-        LF.move(0);
-        LB.move(0);
-        RF.move(0);
-        RB.move(0);
-        odomReset();
-        justPID = false;
-        if(autoSort_enabled){
-        intake.intakeStop();
-        intake.middleStop();
-        intake.indexerStop();
-        autoSort_enabled = false;
-        }
-        isSettled = true;
+      if(ballIndexer.get() < distTarget &&  ballIndexer.get() != 0){
+        stop();
+        break;
+      } else if(goalDist.get() < distTarget && goalDist.get() != 0){
+        stop();
         break;
       }
     }
   }
 return *this;
+}
+
+/*
+Need
+- Tol setter
+- slew acceleration
+*/
+
+void Chassis::waitUntilSettled(bool halt_){
+  halt = halt_;
+}
+
+Chassis& Chassis::withTurn(double theta_, double turn_kP_, double turn_kI_, double turn_kD_){
+  theta = theta_;
+  turn_kP = turn_kP_;
+  turn_kI = turn_kI_;
+  turn_kD = turn_kD_;
+  return *this;
+}
+
+Chassis& Chassis::move(double target, double drive_kP, double drive_kI, double drive_kD){
+  while(!isSettled){
+  // Lateral mvmt PID calc.
+  double current_Left = ( LOdometer.get_position() )/36000; //Convert from centidegress to degrees.
+  double current_Right = ( ROdometer.get_position() )/36000;
+  //Convert to distance traveled in inches.
+  current_Left *= CIRCUMFERENCE;
+  current_Right *= CIRCUMFERENCE;
+  double averagePos = ( current_Left + current_Right ) /2;
+
+  m_error = target - averagePos;
+  m_integral += m_error;
+  if(m_error == 0){
+    m_integral = 0;
+  }
+  if(m_integral > 12000){
+    m_integral = 120000;
+  }
+  m_derivative = m_error - m_prevError;
+  m_prevError = m_error;
+  m_power = m_error * drive_kP + m_integral * drive_kI + m_derivative * drive_kD;
+  LOutput = m_power;
+  ROutput = m_power;
+
+  // Turn mvmt PID calc.
+  leftheading = L_IMU.get_heading();
+  middleheading = M_IMU.get_heading();
+  rightheading = R_IMU.get_heading();
+  averageheading = (leftheading + middleheading + rightheading)/3;
+  if(leftheading > 355 || rightheading > 355 || middleheading > 355){
+    if(direction_turn ==LEFT){ averageheading=360;}
+    else{averageheading = 0;}
+  }
+  t_error = theta - averageheading;
+  t_integral += t_error;
+  if(t_error == 0){
+    t_integral = 0;
+  }
+  if(t_integral > 12000){
+    t_integral = 120000;
+  }
+  t_derivative = t_error - t_prevError;
+  t_prevError = t_error;
+  turn_output = t_error * turn_kP + t_integral * turn_kI + t_derivative * turn_kD;
+
+  calcDir(averageheading, drive_theta);
+  switch(direction_turn){
+    case LEFT:{
+        LOutput += turn_output;
+        ROutput -= turn_output;
+        break;
+    }
+    case RIGHT:{
+        LOutput -= turn_output;
+        ROutput += turn_output;
+        break;
+    }
+  }
+
+  LF.move_voltage(LOutput);
+  LB.move_voltage(LOutput);
+  RF.move_voltage(ROutput);
+  RB.move_voltage(ROutput);
+
+  if(fabs(m_error) < drive_tol && fabs(t_error) < turn_tol){
+    stop();
+    break;
+    }
+  pros::delay(2);
+  }
+  return *this;
 }

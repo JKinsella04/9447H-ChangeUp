@@ -6,6 +6,7 @@
 #define LEFT 2
 #define HOLD 1
 #define COAST 2
+#define CIRCUMFERENCE 10.21018
 
 class Chassis {
   public:
@@ -23,16 +24,16 @@ class Chassis {
     void odomReset();
 
     /*
-    Delays the calling thread until the robot completes its action.
-    */
-    void waitUntilSettled();
-
-    /*
     Sets the drive base motors to either HOLD or COAST
 
     @param int state_ The State of the motor
     */
     void setState(int state_);
+
+    /*
+    resets variables and stops motors. For ending drive + driveCurve.
+    */
+    void stop();
 
     /*
     Sets Turn rate for the slew acceleration.
@@ -151,13 +152,42 @@ class Chassis {
 
     Chassis& driveCurve(double target, double turn_kP, double turn_kD);
 
+    /*
+    Sets halt boolean. Controls whether motors stop moving after reaching tolerance.
+
+    @param halt_ 1 to stop motors.
+    */
+    void waitUntilSettled(bool halt_ = 1);
+
+    /*
+    Sets turn Variables used in Chassis::move();
+
+    @param theta_ wanted angle.
+    @param turn_kP_ kP constant.
+    @param turn_kI_ kI constant.
+    @param turn_kD_ kD constant.
+
+    */
+    Chassis& withTurn(double theta_, double turn_kP_, double turn_kI_, double turn_kD_);
+
+    /*
+    Sets drive Variables.
+
+    @param target wanted distance in inches.
+    @param drive_kP_ kP constant.
+    @param drive_kI_ kI constant.
+    @param drive_kD_ kD constant.
+
+    */
+    Chassis& move(double target, double drive_kP, double drive_kI, double drive_kD);
+
   private:
     static bool isSettled, autoSort_enabled;
 
     static double leftheading, middleheading, rightheading, averageheading;
 
     static double power, rate_drive, rate_turn;
-    static double kP_drive, kD_drive, kP_turn, kD_turn;
+    static double kP_drive, kI_drive, kD_drive, kP_turn, kD_turn;
     static double correction_rate;
     static int direction_turn;
     static double output;
@@ -171,4 +201,10 @@ class Chassis {
     static int heading_diff;
     static bool oneSide;
     static double turnPrevError;
+
+    static bool halt;
+    static double turn_output;
+    static double m_error, m_integral, m_derivative, m_prevError, m_power, LOutput, ROutput;
+    static double t_error, t_integral, t_derivative, t_prevError, t_power, theta, turn_kP, turn_kI, turn_kD;
+
 };
