@@ -33,8 +33,8 @@ bool Chassis::oneSide;
 double Chassis::turnPrevError = 0;
 
 bool Chassis::halt;
-double Chassis:: m_error, m_integral, m_derivative, m_prevError, m_power, LOutput, ROutput, drive_tol = 10, turn_tol = 1,
-                 t_error, t_integral, t_derivative, t_prevError, theta, turn_kP, turn,kI, turn_kD;
+double Chassis::m_error, Chassis::m_integral, Chassis::m_derivative, Chassis::m_prevError, Chassis::m_power, Chassis::LOutput, Chassis::ROutput, Chassis::drive_tol = 10, Chassis::turn_tol = 1,
+                 Chassis::t_error, Chassis::t_integral, Chassis::t_derivative, Chassis::t_prevError, Chassis::theta, Chassis::turn_kP, Chassis::turn_kI, Chassis::turn_kD, Chassis::turn_output;
 
 Chassis::Chassis() { }
 Chassis::~Chassis() {
@@ -265,6 +265,8 @@ Chassis& Chassis::drive(double target){
       // else{output = output -= 5;}
     }else{
       output = power;
+    }if(justPID){
+      output = power;
     }
 
     slew_x += 0.001;
@@ -470,13 +472,14 @@ Chassis& Chassis::withTurn(double theta_, double turn_kP_, double turn_kI_, doub
 }
 
 Chassis& Chassis::move(double target, double drive_kP, double drive_kI, double drive_kD){
+  isSettled = 0;
   while(!isSettled){
   // Lateral mvmt PID calc.
-  double current_Left = ( LOdometer.get_position() )/36000; //Convert from centidegress to degrees.
-  double current_Right = ( ROdometer.get_position() )/36000;
+  double current_Left = ( LOdometer.get_position() )/100; //Convert from centidegress to degrees.
+  double current_Right = ( ROdometer.get_position() )/100;
   //Convert to distance traveled in inches.
-  current_Left *= CIRCUMFERENCE;
-  current_Right *= CIRCUMFERENCE;
+  // current_Left *= CIRCUMFERENCE;
+  // current_Right *= CIRCUMFERENCE;
   double averagePos = ( current_Left + current_Right ) /2;
 
   m_error = target - averagePos;
@@ -489,7 +492,7 @@ Chassis& Chassis::move(double target, double drive_kP, double drive_kI, double d
   }
   m_derivative = m_error - m_prevError;
   m_prevError = m_error;
-  m_power = m_error * drive_kP + m_integral * drive_kI + m_derivative * drive_kD;
+  m_power = (m_error * drive_kP) + (m_integral * drive_kI) + (m_derivative * drive_kD);
   LOutput = m_power;
   ROutput = m_power;
 
@@ -512,7 +515,7 @@ Chassis& Chassis::move(double target, double drive_kP, double drive_kI, double d
   }
   t_derivative = t_error - t_prevError;
   t_prevError = t_error;
-  turn_output = t_error * turn_kP + t_integral * turn_kI + t_derivative * turn_kD;
+  turn_output = (t_error * turn_kP) + (t_integral * turn_kI) + (t_derivative * turn_kD);
 
   calcDir(averageheading, drive_theta);
   switch(direction_turn){

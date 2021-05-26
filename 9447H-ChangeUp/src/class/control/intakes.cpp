@@ -75,13 +75,35 @@ void Intake::runIntakes(){ // Runs the intakes from inputs of R1,R2,L1,L2 on bot
   // if(master.get_digital(DIGITAL_L2)){
   //   ball
   // }
-
+  ///////////////////////////////
+  // while(1){
+  //   if(partner.get_digital(DIGITAL_R1)){
+  //   twoBalls = 0;
+  //   }else if (partner.get_digital(DIGITAL_R2)){
+  //   twoBalls = 1;
+  //   }
+  //   if(master.get_digital(DIGITAL_R1)){
+  //   goalSort(alliance);
+  //   }else if(master.get_digital(DIGITAL_L1)){
+  //   autoSort(alliance);
+  //   }else if(master.get_digital(DIGITAL_L2)){
+  //   rollerSpin(-12000);
+  //   intakeSpin(-12000);
+  //   }
+  //   else{
+  //   intakeStop();
+  //   rollerStop();
+  //   // intake.stopped = 1;
+  //   }
+  // pros::delay(2);}
+    ////////////////////////////
   while(1){
   if(master.get_digital(DIGITAL_L1)){
     // intakeSpin(12000);
     if(master.get_digital(DIGITAL_R1)){
-      intakeSpin(12000);}
-      else{autoSort();}
+      intakeSpin(12000);
+    }
+    else{autoSort();}
     if(!master.get_digital(DIGITAL_R1) && !master.get_digital(DIGITAL_R2)){
     rollerSpin(500);
     }
@@ -91,9 +113,9 @@ void Intake::runIntakes(){ // Runs the intakes from inputs of R1,R2,L1,L2 on bot
     intakeStop();
     stopped = 1;
   }
-  if(master.get_digital(DIGITAL_R1)){
+  if(master.get_digital(DIGITAL_R1) && !master.get_digital(DIGITAL_R2)){
     rollerSpin(12000);
-  }else if(master.get_digital(DIGITAL_R2)){
+  }else if(master.get_digital(DIGITAL_R2) && !master.get_digital(DIGITAL_R1)){
     rollerSpin(-12000);
   }
   if( !master.get_digital(DIGITAL_R1) && !master.get_digital(DIGITAL_L1) && !master.get_digital(DIGITAL_R2)){
@@ -191,7 +213,7 @@ void Intake::goalSort(int allianceColor){
         rollerSpin(12000);
         pros::delay(500);
         intakeSpin(12000);
-        if(twoBalls){rollerSpin(6000);}
+        if(twoBalls){rollerSpin(8000);}
         stopped = 0;
       }
       if(twoBalls){

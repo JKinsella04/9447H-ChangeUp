@@ -43,18 +43,6 @@ void opcontrol() {
   while (true) {
     printf("Left, Right: %d %d\n", LOdometer.get_position(), ROdometer.get_position());
     slew.tankDrive(900, 500, 900);
-    // if(master.get_digital(DIGITAL_R1)){
-    //   intake.twoBall(1);
-    // }else if (master.get_digital(DIGITAL_R2)){
-    //   intake.twoBall(0);
-    // }
-    // if(master.get_digital(DIGITAL_L1)){
-    //   intake.goalSort(alliance);
-    // }else{
-    //   intake.intakeStop();
-    //   intake.rollerStop();
-    //   // intake.stopped = 1;
-    // }
     // intake.runIntakes();
     // intakeTask.set_priority(TASK_PRIORITY_DEFAULT+1);
     // intakeTask.
@@ -63,7 +51,7 @@ void opcontrol() {
 }
 void autonomous() {
   // printf("startPos, firstPos, secondPos, thirdPos %d %d %d %d \n", startPos, firstPos, secondPos, thirdPos);
-  if(alliance == 3){auton.runSkills();} //If Skills was selected it will run skills else it will build the auton.
-  else{auton.run();}
+ if(alliance == 3){auton.runSkills();} //If Skills was selected it will run skills else it will build the auton.
+ else{auton.run();}
   // auton.runTests();
 }

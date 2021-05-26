@@ -204,7 +204,7 @@ class Chassis {
 
     static bool halt;
     static double turn_output;
-    static double m_error, m_integral, m_derivative, m_prevError, m_power, LOutput, ROutput;
+    static double m_error, m_integral, m_derivative, m_prevError, m_power, LOutput, ROutput, turn_tol, drive_tol;
     static double t_error, t_integral, t_derivative, t_prevError, t_power, theta, turn_kP, turn_kI, turn_kD;
 
 };
