@@ -5,17 +5,13 @@
 #include "class/control/intakes.hpp"
 #include "class/control/slew.hpp"
 #include "class/displayController.hpp"
+#include "class/control/odom.hpp"
 
 
 Display display;
 Auton auton;
 static Intake intake;
 static Slew slew;
-
-/*
-Task Creation for Driver Control
-*/
-
 
 void initialize() {
   display.setup();
@@ -50,8 +46,9 @@ void opcontrol() {
   }
 }
 void autonomous() {
+  pros::Task odomTask(Odom::updatePosition);
   // printf("startPos, firstPos, secondPos, thirdPos %d %d %d %d \n", startPos, firstPos, secondPos, thirdPos);
- if(alliance == 3){auton.runSkills();} //If Skills was selected it will run skills else it will build the auton.
- else{auton.run();}
-  // auton.runTests();
+ // if(alliance == 3){auton.runSkills();} //If Skills was selected it will run skills else it will build the auton.
+ // else{auton.run();}
+  auton.runTests();
 }

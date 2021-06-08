@@ -15,7 +15,23 @@ Not Smooth second half? Incrase kD
 Startup too slow? Increase slew_rate
 Isn't settling? Increase kP or broaden exit range
 */
+/*
+for starting kP, kI, kD values
+big distance
+kP - .1
+kI - 0.001
+kD - 0.03
 
+short distance
+kP - .3
+kI - 0.01
+kD - 0.15
+
+for starting turn kP, kI, kD values
+kP - 66, 133, 266
+kI - 0.001
+kD - 33, 66, 133
+*/
 Auton& Auton::run(){
  while(true){
  // blueAutoSortTask.suspend();
@@ -389,7 +405,16 @@ Auton& Auton::runSkills(){
 }
 
 Auton& Auton::runTests(){
-  chassis.withTurn(90, 1, 0,0).move(24, .3, 0,0).waitUntilSettled();
+  chassis.setState(HOLD);
+  chassis.withSlop(10000, 1).withTurn(10, 133, 0, 66).move(57, .1, 0.001, 0.03).waitUntilSettled(0);
+  // pros::delay(100);
+  // chassis.withSlop(1000, 10).withTurn(0, 133, .001, 66).move(-16, .3, 0, .15).waitUntilSettled();
+  // // // pros::delay(100);
+  // chassis.withSlop(1000, 10).withTurn(325, 266, .001, 66).move(16, .3, 0.01, .15).waitUntilSettled();
+  // chassis.withTurnPD(3,2).justPD(1).withTol(1).turn(180).waitUntilSettled();
+  // chassis.withTurnPD(3,2).justPD(1).withTol(1).turn(0).waitUntilSettled();
+
+
   // chassis.withTurnPD(4,2).justPD(1).withTol(1).turn(280).waitUntilSettled();
   // chassis.withPD(.3,1).withSlew(175).withHeading(145,.25).withTol(10).driveCurve(-850, .3, .001);
   // motionProfile.calculate(10, 1);

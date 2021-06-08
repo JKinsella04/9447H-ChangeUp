@@ -64,11 +64,8 @@ void Chassis::reset() {
 }
 
 void Chassis::odomReset() {
-  // LEncoder.reset();
-  // REncoder.reset();
   LOdometer.reset_position();
   ROdometer.reset_position();
-  pros::delay(100);
 }
 
 // void Chassis::waitUntilSettled() {
@@ -168,16 +165,16 @@ Chassis& Chassis::withTol(int tol_){
 void Chassis::calcDir(int current_Pos, int target_Pos){
   heading_diff = current_Pos - target_Pos;
   if(currentPos == 0){
-    if(abs(heading_diff) > 180) {direction_turn = LEFT;}
+    if(abs(heading_diff) >= 180) {direction_turn = LEFT;}
     else{direction_turn = RIGHT;}
     }
   if(heading_diff < 0){
-    direction_turn = RIGHT;
-    if(abs(heading_diff) > 180) direction_turn = LEFT;
+    if(abs(heading_diff) >= 180){ direction_turn = LEFT;}
+    else{direction_turn = RIGHT;}
   }
   if(heading_diff > 0){
-    direction_turn = LEFT;
-    if(abs(heading_diff) > 180) direction_turn = RIGHT;
+    if(abs(heading_diff) >= 180){ direction_turn = RIGHT;}
+    else{direction_turn = LEFT;}
   }
 }
 
@@ -453,14 +450,14 @@ Chassis& Chassis::driveCurve(double target, double turn_kP, double turn_kD){
 return *this;
 }
 
-/*
-Need
-- Tol setter
-- slew acceleration
-*/
-
 void Chassis::waitUntilSettled(bool halt_){
   halt = halt_;
+}
+
+Chassis& Chassis::withSlop(double drive_tol_, double turn_tol_){
+  drive_tol = drive_tol_;
+  turn_tol = turn_tol_;
+  return *this;
 }
 
 Chassis& Chassis::withTurn(double theta_, double turn_kP_, double turn_kI_, double turn_kD_){
@@ -472,14 +469,26 @@ Chassis& Chassis::withTurn(double theta_, double turn_kP_, double turn_kI_, doub
 }
 
 Chassis& Chassis::move(double target, double drive_kP, double drive_kI, double drive_kD){
+  //Convert target from inches to encoder ticks.
+  target *= CONVERSION;
   isSettled = 0;
+  odomReset();
+  printf("isSettled: %d \n", isSettled);
+  // leftheading = L_IMU.get_heading();
+  // middleheading = M_IMU.get_heading();
+  // rightheading = R_IMU.get_heading();
+  // averageheading = (leftheading + middleheading + rightheading)/3;
+  // if(leftheading > 355 || rightheading > 355 || middleheading > 355){
+  //   if(direction_turn ==LEFT){ averageheading=360;}
+  //   else{averageheading = 0;}
+  // }
+  // calcDir(averageheading, theta);
   while(!isSettled){
   // Lateral mvmt PID calc.
-  double current_Left = ( LOdometer.get_position() )/100; //Convert from centidegress to degrees.
-  double current_Right = ( ROdometer.get_position() )/100;
-  //Convert to distance traveled in inches.
-  // current_Left *= CIRCUMFERENCE;
-  // current_Right *= CIRCUMFERENCE;
+  double current_Left = LOdometer.get_position();//( LOdometer.get_position() )/36000; //Convert from centidegress to degrees.
+  double current_Right = ROdometer.get_position();//( ROdometer.get_position )/36000;
+  // current_Left /= CONVERSION;
+  // current_Right /= CONVERSION;
   double averagePos = ( current_Left + current_Right ) /2;
 
   m_error = target - averagePos;
@@ -492,7 +501,8 @@ Chassis& Chassis::move(double target, double drive_kP, double drive_kI, double d
   }
   m_derivative = m_error - m_prevError;
   m_prevError = m_error;
-  m_power = (m_error * drive_kP) + (m_integral * drive_kI) + (m_derivative * drive_kD);
+  m_power = ( (m_error * drive_kP) + (m_integral * drive_kI) + (m_derivative * drive_kD) );
+  if(m_power > 12000)m_power = 12000;
   LOutput = m_power;
   ROutput = m_power;
 
@@ -505,7 +515,7 @@ Chassis& Chassis::move(double target, double drive_kP, double drive_kI, double d
     if(direction_turn ==LEFT){ averageheading=360;}
     else{averageheading = 0;}
   }
-  t_error = theta - averageheading;
+  t_error = averageheading - theta;
   t_integral += t_error;
   if(t_error == 0){
     t_integral = 0;
@@ -516,21 +526,38 @@ Chassis& Chassis::move(double target, double drive_kP, double drive_kI, double d
   t_derivative = t_error - t_prevError;
   t_prevError = t_error;
   turn_output = (t_error * turn_kP) + (t_integral * turn_kI) + (t_derivative * turn_kD);
-
-  calcDir(averageheading, drive_theta);
+  calcDir(averageheading, theta);
   switch(direction_turn){
     case LEFT:{
-        LOutput += turn_output;
-        ROutput -= turn_output;
+      if(m_error < 0){
+        LOutput -= fabs(turn_output);
+        ROutput += fabs(turn_output);
+      }else{
+        LOutput -= fabs(turn_output);
+        ROutput += fabs(turn_output);
+      }
         break;
     }
     case RIGHT:{
-        LOutput -= turn_output;
-        ROutput += turn_output;
+        if(m_error < 0){
+          LOutput -= fabs(turn_output);
+          ROutput += fabs(turn_output);
+        }else{
+          LOutput += fabs(turn_output);
+          ROutput -= fabs(turn_output);
+        }
         break;
     }
   }
 
+  if(autoSort_enabled){
+    switch(alliance){
+      case 3:{intake.autoSort(REDBALL);} //If skills autosort as if Red Alliance.
+      default:{intake.autoSort(alliance);}
+    }
+  }
+  // printf("Turn Error: %f direction: %d Theta: %f\n",  t_error, direction_turn, theta);
+  // printf("Drive Error: %f Turn Error: %f\n", m_error, t_error);
   LF.move_voltage(LOutput);
   LB.move_voltage(LOutput);
   RF.move_voltage(ROutput);
@@ -539,7 +566,16 @@ Chassis& Chassis::move(double target, double drive_kP, double drive_kI, double d
   if(fabs(m_error) < drive_tol && fabs(t_error) < turn_tol){
     stop();
     break;
+  }
+  if(distSensorEnabled){
+    if(ballIndexer.get() < distTarget &&  ballIndexer.get() != 0){
+      stop();
+      break;
+    }else if(goalDist.get() < distTarget && goalDist.get() != 0){
+      stop();
+      break;
     }
+  }
   pros::delay(2);
   }
   return *this;

@@ -6,7 +6,8 @@
 #define LEFT 2
 #define HOLD 1
 #define COAST 2
-#define CIRCUMFERENCE 10.21018
+#define CIRCUMFERENCE 8.635
+#define CONVERSION 4169.079328314997
 
 class Chassis {
   public:
@@ -158,6 +159,14 @@ class Chassis {
     @param halt_ 1 to stop motors.
     */
     void waitUntilSettled(bool halt_ = 1);
+
+    /*
+    Set slop value for drive and turn. Use with move();
+
+    @param drive_tol lateral mvmt slop.
+    @param turn_tol turn mvmt slop.
+    */
+    Chassis& withSlop(double drive_tol_ = 10, double turn_tol_ = 1);
 
     /*
     Sets turn Variables used in Chassis::move();
