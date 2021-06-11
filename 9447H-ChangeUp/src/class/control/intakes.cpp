@@ -160,10 +160,10 @@ void Intake::intakeLock(){
 
 void Intake::deploy(){
   iiInit();
-  rollerSpin(12000);
   intakeSpin(12000);
-  pros::delay(200);
+  pros::delay(400);
   intakeSpin(-12000);
+  rollerSpin(12000);
   pros::delay(200);
   rollerStop();
   intakeStop();
@@ -261,7 +261,7 @@ void Intake::goalSort(int allianceColor, int time){
 
 void Intake::dropBall(){
   intakeSpin(-12000);
-  rollerSpin(-12000);
+  rollerSpin(-12000);  
 }
 
 void Intake::calibrate(int resting_value){

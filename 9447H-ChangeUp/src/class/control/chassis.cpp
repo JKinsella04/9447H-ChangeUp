@@ -91,12 +91,12 @@ void Chassis::setState(int state_){
 
 void Chassis::stop(){
   distSensorEnabled=false;
-  if(halt){
+  // if(halt){
     LF.move(0);
     LB.move(0);
     RF.move(0);
     RB.move(0);
-  }
+  // }
   odomReset();
   justPID = false;
   if(autoSort_enabled){
@@ -369,10 +369,11 @@ Chassis& Chassis::driveCurve(double target, double turn_kP, double turn_kD){
   double rightvalue =ROdometer.get_position();  //REncoder.get_value();
   printf("Left, Right %f %f  \n", leftvalue, rightvalue);
   isSettled = false;
+  // target *= 100;
   // double averagePos = (REncoder.get_value() + LEncoder.get_value())/2;
   while(1 == 1) {
     leftvalue = (LOdometer.get_position())/100; //LEncoder.get_value();
-    rightvalue =(ROdometer.get_position())/100;  //REncoder.get_value();
+    rightvalue = (ROdometer.get_position())/100;  //REncoder.get_value();
     double averagePos = (leftvalue+rightvalue)/2;//(REncoder.get_value() + LEncoder.get_value())/2;
     double error = target - averagePos;
     double derivative = error - prevError;
@@ -398,7 +399,7 @@ Chassis& Chassis::driveCurve(double target, double turn_kP, double turn_kD){
     if(leftheading > 355 || rightheading > 355 || middleheading > 355){
       averageheading=0;
     }
-    double heading_error = drive_theta - averageheading;
+    double heading_error =  averageheading - drive_theta;
     if(fabs(heading_error) >= 3){ //Corrects the robot if it is straying from the wanted angle.
       calcDir(averageheading, drive_theta);
       double turnError = drive_theta - averageheading;
@@ -407,13 +408,22 @@ Chassis& Chassis::driveCurve(double target, double turn_kP, double turn_kD){
       power = error*turn_kP + derivative*turn_kD;
       switch(direction_turn){
         case LEFT:{
-            LOutput += power;
-            ROutput -= power;
+          if(target < 0){
+            LOutput += fabs(power);
+            ROutput -= fabs(power);
+          }
+            LOutput -= fabs(power);
+            ROutput += fabs(power);
             break;
         }
         case RIGHT:{
-            LOutput -= power;
-            ROutput += power;
+          if(target < 0){
+            LOutput += fabs(power);
+            ROutput -= fabs(power);
+          }else{
+            LOutput += fabs(power);
+            ROutput -= fabs(power);
+          }
             break;
         }
       }
@@ -511,7 +521,7 @@ Chassis& Chassis::move(double target, double drive_kP, double drive_kI, double d
   middleheading = M_IMU.get_heading();
   rightheading = R_IMU.get_heading();
   averageheading = (leftheading + middleheading + rightheading)/3;
-  if(leftheading > 355 || rightheading > 355 || middleheading > 355){
+  if(leftheading > 358 || rightheading > 358 || middleheading > 358){
     if(direction_turn ==LEFT){ averageheading=360;}
     else{averageheading = 0;}
   }
@@ -530,8 +540,8 @@ Chassis& Chassis::move(double target, double drive_kP, double drive_kI, double d
   switch(direction_turn){
     case LEFT:{
       if(m_error < 0){
-        LOutput -= fabs(turn_output);
-        ROutput += fabs(turn_output);
+        LOutput += fabs(turn_output);
+        ROutput -= fabs(turn_output);
       }else{
         LOutput -= fabs(turn_output);
         ROutput += fabs(turn_output);
@@ -540,8 +550,8 @@ Chassis& Chassis::move(double target, double drive_kP, double drive_kI, double d
     }
     case RIGHT:{
         if(m_error < 0){
-          LOutput -= fabs(turn_output);
-          ROutput += fabs(turn_output);
+          LOutput += fabs(turn_output);
+          ROutput -= fabs(turn_output);
         }else{
           LOutput += fabs(turn_output);
           ROutput -= fabs(turn_output);

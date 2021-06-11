@@ -23,14 +23,18 @@ int Slew::tankDrive(double fwdAccel, double deccel, double revAccel){
   if(abs(rightJoystick) <5){ rightJoystick = 0;}
 
   leftTarget = leftJoystick*driveMax; //1.58
-  if(LslewOutput < leftTarget){if(leftTarget == 0 && LslewOutput !=0){LslewOutput +=deccel;} else{LslewOutput +=fwdAccel;}}
-  if(LslewOutput > leftTarget){if(leftTarget == 0 && LslewOutput !=0){LslewOutput -=deccel;} else{LslewOutput -=revAccel;}}
+  if(LslewOutput < leftTarget){if(leftTarget == 0 && LslewOutput !=0){LslewOutput = 0;} else{LslewOutput +=fwdAccel;}}
+  if(LslewOutput > leftTarget){if(leftTarget == 0 && LslewOutput !=0){LslewOutput = 0;} else{LslewOutput -=revAccel;}}
   // if(leftTarget == 0)LslewOutput = 0;
 
   rightTarget = rightJoystick*driveMax; //1.58
-  if(RslewOutput < rightTarget){if(rightTarget == 0 && RslewOutput !=0){RslewOutput +=deccel;} else{RslewOutput +=fwdAccel;}}
-  if(RslewOutput > rightTarget){if(rightTarget == 0 && RslewOutput !=0){RslewOutput -=deccel;} else{RslewOutput -=revAccel;}}
+  if(RslewOutput < rightTarget){if(rightTarget == 0 && RslewOutput !=0){RslewOutput = 0;} else{RslewOutput +=fwdAccel;}}
+  if(RslewOutput > rightTarget){if(rightTarget == 0 && RslewOutput !=0){RslewOutput = 0;} else{RslewOutput -=revAccel;}}
   // if(rightTarget == 0)RslewOutput = 0;
+
+  // if(RslewOutput > 12000)RslewOutput = 12000;
+  // if(LslewOutput > 12000)LslewOutput = 12000;
+
 
   LF.move_voltage(LslewOutput);
   LB.move_voltage(LslewOutput);
