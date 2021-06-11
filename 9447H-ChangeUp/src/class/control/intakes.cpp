@@ -191,7 +191,7 @@ void Intake::autoSort(int allianceColor){
     }
     case BLUEBALL:{
       intakeSpin(12000);
-      rollerSpin(9000);
+      rollerSpin(6000);
       if(topOptical.get_proximity() >= 50){
         rollerStop();
         // if(botOptical.get_proximity() >= 50){
@@ -232,13 +232,24 @@ void Intake::goalSort(int allianceColor){
       break;
     }
     case BLUEBALL:{
-      intakeSpin(12000);
-      rollerSpin(9000);
-      if(topOptical.get_hue() <= redHue){
+      if(ball){rollerStop(); intakeSpin(-120000); break;}
+      if(stopped){
+        rollerSpin(12000);
+        pros::delay(500);
+        intakeSpin(12000);
+        if(twoBalls){rollerSpin(8000);}
+        stopped = 0;
+      }
+      if(twoBalls){
+        if(topOptical.get_hue() <= redHue){
+          rollerStop();
+          intakeSpin(-12000);
+          ball = 1;
+        }
+      }else if(botOptical.get_hue() <=  redHue){
+        intakeSpin(-120000);
         rollerStop();
-        // if(botOptical.get_proximity() >= 50){
-        //   intakeStop();
-        // }
+        ball = 1;
       }
       printf("TopOptical: %F BotOptical: %F\n", topOptical.get_hue(), botOptical.get_hue()); //debug code
       pros::delay(15);

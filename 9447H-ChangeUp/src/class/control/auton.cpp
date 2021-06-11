@@ -2,19 +2,12 @@
 #include "class/control/auton.hpp"
 #include "class/control/chassis.hpp"
 #include "class/control/intakes.hpp"
-#include "class/control/misc.hpp"
+// #include "class/control/misc.hpp"
 
 static Chassis chassis;
 static Intake intake;
-static motionProfile motionProfile;
-/*
-When Adjusting PD and Slew values use this as a guide for what needs to change.
+// static motionProfile motionProfile;
 
-Not going far enough? Increase kP
-Not Smooth second half? Incrase kD
-Startup too slow? Increase slew_rate
-Isn't settling? Increase kP or broaden exit range
-*/
 /*
 for starting kP, kI, kD values
 big distance
@@ -76,15 +69,13 @@ Auton& Auton::run(){
           chassis.setState(HOLD);
           chassis.withPD(1.75,1).withSlew(350).withHeading(345,.1).withDist(80).withTol(10).driveCurve(1000,.25,.075);
           pros::delay(200);
-          // chassis.autoSort(1).withDist(80).withSlop(10000, 5).withTurn(340, 250, 0.018, 133).move(15, 0.3, 0.01, 0.15).waitUntilSettled(1);
           intake.twoBall(0).goalSort(alliance, 120);
-          // intake.intakeSpin(-12000);
           intake.dropBall();
           chassis.withPD(.65,.1).withSlew(350).withHeading(0,.1).withTol(50).driveCurve(-1900,.2,.075);
           chassis.withTurnPD(4,2).justPD(1).withTol(3).turn(270).waitUntilSettled();
           chassis.withPD(1.75,1).withSlew(350).withHeading(270,.1).withDist(100).withTol(10).driveCurve(1000, .25, .075);
           intake.twoBall(0).goalSort(alliance, 90);
-          chassis.withPD(1,.5).justPD(1).withHeading(270,.1).withTol(10).driveCurve(-250, .25, .075);
+          chassis.withPD(.7,.5).justPD(1).withHeading(270,.1).withTol(10).driveCurve(-250, .25, .075);
           intake.dropBall();
           chassis.withTurnPD(4,2).justPD(1).withTol(3).turn(345).waitUntilSettled();
           chassis.withPD(.75,.1).withSlew(350).withHeading(0,.1).withTol(10).driveCurve(-1300,.2,.075);
@@ -94,7 +85,7 @@ Auton& Auton::run(){
           chassis.autoSort(1).withPD(1.75,1).withSlew(600).withHeading(225,.1).withDist(100).withTol(10).driveCurve(1200, .25, .075);
           // intake.rollerSpin(12000);
           intake.twoBall(0).goalSort(alliance, 90);
-          chassis.withPD(1.75,1).justPD(1).withHeading(225,.1).withTol(10).driveCurve(-250, .25, .075);
+          chassis.withPD(.7,.5).justPD(1).withHeading(225,.1).withTol(10).driveCurve(-250, .25, .075);
 
           // chassis.withSlop(10000, 5).withTurn(0, 50, 0, 0).move(-50, 0.1, 0.01, 0.05);
 
